@@ -1,0 +1,334 @@
+.linkmap_page {
+  $linkmap-icon-font: "FontAwesome" !default;
+  $linkmap-icon-line-height: 1.1em !default;
+
+  $linkmap-marker-icon: "\f0a6" !default;
+  $linkmap-audio-icon: "\f027" !default;
+  $linkmap-pause-icon: "\f04c" !default;
+
+  $linkmap-main-color: $main-color !default;
+
+  $linkmap-overlay-text-color: #fff !default;
+  $linkmap-overlay-title-color: $linkmap-main-color !default;
+
+  $linkmap-icon-color: $main-color !default;
+
+  $linkmap-audio-progress-color: $linkmap-main-color !default;
+  $linkmap-audio-current-time-color: $linkmap-overlay-text-color !default;
+
+  .hover_area.page_area, .hover_area.external_site_area {
+    .linkmap_marker {
+      &:before {
+        content: $linkmap-marker-icon;
+        font-family: $linkmap-icon-font;
+        color: white;
+        font-size: 30px;
+        background-color: rgba(255, 255, 255, 0.3);
+        padding: 10px;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        @include transform(translate(-50%,-50%));
+        left: 50%;
+        top: 50%;
+        position: absolute;
+        text-align: center;
+        opacity: 0;
+        line-height: $linkmap-icon-line-height;
+        @include transition(0.5s);
+      }
+    }
+
+    &.hover {
+      .linkmap_marker {
+        &:before {
+          opacity: 1;
+          background-color: rgba(0,0,0,0.7);
+          color: $linkmap-icon-color;
+        }
+      }
+    }
+  }
+
+  .linkmap_audio_player_controls {
+    .progress_inner {
+      height: 96%;
+      width: 96%;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+      box-sizing: border-box;
+      @include transform(translate(0,0));
+    }
+  }
+  .hover_area {
+    &.external_site_area {
+      .inline_loading_spinner {
+        .circle_inner {
+          .circle_innerst {
+            border: 4px solid $linkmap-audio-progress-color;
+          }
+        }
+      }
+    }
+
+    &.dynamic_marker {
+      .linkmap_marker {
+        background-color: transparent;
+        position: absolute;
+        top: 50%;
+        @include transform(translate(-50%, -50%));
+        left: 50%;
+        width: 95%;
+        height: auto;
+        padding: 0;
+        border: 4px solid #fff;
+        box-sizing: content-box;
+        border-radius: 50%;
+
+        opacity: 0.1;
+        box-shadow: 0 0 3px #000;
+        margin: 0;
+
+        @include transition(0.5s);
+
+        &.teasing {
+          opacity: 1 !important;
+          border: 7px solid #fff;
+          @include transition(1s ease);
+        }
+
+        &.no_transition {
+          @include transition(border 0.15s);
+
+          .has_mobile_platform & {
+            @include transition(border 0.15s, opacity 0.5s);
+          }
+        }
+      }
+
+      &:hover,
+      &.hover,
+      &.playing,
+      &:focus,
+      &:active {
+        .linkmap_marker {
+          border: 6px solid #fff;
+          opacity: 1 !important;
+          box-shadow: 0 0 3px #000;
+        }
+      }
+    }
+    .linkmap_description {
+      display: none;
+    }
+  }
+
+  .description_overlay {
+    position: absolute;
+    z-index: 2;
+    padding-left: 50px;
+    max-width: 510px;
+    max-height: 400px;
+
+    @include phone {
+      padding-left: 20px;
+    }
+
+    .description_overlay_wrapper {
+      max-width: 510px;
+      max-height: 400px;
+      box-sizing: border-box;
+      left: 0;
+      margin-top: -23px;
+      padding: 10px 15px 10px 15px;
+      background-color: rgba(48,48,48,0.8);
+      opacity: 0;
+      @include transition(0.15s ease 0.1s);
+      @include transform(scale(0));
+      @include transform-origin(center);
+
+      @include phone {
+        max-width: 240px;
+        margin-top: -10px;
+        padding: 5px 10px;
+
+        .link_title {
+          line-height: 20px;
+          font-size: 16px;
+        }
+
+        .link_description {
+          font-size: 12px;
+          line-height: 14px;
+        }
+      }
+    }
+
+    .link_title {
+      font-size: 24px;
+      color: $linkmap-overlay-title-color;
+      letter-spacing: 0.31px;
+      line-height: 30px;
+    }
+
+    .link_description {
+      font-size: 16px;
+      color: white;
+      letter-spacing: 0.22px;
+      line-height: 26px;
+    }
+
+    &:before {
+      content: "";
+      position: absolute;
+      width: 30px;
+      background-color: rgba(255,255,255, 0.8);
+      height: 4px;
+      left: 5px;
+      top: 0;
+      box-shadow: 0 0 3px #000;
+
+      @include transition(0.15s ease);
+      @include transform(scale(0));
+      @include transform-origin(top left);
+
+      @include phone {
+        left: 0;
+        width: 10px;
+      }
+    }
+
+    &.active {
+      .description_overlay_wrapper {
+        opacity: 1;
+        @include transform(scale(1));
+      }
+
+      &:before {
+        @include transform(scale(1));
+      }
+    }
+
+
+    &.left_aligned {
+      padding-left: 0;
+      padding-right: 50px;
+
+      &:before {
+        left: auto;
+        right: 5px;
+      }
+
+      @include phone {
+        padding-right: 20px;
+
+        &:before {
+          right: 0;
+        }
+      }
+    }
+  }
+
+  .linkmap_audio_player_controls {
+    .play, .pause {
+      @include transition(0.1s ease);
+    }
+
+    display: none;
+
+    .play {
+      @include transform(translate(-50%,-50%));
+      left: 50%;
+      top: 50%;
+      width: 100%;
+      height: 100%;
+
+      &:before {
+        content: $linkmap-audio-icon;
+        line-height: $linkmap-icon-line-height;
+        font-family: $linkmap-icon-font;
+        color: white;
+        font-size: 30px;
+        background-color: rgba(255, 255, 255, 0.3);
+        padding: 10px;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        @include transform(translate(-50%,-50%));
+        left: 50%;
+        top: 50%;
+        position: absolute;
+        text-align: center;
+      }
+    }
+
+    .pause {
+      @include transform(translate(-50%,-50%));
+      left: 50%;
+      top: 50%;
+      position: absolute;
+      background-color: rgba(0,0,0,0.7);
+      width: 35px;
+      height: 35px;
+      text-align: center;
+      padding: 10px;
+      border-radius: 50%;
+
+      &:before {
+        content: $linkmap-pause-icon;
+        font-family: $linkmap-icon-font;
+        color: white;
+        font-size: 30px;
+        line-height: $linkmap-icon-line-height;
+      }
+    }
+
+    .current_time {
+      color: $linkmap-audio-current-time-color;
+      font-size: 18px;
+      position: absolute;
+      @include transform(translate(-50%, -50%));
+      left: 50%;
+      bottom: 10px;
+      padding: 2px 11px;
+      background-color: rgba(0,0,0,0.7);
+      border-radius: 5px;
+    }
+
+    .duration {
+      display: none;
+    }
+
+    .right_circle, .left_circle, .audio_inline_loading_spinner {
+      .circle_inner {
+
+        .circle_innerst {
+          border: 4px solid $linkmap-audio-progress-color;
+        }
+      }
+    }
+  }
+
+  .hover_area {
+    &:hover, &.hover {
+      .linkmap_audio_player_controls {
+        .play:before {
+          background-color: rgba(0,0,0,0.7);
+        }
+
+        .play, .pause {
+          &:before {
+            color: $linkmap-icon-color;
+          }
+        }
+      }
+    }
+
+    &.dynamic_marker .linkmap_audio_player_controls {
+      display: block;
+    }
+  }
+}
