@@ -18,3 +18,4 @@ tmp
 log
 Gemfile.lock
 spec/dummy
+.localeapp
