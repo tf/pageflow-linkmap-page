@@ -100,6 +100,8 @@ de:
         visited_image_id:
           inline_help: Ein Ausschnitt dieses Bildes wird in den Bereichen der Hotspots angezeigt, deren Zielseite bereits besucht wurde.
           label: Visited-Bild
+      page_type_category_name: Verweise
+      page_type_description: Verweise mit konfigurierbaren Klickbereichen
       page_type_feature_name: Hotspot-Seitentyp
       page_type_name: Hotspots
     ui:

@@ -100,6 +100,8 @@ en:
         visited_image_id:
           inline_help: A part of this image is displayed inside the areas of hotspots whose target pages have already been visited.
           label: Visited image
+      page_type_category_name: Links
+      page_type_description: Links with configurable click areas
       page_type_feature_name: Hotspot page type
       page_type_name: Hotspots
     ui:
