@@ -69,7 +69,6 @@ pageflow.linkmapPage.ConfigurationEditorView = pageflow.ConfigurationEditorView.
         collection: pageflow.imageFiles,
         positioning: false
       });
-      this.input('background_image_id', pageflow.FileInputView, {collection: pageflow.imageFiles});
     });
 
     this.tab('areas', function() {

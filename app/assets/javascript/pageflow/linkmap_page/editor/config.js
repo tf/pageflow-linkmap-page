@@ -31,7 +31,7 @@ pageflow.editor.pageTypes.register('linkmap_page', {
 
     '.fixed_background': {
       view: pageflow.BackgroundImageEmbeddedView,
-      options: {propertyName: 'background_image_id'}
+      options: {propertyName: 'fixed_background_image_id'}
     }
   },
 
