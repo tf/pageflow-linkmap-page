@@ -1,99 +1,109 @@
 de:
+  activerecord:
+    attributes:
+      pageflow/linkmap_page/area:
+        link_description: ! 'Linkbeschreibung: Text'
+        link_title: ! 'Linkbeschreibung: Titel'
+        marker: Linkmarkierung
+        name: Bezeichnung
+        page_transition: Seitenwechsel-Animation
+        target_id: Ziel
+        target_type: Bereichstyp
+    values:
+      pageflow/linkmap_page/area:
+        marker:
+          dynamic_marker: Flexible Markierung
+          no_marker: Keine Markierung
+        target_type:
+          audio_file: Audio Datei
+          external_site: Externer Verweis
+          page: Interner Verweis
   pageflow:
     linkmap_page:
-      page_type_name: "Hotspots"
-      page_type_feature_name: "Hotspot-Seitentyp"
-      manage_sites: "Verweise verwalten"
-      default_page_transition: "(Standard)"
-
-      page_attributes:
-        background_type: "Panorama-Typ"
-
-        panorama_image: "Hintergrund-Bild"
-        panorama_video: "Hintergrund-Video"
-        panorama_fallback_image: "Hintergrund-Bild (mobil)"
-
-        hover_image: "Hover-Bild"
-        hover_video: "Hover-Video"
-        hover_fallback_image: "Hover-Bild (mobil)"
-
-        visited_image_id: "Visited-Bild"
-        linkmap_areas: "Verweisbereiche"
-        audio_areas: "Bereiche mit Audio"
-        limit_scrolling: "Scrollbereich auf aktive Bereiche beschränken"
-        add_environment: "Scrollumgebung erzwingen"
-        margin_scrolling_disabled: "Am Bildrand scrollen deaktivieren"
-
-      page:
-        scroll_left: "Nach links scrollen"
-        scroll_right: "Nach rechts scrollen"
-
+      default_page_transition: (Standard)
       editor:
         area_types:
-          page: "Seiten Verweis"
-          audio_file: "Audio Datei"
-          external_site: "Externer Verweis"
+          audio_file: Audio Datei
+          external_site: Externer Verweis
+          page: Seiten Verweis
         templates:
-          file_areas:
-            label: "Audios"
-            add: "Hinzufügen"
-          file_area_item:
-            edit: "Bearbeiten"
-            remove: "Entfernen"
-            toggle_marker: "Linkmarkierung aktivieren"
+          edit_area:
+            back: Zurück
+            destroy: Löschen
           embedded:
             area_item:
-              toggle_marker: "Linkmarkierung aktivieren"
-              edit: "Bearbeiten"
-          edit_area:
-            back: "Zurück"
-            destroy: "Löschen"
+              edit: Bearbeiten
+              toggle_marker: Linkmarkierung aktivieren
+          file_area_item:
+            edit: Bearbeiten
+            remove: Entfernen
+            toggle_marker: Linkmarkierung aktivieren
+          file_areas:
+            add: Hinzufügen
+            label: Audios
         views:
           areas_list:
-            label: "Bereiche"
-            add: "Hinzufügen"
+            add: Hinzufügen
+            label: Bereiche
           edit_area_view:
-            confirm_destroy: "Bereich wirklich löschen?"
-
+            confirm_destroy: Bereich wirklich löschen?
+      help_entries:
+        page_type:
+          menu_item: Hotspots
+          text: ! "# Hotspots\n\nVerweise mit konfigurierbaren Klickbereichen.\n\nHotspots können Audio-Dateien abspielen, interne Verweise auf andere Seiten im Pageflow sein oder auf externe Seiten verlinken. Es können so viele Hotspots angelegt werden, wie gewünscht. \n\nDer Panorama Typ entscheidet darüber, ob die Seite ein Hintergrund-Bild oder Hintergrund-Video zeigt. (Beachte, dass Hintergrund-Videos auf mobilen Geräten nicht abgespielt werden, deshalb wähle ein zusätzliches Panorama-Bild für die mobile Version) \n\nDie Hotspot-Seite ermöglicht auch die Nutzung von Panorama-Bildern, die größer sind, als der sichtbare Bildschirmbereich. So können Nutzer diese Seiten auch horizontal oder vertikal durch scrollen erkunden.\n\nUm einen Hotspot zu erstellen, klicke auf „Bereiche“ und wähle zwischen „Audio“, „Seitenverweis“ oder „Externer Verweis“.\n\nDiese „Bereiche\" können auf zwei unterschiedliche Arten dargestellt werden:\n\n##  Hotspots als Kreise\n\nEin weißer Kreis, dessen Position und Größe frei gewählt werden kann, markiert den Hotspot. Hierzu klicke beim entsprechenden Hotspot auf den Button mit dem Auge-Symbol und ziehe den Kreis dann an die gewünschte Position. Bei Auswahl einer Audio-Datei erscheint innerhalb des Kreises ein Kopfhörer-Symbol mit einem Inline-Audio-Player. Dessen Größe hängt von der Größe des Kreises ab. Je näher der Mauszeiger Richtung Kreis bewegt wird, desto heller/sichtbarer wird dieser. Mit Klick auf den Kopfhörer wird der Audio-Player gestartet und gestoppt. \n\n## Individuell gestaltete Hotspots\n\nAlternativ kann ein zweites Panorama-Bild verwendet werden, um das Aussehen der Hotspots zu bestimmen, über denen sich der Cursor befindet. Es müssen zwei Panorama-Bilder vorbereitet werden:\n\n1. Ein Bild mit allen Hotspots im inaktiven Modus (z.B. eine Karte auf der Städte mit schwarzen Punkten markiert sind)\n2. Ein Bild mit allen Hotspots im aktiven Zusand (z.B. die selbe Karte aber mit roten Punkten als Markierung)\n\nDie rechteckigen Bereiche der Hotspots werden nun so positioniert, dass sie die graphischen Darstellungen der Hotspots im Bild überdecken. Befindet sich der Cursor über einem der Bereiche, wird genau in diesem Ausschnitt der entsprechende Teil des Hover-Bildes gezeigt. Der Hotspot erscheint daher aktiv, während alle anderen Hotspots weiterhin inaktiv dargestellt werden.\n\nAn Stelle von Bildern können auch Video verwendet werden. Folgende Kombinationen sind möglich:\n\n1. Hintergrund-Bild mit Hover-Bild\n2. Hintergrund-Video mit Hover-Bild\n3. Hintergrund-Bild mit Hover-Video\n\nFalls die vom User bereits besuchten Bereiche anschliessend anders dargestellt werden sollen, kann ein „Visited-Bild“ festgelegt werden, das dann zum Beispiel einen bestimmten Hotspot nach dem Klick in einer abgeschwächten Farbe zeigt.\n\n## Textoptionen\n\nDie Hotspots können mit einem Titel benannt und mit weiteren Text versehen werden. Der Text kann in fett, kursiv und unterstrichen formatiert werden.\n\n## Atmo Optionen\n\nWie bei den anderen Seitentypen auch,  kann im Hintergrund ein zusätzliches Audiofile abgespielt werden. Für die Kombination mit Audio-Hotspots ist es neben “Ausblenden” und “Weiterspielen” zudem möglich, die Option “Leiser weiterspielen” auszuwählen. Das kann sinnvoll sein, wenn zum Beispiel ein im Hintergrund laufender Titel von einem kurzen Interview überlagert wird.\n\n## Weitere Optionen\n\nUnter „Optionen\" können folgende Regeln definiert werden:\n\nScrollbereich auf aktive Bereiche beschränken: Hierbei wird verhindert, dass die User sich in Bildbereiche ausserhalb der Hotspots bewegen können.\n\nScrollumgebung erzwingen: Hierbei wird der sichtbare Bereich so verkleinert, dass User sich durch die Seite scrollen müssen, um alle Hotspots zu sehen.\n\nAm Bildrand scrollen deaktivieren: Hierbei wird das sonst automatische Scrollen unterdrückt, sobald Leser die Maus zum Bildrand bewegen.\n\nTypische Anwendungsbeispiele: Menüseite, Multiple Choice, Entdeckungstour"
+      manage_sites: Verweise verwalten
+      page:
+        scroll_left: Nach links scrollen
+        scroll_right: Nach rechts scrollen
+      page_attributes:
+        add_environment:
+          inline_help: Panorama etwas vergrößern, um Scrollen in beide Richtungen zu erlauben.
+          label: Scrollumgebung erzwingen
+        audio_areas:
+          label: Bereiche mit Audio
+        background_type:
+          label: Panorama-Typ
+          values:
+            hover_video: Hintergrund-Bild/Hover-Video
+            image: Hintergrund-Bild/Hover-Bild
+            video: Hintergrund-Video/Hover-Bild
+        hover_image_id:
+          inline_help: Ein Ausschnitt dieses Bildes wird im Bereich eines Hotspots angezeigt, wenn sich der Cursor über dem Hotspot befindet.
+          label: Hover-Bild
+        hover_video_type:
+          hover_image_id:
+            inline_help: Bild, das auf mobilen Plattformen anstelle des Hover-Videos gezeigt werden soll.
+            label: Hover-Bild (mobil)
+          panorama_video_id:
+            inline_help: Ein Ausschnitt dieses Videos wird im Bereich eines Hotspots angezeigt, wenn sich der Cursor über dem Hotspot befindet.
+            label: Hover-Video
+        limit_scrolling:
+          inline_help: Scrollen nur erlauben, falls Hotspot Bereiche außerhalb des sichtbaren Bereichs liegen.
+          label: Scrollbereich auf aktive Bereiche beschränken
+        linked_linkmap_page_perma_ids:
+          label: Verlinkte Seiten
+        linkmap_areas:
+          label: Verweisbereiche
+        margin_scrolling_disabled:
+          inline_help: Panorama nicht automatisch scrollen, wenn der Cursor bewegt wird.
+          label: Am Bildrand scrollen deaktivieren
+        panorama_image_id:
+          inline_help: Bild auf dem Hotspots gesetzt werden sollen.
+          label: Panorama-Bild
+        panorama_video_id:
+          inline_help: Video auf dem Hotspots gesetzt werden sollen.
+          label: Panorama-Video
+        video_type:
+          panorama_image_id:
+            inline_help: Bild, das auf mobilen Plattformen anstelle des Panorama-Videos gezeigt werden soll.
+            label: Panorama-Bild (mobil)
+        visited_image_id:
+          inline_help: Ein Ausschnitt dieses Bildes wird in den Bereichen der Hotspots angezeigt, deren Zielseite bereits besucht wurde.
+          label: Visited-Bild
+      page_type_feature_name: Hotspot-Seitentyp
+      page_type_name: Hotspots
     ui:
       configuration_editor:
         tabs:
-          areas: "Bereiche"
-          appearance: "Erscheinungsbild"
-
-  activerecord:
-    attributes:
-      "pageflow/linkmap_page/area":
-        target_type: "Bereichstyp"
-        target_id: "Ziel"
-        name: "Bezeichnung"
-        page_transition: "Seitenwechsel-Animation"
-        marker: "Linkmarkierung"
-        link_title: "Linkbeschreibung: Titel"
-        link_description: "Linkbeschreibung: Text"
-      "pageflow/page":
-        background_type: "Panorama-Typ"
-        linked_linkmap_page_perma_ids: "Verlinkte Seiten"
-        panorama_image_id: "Hintergrund-Bild"
-        panorama_video_id: "Video"
-        hover_image_id: "Hover-Bild"
-        visited_image_id: "Visited-Bild"
-        linkmap_areas: "Verweisbereiche"
-        audio_areas: "Bereiche mit Audio"
-        limit_scrolling: "Scrollbereich auf aktive Bereiche beschränken"
-        add_environment: "Scrollumgebung erzwingen"
-        margin_scrolling_disabled: "Am Bildrand scrollen deaktivieren"
-    values:
-      "pageflow/page":
-        background_type:
-          image: "Hintergrund-Bild/Hover-Bild"
-          video: "Hintergrund-Video/Hover-Bild"
-          hover_video: "Hintergrund-Bild/Hover-Video"
-      "pageflow/linkmap_page/area":
-        marker:
-          no_marker: "Keine Markierung"
-          dynamic_marker: "Flexible Markierung"
-        target_type:
-          page: "Interner Verweis"
-          external_site: "Externer Verweis"
-          audio_file: "Audio Datei"
+          appearance: Erscheinungsbild
+          areas: Bereiche

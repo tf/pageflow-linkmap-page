@@ -12,7 +12,6 @@ pageflow.linkmapPage.ConfigurationEditorView = pageflow.ConfigurationEditorView.
       });
 
       this.input('panorama_image_id', pageflow.FileInputView, {
-        label: I18n.t('pageflow.linkmap_page.page_attributes.panorama_image'),
         collection: pageflow.imageFiles,
         positioning: true,
         visibleBinding: 'background_type',
@@ -22,7 +21,6 @@ pageflow.linkmapPage.ConfigurationEditorView = pageflow.ConfigurationEditorView.
       });
 
       this.input('panorama_video_id', pageflow.FileInputView, {
-        label: I18n.t('pageflow.linkmap_page.page_attributes.panorama_video'),
         collection: pageflow.videoFiles,
         positioning: true,
         visibleBinding: 'background_type',
@@ -30,7 +28,7 @@ pageflow.linkmapPage.ConfigurationEditorView = pageflow.ConfigurationEditorView.
       });
 
       this.input('panorama_image_id', pageflow.FileInputView, {
-        label: I18n.t('pageflow.linkmap_page.page_attributes.panorama_fallback_image'),
+        attributeTranslationKeyPrefixes: ['pageflow.linkmap_page.page_attributes.video_type'],
         collection: pageflow.imageFiles,
         positioning: false,
         visibleBinding: 'background_type',
@@ -38,7 +36,6 @@ pageflow.linkmapPage.ConfigurationEditorView = pageflow.ConfigurationEditorView.
       });
 
       this.input('hover_image_id', pageflow.FileInputView, {
-        label: I18n.t('pageflow.linkmap_page.page_attributes.hover_image'),
         collection: pageflow.imageFiles,
         positioning: false,
         visibleBinding: 'background_type',
@@ -48,7 +45,7 @@ pageflow.linkmapPage.ConfigurationEditorView = pageflow.ConfigurationEditorView.
       });
 
       this.input('panorama_video_id', pageflow.FileInputView, {
-        label: I18n.t('pageflow.linkmap_page.page_attributes.hover_video'),
+        attributeTranslationKeyPrefixes: ['pageflow.linkmap_page.page_attributes.hover_video_type'],
         collection: pageflow.videoFiles,
         positioning: false,
         visibleBinding: 'background_type',
@@ -56,7 +53,7 @@ pageflow.linkmapPage.ConfigurationEditorView = pageflow.ConfigurationEditorView.
       });
 
       this.input('hover_image_id', pageflow.FileInputView, {
-        label: I18n.t('pageflow.linkmap_page.page_attributes.hover_fallback_image'),
+        attributeTranslationKeyPrefixes: ['pageflow.linkmap_page.page_attributes.hover_video_type'],
         collection: pageflow.imageFiles,
         positioning: false,
         visibleBinding: 'background_type',
