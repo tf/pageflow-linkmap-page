@@ -101,6 +101,11 @@
     display: none !important;
   }
 
+  .arrow_left,
+  .arrow_right {
+    display: none;
+  }
+
   .hover_area {
     position: absolute;
     top: 50%;

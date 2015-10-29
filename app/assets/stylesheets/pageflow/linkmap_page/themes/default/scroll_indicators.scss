@@ -1,0 +1,68 @@
+.linkmap_page {
+  .arrow_left,
+  .arrow_right {
+    position: absolute;
+    top: 50%;
+    margin-top: -40px;
+    width: 80px;
+    height: 80px;
+    text-decoration: none;
+    pointer-events: none;
+    z-index: 10;
+    display: block;
+
+    &:before {
+      color: #fff;
+      width: 100%;
+      position: absolute;
+      height: 100%;
+      text-align: center;
+      font-size: 80px;
+      line-height: 80px;
+      opacity: 0;
+      text-shadow: 2px 2px 7px black, -1px -1px 7px black;
+      @include transition(opacity 0.3s);
+    }
+
+    &:hover {
+      &:before {
+        opacity: 1;
+      }
+    }
+
+    .invert & {
+      &:before {
+        color: black;
+        text-shadow: 2px 2px 7px black, -1px -1px 7px white;
+      }
+    }
+  }
+
+  .arrow_left {
+    @include fa-angle-left-icon;
+    left: 10px;
+
+    @include phone {
+      left: 2px;
+      @include transform(scale(0.5))
+    }
+  }
+
+  .arrow_right {
+    @include fa-angle-right-icon;
+    right: 30px;
+
+    @include phone {
+      right: 2px;
+      @include transform(scale(0.5))
+    }
+  }
+
+  &.can_scroll_left .arrow_left:before {
+    opacity: 1;
+  }
+
+  &.can_scroll_right .arrow_right:before {
+    opacity: 1;
+  }
+}

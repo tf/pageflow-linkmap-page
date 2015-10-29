@@ -24,6 +24,10 @@ de:
         add_environment: "Scrollumgebung erzwingen"
         margin_scrolling_disabled: "Am Bildrand scrollen deaktivieren"
 
+      page:
+        scroll_left: "Nach links scrollen"
+        scroll_right: "Nach rechts scrollen"
+
       editor:
         area_types:
           page: "Seiten Verweis"

@@ -33,6 +33,10 @@ pageflow.pageType.register('linkmap_page', _.extend({
       marginScrollingDisabled: configuration.margin_scrolling_disabled
     });
 
+    pageElement.find('.linkmap_page').linkmapScrollIndicators({
+      scroller: this.scroller
+    });
+
     pageElement.find('.hover_video').linkmapHoverVideo({
       video: pageElement.find('.panorama_video')
     });
