@@ -1,4 +1,8 @@
 .linkmap_page {
+  $arrow-margin: 30px;
+  $arrow-margin-with-default-navigation: 95px;
+  $arrow-margin-mobile: 10px;
+
   .arrow_left,
   .arrow_right {
     position: absolute;
@@ -43,18 +47,28 @@
     left: 10px;
 
     @include phone {
-      left: 2px;
+      left: $arrow-margin-mobile;
       @include transform(scale(0.5))
     }
   }
 
   .arrow_right {
     @include fa-angle-right-icon;
-    right: 30px;
+    right: $arrow-margin;
 
     @include phone {
-      right: 2px;
+      right: $arrow-margin-mobile;
       @include transform(scale(0.5))
+    }
+
+    .widget_default_navigation_present & {
+      @include desktop {
+        right: $arrow-margin-with-default-navigation;
+      }
+
+      @include pad_portrait {
+        right: $arrow-margin-mobile;
+      }
     }
   }
 
