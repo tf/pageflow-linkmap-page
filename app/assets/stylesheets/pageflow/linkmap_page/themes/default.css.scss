@@ -10,6 +10,7 @@
 
   $linkmap-overlay-text-color: #fff !default;
   $linkmap-overlay-title-color: $linkmap-main-color !default;
+  $linkmap-overlay-background-color: rgba(48,48,48,0.8) !default;
 
   $linkmap-icon-color: $main-color !default;
 
@@ -144,7 +145,7 @@
       left: 0;
       margin-top: -23px;
       padding: 10px 15px 10px 15px;
-      background-color: rgba(48,48,48,0.8);
+      background-color: $linkmap-overlay-background-color;
       opacity: 0;
       @include transition(0.15s ease 0.1s);
       @include transform(scale(0));
