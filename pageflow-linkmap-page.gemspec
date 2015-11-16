@@ -5,7 +5,7 @@ Gem::Specification.new do |spec|
   spec.version       = "0.1.0"
   spec.authors       = ["Christoph Merkelbach"]
   spec.email         = ["cmerkelbach@codevise.de"]
-  spec.summary       = "Pageflow Page Type for a page that contains customizable link areas"
+  spec.summary       = "Pageflow page type for a page that contains customizable link areas"
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -14,8 +14,8 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency 'pageflow', '>= 0.8.pre'
-  spec.add_runtime_dependency 'pageflow-external-links', '>= 0.3.pre'
+  spec.add_runtime_dependency 'pageflow', '~> 0.9'
+  spec.add_runtime_dependency 'pageflow-external-links', '~> 0.3'
 
   # Using translations from rails locales in javascript code.
   spec.add_runtime_dependency 'i18n-js'

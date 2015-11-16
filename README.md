@@ -1,4 +1,4 @@
-# Pageflow External Links
+# Pageflow Linkmap Page
 
 [![Gem Version](https://badge.fury.io/rb/pageflow-linkmap-page.svg)](http://badge.fury.io/rb/pageflowlinkmap-page)
 
