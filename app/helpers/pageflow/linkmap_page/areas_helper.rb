@@ -20,6 +20,7 @@ module Pageflow
           content_tag(:a,
                       '',
                       href: href,
+                      target: target,
                       class: css_classes,
                       style: inline_styles,
                       data: data_attributes,
@@ -30,14 +31,23 @@ module Pageflow
 
         def href
           if attributes[:target_type] == 'external_site'
-            site = ExternalLinks::Site.find_by_revision_id_and_perma_id(entry.try(:revision),
-                                                                        attributes[:target_id])
-            site ? site.url : '#'
+            external_site ? external_site.url : '#'
           elsif attributes[:target_type] == 'page'
             "##{attributes[:target_id]}"
           else
             '#'
           end
+        end
+
+        def target
+          return '' unless attributes[:target_type] == 'external_site'
+          (external_site && external_site.open_in_new_tab?) ? '_blank' : ''
+        end
+
+        def external_site
+          @external_site ||=
+            ExternalLinks::Site.find_by_revision_id_and_perma_id(entry.try(:revision),
+                                                                 attributes[:target_id])
         end
 
         def data_attributes
@@ -62,8 +72,9 @@ module Pageflow
 
         def css_classes
           ['hover_area',
+            (external_site && !external_site.open_in_new_tab?) ? 'target_self' : nil,
             attributes[:marker].to_s,
-            "#{attributes[:target_type]}_area"].join(' ')
+            "#{attributes[:target_type]}_area"].compact.join(' ')
         end
 
         def styles_string(properties)

@@ -253,7 +253,7 @@
       @include inline-loading-spinner;
     }
 
-    &.active {
+    &.active.target_self {
       .inline_loading_spinner {
         display: block;
       }
