@@ -31,6 +31,14 @@ Include javascripts and stylesheets:
     # app/assets/stylesheets/pageflow/editor.css.scss
     @import "pageflow/linkmap_page/editor";
 
+Import default theme additions:
+
+    # app/assets/stylesheets/pageflow/themes/default.css.scss
+
+    @import "pageflow/linkmap_page/themes/default";
+
+    /* Display arrows left and right to indicate panorama */
+    @import "pageflow/linkmap_page/themes/default/scroll_indicators";
 
 Install dependencies:
 

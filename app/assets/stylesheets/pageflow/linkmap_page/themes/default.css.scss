@@ -1,3 +1,5 @@
+@include pageflow-page-type-pictograms("linkmap_page");
+
 .linkmap_page {
   $linkmap-icon-font: "FontAwesome" !default;
   $linkmap-icon-line-height: 1.1em !default;
