@@ -109,3 +109,11 @@ en:
         tabs:
           appearance: Appearance
           areas: Areas
+      inline_help:
+        pageflow/linkmap_page/area:
+          link_title: The description is displayed inside an overlay when the cursor hovers the hotspot.
+          marker: ! 'Choose the hotspot''s visual appearance. '
+          name: Choose a label to recognize the link within the overview. This label is for your orientation only and will not be displayed to the reader.
+          page_transition: Choose the animation, that will be used to transition to the link's target page.
+          target_id: Object the hotspot links to.
+          target_type: Choose the type of object the hotspot is supposed to link to.

@@ -109,3 +109,11 @@ de:
         tabs:
           appearance: Erscheinungsbild
           areas: Bereiche
+      inline_help:
+        pageflow/linkmap_page/area:
+          link_title: Die Beschreibung wird in einem Overlay angezeigt, wenn sich der Cursor über dem Hotspot befindet.
+          marker: Wähle die visuelle Darstellung des Hotspots.
+          name: Gib hier eine Bezeichnung ein, um später bei in der Verweis-Übersicht direkt zu erkennen, um welchen Verweis es sich handelt. Die Bezeichnung ist für die Leser nicht sichtbar.
+          page_transition: Wähle hier den Effekt, der beim Übergang zur Zielseite des Verweises benutzt werden soll.
+          target_id: Objekt auf das der Hotspot verlinkt.
+          target_type: Wähle den Typ von Objekt auf den Hotspot verlinken soll.
