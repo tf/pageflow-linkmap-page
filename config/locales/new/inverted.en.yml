@@ -1,4 +1,5 @@
 en:
-  pageflow:
-    pageflow/linkmap_page/area:
-      inverted: "Inverted"
+  activerecord:
+    attributes:
+      pageflow/linkmap_page/area:
+        inverted: "Inverted"
