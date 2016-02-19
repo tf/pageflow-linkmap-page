@@ -2,7 +2,6 @@ pageflow.linkmapPage.ConfigurationEditorView = pageflow.ConfigurationEditorView.
   configure: function() {
     this.tab('general', function() {
       this.input('title', pageflow.TextInputView, {required: true});
-      this.input('invert', pageflow.CheckBoxInputView);
     });
 
     this.tab('files', function() {
