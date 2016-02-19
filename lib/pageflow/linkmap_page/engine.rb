@@ -4,6 +4,7 @@ module Pageflow
       isolate_namespace Pageflow::LinkmapPage
 
       config.autoload_paths << File.join(config.root, 'lib')
+      config.i18n.load_path += Dir[config.root.join('config', 'locales', '**', '*.yml').to_s]
 
       config.generators do |g|
         g.test_framework :rspec,:fixture => false
@@ -14,5 +15,3 @@ module Pageflow
     end
   end
 end
-
-
