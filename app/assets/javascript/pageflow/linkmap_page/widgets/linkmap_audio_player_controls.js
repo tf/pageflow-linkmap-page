@@ -54,7 +54,7 @@
       });
 
       this.element.on('click', function() {
-        if (widget.element.hasClass('no_marker')) {
+        if (!widget.element.hasClass('dynamic_marker')) {
           widget._trigger('play', null, {
             audioFileId: widget.element.data('audioFile')
           });
