@@ -157,9 +157,13 @@
     },
 
     calcAreaOpacity: function(activeAreas, mX, mY) {
+      if (pageflow.browser.has('mobile platform')) {
+        return;
+      }
+
       var pageElement = this.options.page;
       var distanceLimit = pageElement.width() > pageElement.height() ? pageElement.height() : pageElement.width();
-      var minOpacity = 0.1;
+      var minOpacity = 0.4;
       activeAreas.each(function() {
         var distance = calculateDistance($(this), mX, mY);
 
@@ -196,7 +200,7 @@
       var element = this.element;
 
       element.find('.linkmap_marker').removeClass('no_transition teasing');
-      element.find('.linkmap_marker').css('opacity', '0.1');
+      element.find('.linkmap_marker').css('opacity', pageflow.browser.has('mobile platform') ? '0.8' : '0.4');
     },
 
     getScrollArea: function(activeAreas) {
