@@ -315,6 +315,10 @@
     }
   }
 
+  .inverted .linkmap_audio_player_controls .play:before {
+    color: #444;
+  }
+
   .hover_area {
     &:hover, &.hover {
       .linkmap_audio_player_controls {

@@ -74,6 +74,7 @@ module Pageflow
           ['hover_area',
             (external_site && !external_site.open_in_new_tab?) ? 'target_self' : nil,
             attributes[:marker].to_s,
+            attributes[:inverted] ? 'inverted' : nil,
             "#{attributes[:target_type]}_area"].compact.join(' ')
         end
 

@@ -185,5 +185,6 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
       element.toggleClass(option, that.model.get('marker') === option);
     });
 
+    element.toggleClass('inverted', !!this.model.get('inverted'));
   }
 });
