@@ -151,7 +151,7 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
     this.$el.toggleClass('portrait', this.$el.width() <= this.$el.height());
     this.$el.toggleClass('landscape', this.$el.width() > this.$el.height());
 
-    _(['page', 'audio_file', 'external_site']).each(function(type) {
+    _(['page', 'audio_file', 'external_site', 'text_only']).each(function(type) {
       this.$el.toggleClass(type + '_area', this.model.get('target_type') === type);
     }, this);
 

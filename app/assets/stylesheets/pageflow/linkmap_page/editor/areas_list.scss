@@ -2,4 +2,14 @@
   .drop_down_button button {
     @include plus-circled-icon;
   }
+
+  .text_only {
+    .type_pictogram {
+      background-image: image-url("pageflow/linkmap_page/text_only_area_type_pictogram.png");
+    }
+
+    .pictogram {
+      @include feather-icon;
+    }
+  }
 }

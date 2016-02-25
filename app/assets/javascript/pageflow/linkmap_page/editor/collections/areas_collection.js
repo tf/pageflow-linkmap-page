@@ -41,6 +41,12 @@ pageflow.linkmapPage.AreasCollection = Backbone.Collection.extend({
     });
   },
 
+  addTextOnly: function() {
+    this.addWithPosition({
+      target_type: 'text_only'
+    });
+  },
+
   addWithPosition: function(attributes) {
     this.add(_.extend(
       {width: 7, height: 7},

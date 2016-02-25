@@ -42,7 +42,7 @@ pageflow.linkmapPage.EditAreaView = Backbone.Marionette.Layout.extend({
       this.input('name', pageflow.TextInputView);
 
       this.input('target_type', pageflow.SelectInputView, {
-        values: ['page', 'external_site', 'audio_file'],
+        values: ['page', 'external_site', 'audio_file', 'text_only'],
         ensureValueDefined: true
       });
 
@@ -74,13 +74,19 @@ pageflow.linkmapPage.EditAreaView = Backbone.Marionette.Layout.extend({
         visibleBinding: 'target_type',
         visibleBindingValue: 'audio_file'
       });
+
+      this.input('link_title', pageflow.TextInputView);
+      this.input('link_description', pageflow.TextAreaInputView, {size: 'short'});
     });
 
     configurationEditor.tab('appearance', function() {
       this.input('marker', pageflow.SelectInputView, {values: pageflow.linkmapPage.toggleMarkerOptions});
-      this.input('inverted', pageflow.CheckBoxInputView);
-      this.input('link_title', pageflow.TextInputView);
-      this.input('link_description', pageflow.TextAreaInputView, {size: 'short'});
+      this.input('inverted', pageflow.CheckBoxInputView, {
+        visibleBinding: 'target_type',
+        visible: function(value) {
+          return value !== 'text_only';
+        }
+      });
     });
   },
 

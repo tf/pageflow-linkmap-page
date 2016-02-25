@@ -31,8 +31,25 @@ pageflow.linkmapPage.Area = Backbone.Model.extend({
   },
 
   thumbnailFile: function() {
+    if (this.get('target_type') === 'text_only') {
+      return this.textOnlyAreaPlaceholderFile();
+    }
+
     var target = this.target();
     return target ? target.thumbnailFile() : null;
+  },
+
+  textOnlyAreaPlaceholderFile: function() {
+    if (!pageflow.linkmapPage.Area.textOnlyAreaPlaceholderFile) {
+      var file = new pageflow.AudioFile({
+        state: 'encoded'
+      });
+
+      file.thumbnailPictogram = 'text_only';
+      pageflow.linkmapPage.Area.textOnlyAreaPlaceholderFile = file;
+    }
+
+    return pageflow.linkmapPage.Area.textOnlyAreaPlaceholderFile;
   },
 
   label: function() {

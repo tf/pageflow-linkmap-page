@@ -1,0 +1,11 @@
+en:
+  pageflow:
+    linkmap_page:
+      editor:
+        area_types:
+          text_only: "Text only"
+  activerecord:
+    values:
+      pageflow/linkmap_page/area:
+        target_type:
+          text_only: Text only

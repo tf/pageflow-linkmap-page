@@ -19,7 +19,8 @@ pageflow.linkmapPage.AreasListView = Backbone.Marionette.View.extend({
         return {
           'audio_file': 'audio',
           'page': 'internal_links_list',
-          'external_site': 'external_links'
+          'external_site': 'external_links',
+          'text_only': 'text_only'
         }[area.get('target_type')];
       },
 
@@ -28,7 +29,7 @@ pageflow.linkmapPage.AreasListView = Backbone.Marionette.View.extend({
       },
 
       itemIsInvalid: function(area) {
-        return !area.target();
+        return !area.target() && area.get('target_type') !== 'text_only';
       },
     }));
 

@@ -9,7 +9,7 @@
       this.delegatePlayerEvent('timeupdate', 'updateProgress');
 
       player.on('play', function(options) {
-        var playerElements = element.find('[data-audio-file]');
+        var playerElements = element.find('[data-target-type="audio_file"]');
 
         playerElements.each(function() {
           var playerElement = $(this);

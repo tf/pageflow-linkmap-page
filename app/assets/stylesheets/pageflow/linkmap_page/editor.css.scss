@@ -44,7 +44,8 @@
   }
 
   .page_area,
-  .external_site_area {
+  .external_site_area,
+  .text_only_area {
     .linkmap_audio_player_controls {
       display: none !important;
     }
@@ -105,6 +106,16 @@
 
       .area_type_pictogram {
         @include note-icon;
+      }
+    }
+
+    .text_only_area {
+      &:before {
+        border-color: pink;
+      }
+
+      .area_type_pictogram {
+        @include feather-icon;
       }
     }
   }

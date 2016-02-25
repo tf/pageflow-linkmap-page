@@ -15,7 +15,8 @@ pageflow.linkmapPage.areaTypesFor = function(pageConfiguration) {
   return new Backbone.Collection(_([
     pageflow.linkmapPage.PageLinkAreaType,
     pageflow.linkmapPage.AudioFileAreaType,
-    pageflow.linkmapPage.ExternalLinkAreaType
+    pageflow.linkmapPage.ExternalLinkAreaType,
+    pageflow.linkmapPage.TextOnlyAreaType
   ]).map(function(constructor) {
     return new constructor({}, {
       pageConfiguration: pageConfiguration
