@@ -2,4 +2,9 @@ de:
   activerecord:
     attributes:
       pageflow/linkmap_page/area:
-        inverted: "Invertiert"
+        inverted: "Invertieren"
+  pageflow:
+    ui:
+      inline_help:
+        pageflow/linkmap_page/area:
+          inverted: "Dunkle Piktogramme für die Verwendung auf hellen Hintergründen anzeigen."

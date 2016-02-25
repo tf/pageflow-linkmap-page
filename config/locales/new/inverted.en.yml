@@ -2,4 +2,9 @@ en:
   activerecord:
     attributes:
       pageflow/linkmap_page/area:
-        inverted: "Inverted"
+        inverted: "Invert"
+  pageflow:
+    ui:
+      inline_help:
+        pageflow/linkmap_page/area:
+          inverted: "Display dark pictograms to improve visibility on light backgrounds."
