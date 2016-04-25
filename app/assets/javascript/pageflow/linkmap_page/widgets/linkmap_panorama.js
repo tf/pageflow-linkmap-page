@@ -289,6 +289,9 @@
         this.panorama.width(this.panoramaSize.width);
         this.panorama.height(this.panoramaSize.height);
 
+        pageElement.toggleClass('linkmap_panorama_h', this.panoramaSize.orientation === 'h');
+        pageElement.toggleClass('linkmap_panorama_v', this.panoramaSize.orientation === 'v');
+
         this.activeAreas = pageElement.find(this.options.activeAreasSelector);
         this.scrollArea = this.getScrollArea(this.activeAreas);
 
@@ -333,10 +336,12 @@
       if(imageRatio > windowRatio) {
         result.height = pageElement.height() * environmentMargin;
         result.width = result.height * imageRatio;
+        result.orientation = 'h';
       }
       else {
         result.width = pageElement.width() * environmentMargin;
         result.height = result.width / imageRatio;
+        result.orientation = 'v';
       }
 
       if (result.width < this.panorama.attr('data-width') * smallestScale) {
