@@ -1,8 +1,8 @@
 # CHANGELOG
 
-### 0.1.0
+### Version 0.1.0
 
-2015-12-01
+2016-06-09
 
 - Initial release
 
