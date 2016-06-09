@@ -5,3 +5,7 @@ rescue LoadError
 end
 
 Bundler::GemHelper.install_tasks
+
+require 'semmy'
+
+Semmy::Tasks.install

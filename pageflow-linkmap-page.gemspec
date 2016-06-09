@@ -1,8 +1,11 @@
 # coding: utf-8
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'pageflow/linkmap_page/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'pageflow-linkmap-page'
-  spec.version       = '0.1.0'
+  spec.version       = Pageflow::LinkmapPage::VERSION
   spec.authors       = ['Codevise Solutions Ltd.']
   spec.email         = ['info@codevise.de']
   spec.summary       = 'Pageflow page type for a page that contains customizable link areas'
@@ -28,4 +31,7 @@ Gem::Specification.new do |spec|
 
   # Browser like integration testing
   spec.add_development_dependency 'capybara'
+
+  # Semantic versioning rake tasks
+  spec.add_development_dependency 'semmy', '~> 0.2.1'
 end
