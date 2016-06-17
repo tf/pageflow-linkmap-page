@@ -10,6 +10,7 @@ pages and inline audio players.
 Add this line to your application's `Gemfile`:
 
     gem 'pageflow-linkmap-page'
+    gem 'pageflow-external-links' # needed to copy the migration contained within
 
 Register the page type inside the configure block in `config/initializers/pageflow.rb`
 
@@ -43,6 +44,8 @@ Import default theme additions:
 Install dependencies:
 
     bundle install
+
+Then follow the installation instructions for the [pageflow-external-links](https://github.com/codevise/pageflow-external-links) gem.
 
 Restart the application server and enable the corresponding page type
 feature.
