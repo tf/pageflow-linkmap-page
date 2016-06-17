@@ -45,10 +45,7 @@ Install dependencies:
 
     bundle install
 
-Copy migrations of pageflow-external-links into your project and migrate the database:
-
-    bundle exec rake pageflow_external_links:install:migrations
-    bundle exec rake db:migrate
+Then follow the installation instructions for the [pageflow-external-links](https://github.com/codevise/pageflow-external-links) gem.
 
 Restart the application server and enable the corresponding page type
 feature.
