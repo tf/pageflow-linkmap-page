@@ -4,16 +4,20 @@
   $arrow-margin-mobile: 10px;
 
   .arrow_left,
-  .arrow_right {
+  .arrow_right,
+  .arrow_up,
+  .arrow_down {
     position: absolute;
-    top: 50%;
-    margin-top: -40px;
     width: 80px;
     height: 80px;
     text-decoration: none;
     pointer-events: none;
     z-index: 10;
     display: block;
+
+    @include phone {
+      @include transform(scale(0.5))
+    }
 
     &:before {
       color: #fff;
@@ -42,41 +46,67 @@
     }
   }
 
+  .arrow_left,
+  .arrow_right {
+    margin-top: -40px;
+    top: 50%;
+  }
+
+  .arrow_up,
+  .arrow_down {
+    left: 50%;
+  }
+
   .arrow_left {
     @include fa-angle-left-icon;
     left: 10px;
 
     @include phone {
       left: $arrow-margin-mobile;
-      @include transform(scale(0.5))
     }
   }
 
   .arrow_right {
     @include fa-angle-right-icon;
     right: $arrow-margin;
+    @extend %pageflow_widget_margin_right !optional;
 
     @include phone {
       right: $arrow-margin-mobile;
-      @include transform(scale(0.5))
-    }
-
-    .widget_default_navigation_present & {
-      @include desktop {
-        right: $arrow-margin-with-default-navigation;
-      }
-
-      @include pad_portrait {
-        right: $arrow-margin-mobile;
-      }
     }
   }
 
-  &.can_scroll_left .arrow_left:before {
+  .arrow_up {
+    @include fa-angle-up-icon;
+    top: $arrow-margin;
+
+    @include phone {
+      top: 0;
+    }
+  }
+
+  .arrow_down {
+    @include fa-angle-down-icon;
+    bottom: $arrow-margin;
+
+    @include phone {
+      bottom: 0;
+    }
+  }
+
+  .linkmap_panorama_h &.can_scroll_left .arrow_left:before {
     opacity: 1;
   }
 
-  &.can_scroll_right .arrow_right:before {
+  .linkmap_panorama_h  &.can_scroll_right .arrow_right:before {
+    opacity: 1;
+  }
+
+  .linkmap_panorama_v &.can_scroll_up .arrow_up:before {
+    opacity: 1;
+  }
+
+  .linkmap_panorama_v &.can_scroll_down .arrow_down:before {
     opacity: 1;
   }
 }
