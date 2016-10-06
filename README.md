@@ -48,7 +48,7 @@ Install dependencies:
 Then follow the installation instructions for the [pageflow-external-links](https://github.com/codevise/pageflow-external-links) gem.
 
 Restart the application server and enable the corresponding page type
-feature.
+feature for entries in the tab *features*.
 
 ## Troubleshooting
 
