@@ -6,6 +6,9 @@
     _create: function() {
       var widget = this;
 
+      this.lastImageUrls = {};
+      this.imagePromises = {};
+
       this.refresh();
 
       if (widget.options.hoverVideoEnabled) {
@@ -42,29 +45,74 @@
     },
 
     refresh: function() {
-      var hoverAreas = this.element.find('.hover_area'),
-          hoverImages = this.element.find('.background_image');
+      var hoverAreas = this.element.find('.hover_area');
+      var widget = this;
 
-      this._resizeToBaseImage(hoverImages);
+      $.when(
+        this.loadImage('hover'),
+        this.loadImage('visited'),
+        this.loadMasks()
+      ).then(function(hoverImage, visitedImage, masks) {
+        var baseImage = widget.options.baseImage();
+        var width = baseImage.width();
+        var height = baseImage.height();
+
+        hoverAreas.linkmapAreaRedraw({
+          target: '.hover_image',
+          image: hoverImage,
+          width: width,
+          height: height,
+          masks: masks
+        });
+
+        hoverAreas.linkmapAreaRedraw({
+          target: '.visited_image',
+          image: visitedImage,
+          width: width,
+          height: height,
+          masks: masks
+        });
+      });
 
       hoverAreas.linkmapAreaClip();
       hoverAreas.linkmapAreaFormat();
       hoverAreas.linkmapAreaVisited();
     },
 
-    _resizeToBaseImage: function(target) {
-      var baseImage = this.options.baseImage();
+    loadImage: function(name) {
+      var url = this.options[name + 'ImageUrl'];
 
-      target
-        .width(baseImage.width())
-        .height(baseImage.height());
+      if (this.lastImageUrls[name] !== url) {
+        this.lastImageUrls[name] = url;
+        this.imagePromises[name] = url && pageflow.linkmapPage.RemoteImage.load(url);
+      }
+
+      return this.imagePromises[name];
+    },
+
+    loadMasks: function() {
+      var widget = this;
+
+      if (this.lastMaskImageUrl !== this.options.maskImageUrl) {
+        this.lastMaskImageUrl = this.options.maskImageUrl;
+
+        this.masksPromise = this.options.maskImageUrl ?
+          pageflow.linkmapPage.Masks.loadColorMap(this.options.maskImageUrl) :
+          $.when(pageflow.linkmapPage.Masks.empty);
+
+        this.masksPromise.then(function(masks) {
+          widget._trigger('updatemasks', null, {masks: masks});
+        });
+      }
+
+      return this.masksPromise;
     }
   });
 
   $.fn.linkmapAreaClip = function(optionalPosition) {
     this.each(function() {
       var hoverArea = $(this);
-      var clippedElement = hoverArea.find('.panorama_video, .background_image');
+      var clippedElement = hoverArea.find('.panorama_video, .hover_image, .visited_image');
       var position = optionalPosition || hoverArea.position();
 
       clippedElement.css({

@@ -4,9 +4,21 @@ module Pageflow
       include BackgroundImageHelper
 
       def linkmap_areas_div(entry, configuration)
+        hover_image_file = Pageflow::ImageFile.find_by_id(configuration['hover_image_id'])
+        visited_image_file = Pageflow::ImageFile.find_by_id(configuration['visited_image_id'])
+        mask_image_file = Pageflow::ImageFile.find_by_id(configuration['mask_image_id'])
+
         render('pageflow/linkmap_page/areas/div',
                entry: entry,
-               configuration: configuration)
+               configuration: configuration,
+               data_attributes: {
+                 hover_image_url: hover_image_file &&
+                   hover_image_file.attachment.url(:panorama_large),
+                 visited_image_url: visited_image_file &&
+                   visited_image_file.attachment.url(:panorama_large),
+                 mask_image_url: mask_image_file &&
+                   mask_image_file.attachment.url(:panorama_large)
+               })
       end
 
       def linkmap_area(entry, attributes, index, &block)
@@ -58,6 +70,7 @@ module Pageflow
             target_id: attributes[:target_id],
             audio_file: audio_file_id.present? ? "#{audio_file_id}.area_#{index}" : nil,
             page_transition: attributes[:page_transition],
+            mask_id: attributes[:mask_perma_id],
             width: attributes[:width],
             height: attributes[:height]
           }.delete_if { |key, value| value.blank? }
