@@ -6,4 +6,4 @@
 
 pageflow.linkmapPage = pageflow.linkmapPage || {};
 
-pageflow.linkmapPage.toggleMarkerOptions = ['no_marker', 'dynamic_marker'];
+pageflow.linkmapPage.markerOptions = ['no_marker', 'dynamic_marker'];

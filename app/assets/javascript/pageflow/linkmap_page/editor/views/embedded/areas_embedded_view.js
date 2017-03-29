@@ -1,5 +1,14 @@
 pageflow.linkmapPage.AreasEmbeddedView = Backbone.Marionette.View.extend({
   render: function() {
+    var view = this;
+
+    var masksDelegator = this.masks = new pageflow.linkmapPage.MasksDelegator();
+
+    this.$el.on('linkmapupdatemasks', function(event, options) {
+      masksDelegator.updateDelegate(options.masks);
+      view.updateClassNames();
+    });
+
     this.subview(new pageflow.CollectionView({
       el: this.$el,
       collection: this.model.linkmapAreas(this.options.propertyName),
@@ -7,7 +16,8 @@ pageflow.linkmapPage.AreasEmbeddedView = Backbone.Marionette.View.extend({
       itemViewOptions: {
         pageConfiguration: this.model,
         page: this.model.page,
-        container: this.options.container
+        container: this.options.container,
+        masks: masksDelegator
       }
     }));
 

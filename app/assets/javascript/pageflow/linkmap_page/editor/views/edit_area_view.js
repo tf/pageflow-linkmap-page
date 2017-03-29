@@ -83,7 +83,7 @@ pageflow.linkmapPage.EditAreaView = Backbone.Marionette.Layout.extend({
     });
 
     configurationEditor.tab('appearance', function() {
-      this.input('marker', pageflow.SelectInputView, {values: pageflow.linkmapPage.toggleMarkerOptions});
+      this.input('marker', pageflow.SelectInputView, {values: pageflow.linkmapPage.markerOptions});
       this.input('inverted', pageflow.CheckBoxInputView, {
         visibleBinding: 'target_type',
         visible: function(value) {
