@@ -4,13 +4,10 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
   className: 'hover_area',
 
   events: {
-    'click .edit': function() {
-      pageflow.editor.navigate(this.model.editPath(), {trigger: true});
-      return false;
-    },
-
     'linkmapareaclick': function() {
       if (this.$el.is('.editable .hover_area')) {
+        this.model.select();
+        pageflow.editor.navigate(this.model.editPath(), {trigger: true});
         return false;
       }
     },
@@ -22,17 +19,42 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
       else {
         this.model.set('marker', 'dynamic_marker');
       }
+    },
+
+    'click .action_buttons': function() {
+      return false;
+    },
+
+    'click .set_mask': function() {
+      this.model.selectMask();
+    },
+
+    'click .unset_mask': function() {
+      this.model.unsetMask();
+    },
+
+    'linkmapareaenter': function() {
+      this.model.set('highlighted', true);
+    },
+
+    'linkmaparealeave': function() {
+      this.model.set('highlighted', false);
+    },
+
+    'resize': function(event) {
+      event.stopPropagation();
     }
   },
 
   modelEvents: {
-    change: 'update'
+    'change': 'update',
+
+    'change:selected': 'updateDraggableAndResizable'
   },
 
   onRender: function() {
     this.setupDraggableAndResizable();
     this.setupAudioPlayer();
-    this.listenToEditable();
 
     this.update();
   },
@@ -45,15 +67,19 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
       handles: 'n, e, s, w, ne, se, sw, nw',
 
       start: function() {
-        that.$el.addClass('hover editing');
+        that.model.set('editing', true);
         scroller.scroller('disable');
 
       },
 
+      resize: function(event, ui) {
+        that.$el.linkmapAreaClip(ui.position);
+      },
+
       stop: function(event, ui) {
-        that.$el.removeClass('hover editing');
         savePositionAndSize();
         scroller.scroller('enable');
+        that.model.unset('editing');
       }
     });
 
@@ -61,7 +87,7 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
       iframeFix: true,
 
       start: function() {
-        that.$el.addClass('hover editing');
+        that.model.set('editing', true);
         scroller.scroller('disable');
       },
 
@@ -70,44 +96,39 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
       },
 
       stop: function(event, ui) {
-        that.$el.removeClass('hover editing');
         scroller.scroller('enable');
         savePositionAndSize();
+        that.model.unset('editing');
       }
     }).css('position', 'absolute');
 
-    if (!this.options.page.get('areas_editable')) {
-      this.$el.resizable('disable');
-      this.$el.draggable('disable');
-    }
+    this.updateDraggableAndResizable();
 
     function savePositionAndSize() {
       var element = that.$el;
 
-      that.model.set({
-        left: parseInt(element.css('left'), 10) / (element.parent().width() / 100),
-        top: parseInt(element.css('top'), 10) / (element.parent().height() / 100),
-        width: parseInt(element.css('width'), 10) / (element.parent().width() / 100),
-        height: parseInt(element.css('height'), 10) / (element.parent().height() / 100)
-      });
+      that.model.setDimensions(
+        parseInt(element.css('left'), 10) / (element.parent().width() / 100),
+        parseInt(element.css('top'), 10) / (element.parent().height() / 100),
+        parseInt(element.css('width'), 10) / (element.parent().width() / 100),
+        parseInt(element.css('height'), 10) / (element.parent().height() / 100)
+      );
+    }
+  },
+
+  updateDraggableAndResizable: function() {
+    if (this.model.get('selected') && !this.getMask()) {
+      this.$el.resizable('enable');
+      this.$el.draggable('enable');
+    }
+    else {
+      this.$el.resizable('disable');
+      this.$el.draggable('disable');
     }
   },
 
   setupAudioPlayer: function() {
     this.$el.linkmapAudioPlayerControls();
-  },
-
-  listenToEditable: function() {
-    this.listenTo(this.options.page, 'change:areas_editable', function(model, editable) {
-      if (editable) {
-        this.$el.resizable('enable');
-        this.$el.draggable('enable');
-      }
-      else {
-        this.$el.resizable('disable');
-        this.$el.draggable('disable');
-      }
-    });
   },
 
   update: function() {
@@ -121,7 +142,11 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
     this.$el.attr('data-target-id', this.model.get('target_id'));
     this.$el.attr('data-page-transition', this.model.get('page_transition'));
 
+    this.$el.toggleClass('selected', !!this.model.get('selected'));
     this.$el.toggleClass('highlighted', !!this.model.get('highlighted'));
+    this.$el.toggleClass('editing', !!this.model.get('editing'));
+    this.$el.toggleClass('without_mask', !mask);
+    this.$el.toggleClass('with_mask', !!mask);
 
     this.$el.attr('data-width', this.model.get('width'));
     this.$el.attr('data-height', this.model.get('height'));

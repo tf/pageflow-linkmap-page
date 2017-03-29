@@ -1,0 +1,39 @@
+de:
+  activerecord:
+    attributes:
+      pageflow/linkmap_page/area:
+        mask_perma_id: "Maske"
+    values:
+      pageflow/linkmap_page/area:
+        marker:
+          mask: "Maske"
+  pageflow:
+    ui:
+      inline_help:
+        pageflow/linkmap_page/area:
+          mask_perma_id: "Farbiger Bereich im Maskenbild, der die Form des Hotspots bestimmt."
+          mask_perma_id_disabled: "Farbiger Bereich im Maskenbild, der die Form des Hotspots bestimmt. Wähle zunächst ein Masken-Bild im 'Dateien'-Tab der Hotspot-Seite."
+    linkmap_page:
+      page_attributes:
+        mask_image_id:
+          label: "Masken-Bild"
+          inline_help: "Bild mit farbigen Bereichen, die die Umrisse von Hotspots bestimmen. Weitere Hinweise im Hilfe-Eintrag des Hotspot-Seitentyps."
+      editor:
+        views:
+          area_mask_input_view:
+            present: "(Aktiv)"
+          select_area_position_hint:
+            select_mask_hint: "Klicke auf einen der farbigen Bereiche des Masken-Bildes, um einen Bereich für den Hotspot auszuwählen."
+            select_mask_or_drag_hint: "Klicke auf einen der farbigen Bereiche des Masken-Bildes oder wähle einen frei positionierten Bereich durch Klicken und Ziehen mit der Maus."
+            drag_hint: "Wähle einen Bereich für den Hotspot durch Klicken und Ziehen mit der Maus."
+        templates:
+          select_area_position_hint:
+            cancel: "Abbrechen"
+          embedded:
+            area_item:
+              set_mask: "Maske auswählen"
+              unset_mask: "Frei positionierbar machen"
+              hide_marker: "Linkmarkierung deaktivieren"
+              show_marker: "Linkmarkierung aktivieren"
+              edit: "DELETE"
+              toggle_marker: "DELETE"
