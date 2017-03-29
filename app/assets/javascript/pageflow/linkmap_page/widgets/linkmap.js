@@ -71,6 +71,10 @@
           area.trigger('linkmaparealeave');
         }
 
+        area.css('cursor',
+                 hovered && area.attr('data-target-type') !== 'text_only' ?
+                 'pointer' : 'default');
+
         area.toggleClass('hover', hovered);
       });
     },
