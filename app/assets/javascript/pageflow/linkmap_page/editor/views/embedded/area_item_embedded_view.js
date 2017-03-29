@@ -9,7 +9,7 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
       return false;
     },
 
-    'click': function() {
+    'linkmapareaclick': function() {
       if (this.$el.is('.editable .hover_area')) {
         return false;
       }
