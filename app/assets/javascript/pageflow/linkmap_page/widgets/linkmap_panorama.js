@@ -41,7 +41,7 @@
         that.calcAreaOpacity(that.activeAreas, e.pageX, e.pageY);
       });
 
-      pageElement.on('mouseenter', '.hover_area', function() {
+      pageElement.on('linkmapareaenter', '.hover_area', function() {
         positionOverlay($(this));
       });
 
@@ -50,7 +50,7 @@
         that.activeAreas.removeClass('hover');
       });
 
-      $('body').on('mouseleave', '.hover_area', function() {
+      $('body').on('linkmaparealeave', '.hover_area', function() {
         that.overlayBox.removeClass('active');
       });
 

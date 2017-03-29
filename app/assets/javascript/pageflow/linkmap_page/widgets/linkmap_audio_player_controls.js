@@ -53,7 +53,7 @@
         e.stopPropagation();
       });
 
-      this.element.on('click', function() {
+      this.element.on('linkmapareaclick', function() {
         if (!widget.element.hasClass('dynamic_marker')) {
           widget._trigger('play', null, {
             audioFileId: widget.element.data('audioFile')

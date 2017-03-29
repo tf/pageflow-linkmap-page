@@ -31,6 +31,62 @@
           widget.options.hoverVideo.pause();
         }
       });
+
+      this.element.on('click', function(event) {
+        var area = widget.areaAt(widget.positionFromEvent(event));
+
+        if (area.length) {
+          area.trigger('linkmapareaclick');
+        }
+        else {
+          widget._trigger('backgroundclick');
+        }
+
+        return false;
+      });
+
+      this.element.on('mousemove mouseleave', function(event) {
+        widget.updateHoverStates(event);
+      });
+    },
+
+    areaAt: function(position) {
+      return this.element.find('.hover_area').filter(function() {
+        return $(this).linkmapAreaContains(position);
+      }).first();
+    },
+
+    updateHoverStates: function(event) {
+      var position = this.positionFromEvent(event);
+
+      this.element.find('.hover_area').each(function() {
+        var area = $(this);
+
+        var hovered = area.linkmapAreaContains(position);
+
+        if (!area.hasClass('hover') && hovered) {
+          area.trigger('linkmapareaenter');
+        }
+        else if (area.hasClass('hover') && !hovered) {
+          area.trigger('linkmaparealeave');
+        }
+
+        area.toggleClass('hover', hovered);
+      });
+    },
+
+    positionFromEvent: function(event) {
+      var clientRect = this.element[0].getBoundingClientRect();
+
+      var left = event.clientX - clientRect.left;
+      var top = event.clientY - clientRect.top;
+
+      return {
+        leftInPixel: left,
+        topInPixel: top,
+        leftInPercent: left / this.element.width() * 100,
+        topInPercent: top / this.element.height() * 100
+      };
     },
 
     updateHoverVideoEnabled: function(value) {
