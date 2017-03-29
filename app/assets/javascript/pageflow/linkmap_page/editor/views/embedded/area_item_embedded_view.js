@@ -3,11 +3,6 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
 
   className: 'hover_area',
 
-  ui: {
-    hoverImage: '.hover_image',
-    visitedImage: '.visited_image'
-  },
-
   events: {
     'click .edit': function() {
       pageflow.editor.navigate(this.model.editPath(), {trigger: true});
@@ -35,26 +30,11 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
   },
 
   onRender: function() {
-    this.setupImageViews();
     this.setupDraggableAndResizable();
     this.setupAudioPlayer();
     this.listenToEditable();
 
     this.update();
-  },
-
-  setupImageViews: function() {
-    var hoverImageView = new pageflow.BackgroundImageEmbeddedView({
-      el: this.ui.hoverImage,
-      model: this.options.pageConfiguration,
-      propertyName: 'hover_image_id'
-    }).render();
-
-    var visitedImageView = new pageflow.BackgroundImageEmbeddedView({
-      el: this.ui.visitedImage,
-      model: this.options.pageConfiguration,
-      propertyName: 'visited_image_id'
-    }).render();
   },
 
   setupDraggableAndResizable: function() {
@@ -132,7 +112,10 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
 
   update: function() {
     var audioFileId = this.model.get('target_id');
+    var maskPermaId = this.model.get('mask_perma_id');
+    var mask = this.getMask();
 
+    this.$el.attr('data-mask-id', maskPermaId ? maskPermaId : '');
     this.$el.attr('data-audio-file', audioFileId ? audioFileId + '.' + this.cid : '');
     this.$el.attr('data-target-type', this.model.get('target_type'));
     this.$el.attr('data-target-id', this.model.get('target_id'));
@@ -181,10 +164,14 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
     linkTitle.html(this.model.get('link_title'));
     linkDescription.html(this.model.get('link_description'));
 
-    _.forEach(pageflow.linkmapPage.toggleMarkerOptions, function(option) {
+    _.forEach(pageflow.linkmapPage.markerOptions, function(option) {
       element.toggleClass(option, that.model.get('marker') === option);
     });
 
     element.toggleClass('inverted', !!this.model.get('inverted'));
+  },
+
+  getMask: function() {
+    return this.options.masks.findByPermaId(this.model.get('mask_perma_id'));
   }
 });
