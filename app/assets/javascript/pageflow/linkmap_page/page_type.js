@@ -44,6 +44,10 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
     this.linkmapAreas = pageElement.find('.linkmap_areas');
     this.linkmapAreas.linkmap({
+      hoverImageUrl: this.linkmapAreas.data('hoverImageUrl'),
+      visitedImageUrl: this.linkmapAreas.data('visitedImageUrl'),
+      maskImageUrl: this.linkmapAreas.data('maskImageUrl'),
+
       baseImage: function() {
         return pageElement.find('.panorama.active');
       },
@@ -213,6 +217,22 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
     this.afterEmbeddedViewsUpdate(function() {
       var minScaling = false;
+
+      this.linkmapAreas.linkmap('option',
+                                'hoverImageUrl',
+                                configuration.getImageFileUrl('hover_image_id', {
+                                  styleGroup: 'panorama'
+                                }));
+      this.linkmapAreas.linkmap('option',
+                                'visitedImageUrl',
+                                configuration.getImageFileUrl('visited_image_id', {
+                                  styleGroup: 'panorama'
+                                }));
+      this.linkmapAreas.linkmap('option',
+                                'maskImageUrl',
+                                configuration.getImageFileUrl('mask_image_id', {
+                                  styleGroup: 'panorama'
+                                }));
 
       this.content.linkmapPanorama('update',
                                    configuration.get('add_environment'),

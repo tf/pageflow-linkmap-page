@@ -1,7 +1,7 @@
-<%= content_tag(:div, class: "linkmap_areas") do %>
+<%= content_tag(:div, class: "linkmap_areas", data: data_attributes) do %>
   <% (configuration['linkmap_areas'].presence || []).each_with_index do |attributes, index| %>
     <%= linkmap_area(entry, attributes, index) do %>
-      <%= background_image_div_with_size(configuration, 'visited_image', class: 'visited_image', style_group: :panorama) %>
+      <canvas class="visited_image"></canvas>
 
       <% if configuration['background_type'] == 'hover_video' &&
             !Pageflow::ImageFile.find_by_id(configuration['hover_image_id']) %>
@@ -11,10 +11,7 @@
                                            file_type: 'video_file',
                                            class: 'hover_image') %>
       <% else %>
-        <%= background_image_div_with_size(configuration,
-                                           'hover_image',
-                                           class: 'hover_image',
-                                           style_group: :panorama) %>
+        <canvas class="hover_image"></canvas>
       <% end %>
 
       <div class="linkmap_marker <%= attributes['marker'] %>">

@@ -117,16 +117,20 @@
     display: block;
     pointer-events: all;
 
-    .background_image {
+    .hover_image,
+    .visited_image {
+      position: absolute;
+      top: 0;
+      left: 0;
       visibility: hidden;
       opacity: 0;
-      position: absolute;
       @include transition(opacity 0.5s ease, visibility 0.5s ease);
     }
 
-    &:hover,
     &.hover,
-    &.playing, &:focus, &:active {
+    &.playing,
+    &:focus,
+    &.editing {
       .hover_image {
         opacity: 1;
         visibility: visible;
@@ -163,7 +167,6 @@
         z-index: 2;
       }
 
-      &:hover,
       &.hover,
       &.playing,
       &:focus,
