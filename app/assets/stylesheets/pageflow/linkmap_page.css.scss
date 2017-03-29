@@ -27,10 +27,6 @@
 
   @include user-select(none);
 
-  .content {
-/*    pointer-events: none; */
-  }
-
   .scroller {
     overflow: hidden;
 
@@ -40,7 +36,6 @@
   }
 
   .linkmap {
-    pointer-events: none;
     position: absolute;
     height: 100%;
     width: 100%;
@@ -132,6 +127,7 @@
     &:focus,
     &.editing {
       .hover_image {
+        z-index: 1;
         opacity: 1;
         visibility: visible;
       }

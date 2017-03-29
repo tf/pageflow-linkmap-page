@@ -7,13 +7,8 @@ pageflow.linkmapPage.AreasCollection = Backbone.Collection.extend({
       left: 10,
       top: 10
     };
-  },
 
-  /**
-   * @param [Object, Function] value
-   */
-  setDefaultPosition: function(value) {
-    this.defaultPosition = value;
+    this.listenTo(this, 'select', this.updateSelectedAttributes);
   },
 
   canAddLink: function() {
@@ -48,10 +43,23 @@ pageflow.linkmapPage.AreasCollection = Backbone.Collection.extend({
   },
 
   addWithPosition: function(attributes) {
-    this.add(_.extend(
-      {width: 7, height: 7},
-      _.result(this, 'defaultPosition'),
-      attributes
-    ));
+    var collection = this;
+
+    pageflow.linkmapPage.selectArea(this.page).then(function(positionAttributes) {
+      collection.add(_.extend(
+        positionAttributes,
+        attributes
+      ));
+    });
+  },
+
+  resetSelection: function() {
+    this.updateSelectedAttributes(null);
+  },
+
+  updateSelectedAttributes: function(selectedArea) {
+    this.each(function(area) {
+      area.set('selected', area === selectedArea);
+    });
   }
 });

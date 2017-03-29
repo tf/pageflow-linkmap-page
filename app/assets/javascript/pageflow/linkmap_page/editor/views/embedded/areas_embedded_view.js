@@ -1,4 +1,11 @@
 pageflow.linkmapPage.AreasEmbeddedView = Backbone.Marionette.View.extend({
+  events: {
+    'linkmapbackgroundclick': function() {
+      this.model.linkmapAreas(this.options.propertyName).resetSelection();
+      pageflow.editor.navigate('/pages/' + this.model.page.id + '/areas', {trigger: true});
+    }
+  },
+
   render: function() {
     var view = this;
 
@@ -21,16 +28,29 @@ pageflow.linkmapPage.AreasEmbeddedView = Backbone.Marionette.View.extend({
       }
     }));
 
+    view.appendSubview(new pageflow.linkmapPage.AreaOutlinesEmbeddedView({
+      model: this.model,
+      areas: this.model.linkmapAreas(this.options.propertyName),
+      masks: masksDelegator
+    }));
+
+    view.appendSubview(new pageflow.linkmapPage.AreaMasksPreviewEmbeddedView({
+      model: this.model,
+      areas: this.model.linkmapAreas(this.options.propertyName),
+      masks: masksDelegator
+    }));
+
     this.listenTo(this.model.page, 'change:areas_editable', function() {
-      this.updateClassName();
+      this.updateClassNames();
     });
 
     return this;
   },
 
-  updateClassName: function() {
+  updateClassNames: function() {
     var editable = this.model.page.get('areas_editable');
 
     this.$el.toggleClass('editable', !!editable);
+    this.$el.toggleClass('masks_available', !this.masks.isEmpty());
   }
 });

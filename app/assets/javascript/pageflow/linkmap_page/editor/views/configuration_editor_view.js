@@ -59,6 +59,15 @@ pageflow.linkmapPage.ConfigurationEditorView = pageflow.ConfigurationEditorView.
         visibleBindingValue: 'hover_video'
       });
 
+      this.input('mask_image_id', pageflow.FileInputView, {
+        collection: pageflow.imageFiles,
+        positioning: false,
+        visibleBinding: 'background_type',
+        visible: function(backgroundType) {
+          return _(['image', 'video']).contains(backgroundType);
+        }
+      });
+
       this.input('visited_image_id', pageflow.FileInputView, {
         collection: pageflow.imageFiles,
         positioning: false
@@ -73,10 +82,6 @@ pageflow.linkmapPage.ConfigurationEditorView = pageflow.ConfigurationEditorView.
     this.tab('areas', function() {
       this.view(pageflow.linkmapPage.AreasListView, {
         model: this.model
-      });
-
-      this.view(pageflow.linkmapPage.EditableAreasModeView, {
-        model: this.model.page
       });
     });
 

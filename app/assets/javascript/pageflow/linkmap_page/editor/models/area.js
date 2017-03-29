@@ -56,6 +56,42 @@ pageflow.linkmapPage.Area = Backbone.Model.extend({
     return this.get('name');
   },
 
+  select: function() {
+    this.trigger('select', this);
+  },
+
+  selectMask: function() {
+    var model = this;
+
+    return pageflow.linkmapPage.selectArea(
+      this.collection.page,
+      {type: 'mask'}
+    ).then(function(attributes) {
+      model.set(_.extend(attributes, {
+        marker: 'no_marker'
+      }));
+      model.trigger('change:dimensions');
+    });
+  },
+
+  unsetMask: function() {
+    this.set({
+      marker: 'no_marker',
+      mask_perma_id: undefined
+    });
+    this.trigger('change:dimensions');
+  },
+
+  setDimensions: function(left, top, width, height) {
+    this.set({
+      left: left,
+      top: top,
+      width: width,
+      height: height
+    });
+    this.trigger('change:dimensions');
+  },
+
   highlight: function() {
     this.set('highlighted', true);
   },

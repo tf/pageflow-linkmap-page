@@ -2,6 +2,12 @@ pageflow.linkmapPage.AreasListView = Backbone.Marionette.View.extend({
   className: 'linkmap_page_areas_list',
 
   render: function() {
+    this.model.linkmapAreas().resetSelection();
+
+    this.subview(new pageflow.linkmapPage.EditableAreasModeView({
+      model: this.model.page
+    }));
+
     this.appendSubview(new pageflow.ListView({
       label: I18n.t('pageflow.linkmap_page.editor.views.areas_list.label'),
       collection: this.model.linkmapAreas(),

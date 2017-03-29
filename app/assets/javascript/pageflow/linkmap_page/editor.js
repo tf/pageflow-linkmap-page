@@ -23,3 +23,14 @@ pageflow.linkmapPage.areaTypesFor = function(pageConfiguration) {
     });
   }));
 };
+
+pageflow.linkmapPage.selectArea = function(page, options) {
+  return $.Deferred(function(deferred) {
+    pageflow.linkmapPage.currentAreaSelection = _.extend(options || {}, {
+      deferred: deferred
+    });
+
+    var path = 'linkmap_pages/' + page.id + '/select_area_position';
+    pageflow.editor.navigate(path, {trigger: true});
+  }).promise();
+};

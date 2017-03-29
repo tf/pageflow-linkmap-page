@@ -208,7 +208,6 @@ pageflow.pageType.register('linkmap_page', _.extend({
   },
 
   update: function(pageElement, configuration) {
-    this.setupDefaultAreaPositions(configuration);
     this.setupPanoramaBackground(pageElement, configuration.attributes);
     this.updateCommonPageCssClasses(pageElement, configuration);
 
@@ -257,30 +256,6 @@ pageflow.pageType.register('linkmap_page', _.extend({
       else {
         this.pauseVideo(configuration.attributes);
       }
-    }
-  },
-
-  setupDefaultAreaPositions: function(configuration) {
-    if (!this.defaultPositionDefined) {
-      var scroller = this.scroller;
-
-      _.each(['linkmap_page_link_areas', 'linkmap_audio_file_areas'], function(propertyName) {
-        configuration.linkmapAreas(propertyName).setDefaultPosition(function() {
-          return {
-            left: getPercent(scroller.positionX(), scroller.maxX()),
-            top: getPercent(scroller.positionY(), scroller.maxY())
-          };
-        });
-      });
-      this.defaultPositionDefined = true;
-    }
-
-    function getPercent(value, max) {
-      if (max === 0) {
-        return 20;
-      }
-
-      return Math.max(3, Math.min(90, value / max * 100));
     }
   },
 
