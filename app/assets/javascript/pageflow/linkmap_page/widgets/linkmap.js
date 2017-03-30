@@ -61,18 +61,24 @@
 
       this.element.find('.hover_area').each(function() {
         var area = $(this);
+        var hovered = area.linkmapAreaContains(position);
 
+        if (area.hasClass('hover') && !hovered) {
+          area.trigger('linkmaparealeave');
+        }
+      });
+
+      this.element.find('.hover_area').each(function() {
+        var area = $(this);
         var hovered = area.linkmapAreaContains(position);
 
         if (!area.hasClass('hover') && hovered) {
           area.trigger('linkmapareaenter');
         }
-        else if (area.hasClass('hover') && !hovered) {
-          area.trigger('linkmaparealeave');
-        }
 
         area.css('cursor',
-                 hovered && area.attr('data-target-type') !== 'text_only' ?
+                 hovered &&
+                 area.attr('data-target-type') !== 'text_only' ?
                  'pointer' : 'default');
 
         area.toggleClass('hover', hovered);
