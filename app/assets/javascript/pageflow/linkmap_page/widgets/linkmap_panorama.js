@@ -48,7 +48,7 @@
 
       pageElement.on('click', function() {
         that.overlayBox.removeClass('active');
-        that.activeAreas.removeClass('hover');
+        that.activeAreas.removeClass('hover hover_mobile');
       });
 
       $('body').on('linkmaparealeave', '.hover_area', function() {
@@ -62,13 +62,13 @@
       that.activeAreas.each(function() {
         $(this).on('click touchstart', function(e) {
           if (pageflow.browser.has('mobile platform')) {
-            if($(this).hasClass('hover')) {
+            if($(this).hasClass('hover_mobile')) {
               that.activeAreas.removeClass('active');
               $(this).addClass('active');
               return;
             }
-            that.activeAreas.removeClass('hover');
-            $(this).addClass('hover');
+            that.activeAreas.removeClass('hover hover_mobile');
+            $(this).addClass('hover hover_mobile');
             positionOverlay($(this));
             return false;
           }
