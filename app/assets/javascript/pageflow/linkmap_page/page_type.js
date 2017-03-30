@@ -56,6 +56,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
     });
 
     this.setupPageLinkAreas(pageElement);
+    this.setupExternalLinkAreas(pageElement);
     this.setupAudioFileAreas(pageElement, configuration);
   },
 
@@ -121,6 +122,19 @@ pageflow.pageType.register('linkmap_page', _.extend({
       pageflow.slides.goToByPermaId(area.data('targetId'), {
         transition: area.data('pageTransition')
       });
+    });
+  },
+
+  setupExternalLinkAreas: function(pageElement) {
+    pageElement.on('linkmapareaclick', '[data-target-type="external_site"]', function(e) {
+      var area = $(this);
+
+      if (area.attr('target')) {
+        window.open(area.attr('href'), area.attr('target'));
+      }
+      else {
+        window.location.href = area.attr('href');
+      }
     });
   },
 
