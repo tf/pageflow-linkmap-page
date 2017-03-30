@@ -41,6 +41,8 @@
         else {
           widget._trigger('backgroundclick');
         }
+
+        return false;
       });
 
       this.element.on('mousemove mouseleave', function(event) {

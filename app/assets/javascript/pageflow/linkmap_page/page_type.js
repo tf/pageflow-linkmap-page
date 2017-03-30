@@ -57,7 +57,6 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
     this.setupPageLinkAreas(pageElement);
     this.setupAudioFileAreas(pageElement, configuration);
-    this.setupTextOnlyAreas(pageElement);
   },
 
   getPanoramaStartScrollPosition: function(configuration) {
@@ -116,13 +115,12 @@ pageflow.pageType.register('linkmap_page', _.extend({
   },
 
   setupPageLinkAreas: function(pageElement) {
-    pageElement.on('click', '[data-target-type="page"]', function(e) {
+    pageElement.on('linkmapareaclick', '[data-target-type="page"]', function(e) {
       var area = $(this);
 
       pageflow.slides.goToByPermaId(area.data('targetId'), {
         transition: area.data('pageTransition')
       });
-      return false;
     });
   },
 
@@ -138,12 +136,6 @@ pageflow.pageType.register('linkmap_page', _.extend({
     });
 
     pageElement.find('[data-target-type="audio_file"]').linkmapAudioPlayerControls();
-  },
-
-  setupTextOnlyAreas: function(pageElement) {
-    pageElement.on('click', '[data-target-type="text_only"]', function(e) {
-      return false;
-    });
   },
 
   resize: function(pageElement, configuration) {
