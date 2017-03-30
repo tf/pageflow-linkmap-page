@@ -10,6 +10,11 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
         pageflow.editor.navigate(this.model.editPath(), {trigger: true});
         return false;
       }
+
+      if (this.model.get('target_type') === 'external_site') {
+        alert(I18n.t('pageflow.linkmap_page.editor.views.embedded.area_item.external_link_disabled'));
+        return false;
+      }
     },
 
     'click .toggle_marker': function() {
