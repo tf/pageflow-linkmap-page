@@ -8,6 +8,7 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
       if (this.$el.is('.editable .hover_area')) {
         this.model.select();
         pageflow.editor.navigate(this.model.editPath(), {trigger: true});
+        return false;
       }
     },
 
