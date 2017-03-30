@@ -26,6 +26,9 @@ de:
             select_mask_hint: "Klicke auf einen der farbigen Bereiche des Masken-Bildes, um einen Bereich für den Hotspot auszuwählen."
             select_mask_or_drag_hint: "Klicke auf einen der farbigen Bereiche des Masken-Bildes oder wähle einen frei positionierten Bereich durch Klicken und Ziehen mit der Maus."
             drag_hint: "Wähle einen Bereich für den Hotspot durch Klicken und Ziehen mit der Maus."
+          embedded:
+            area_item:
+              external_link_disabled: "Externe Links sind im Editor deaktiviert."
         templates:
           select_area_position_hint:
             cancel: "Abbrechen"
