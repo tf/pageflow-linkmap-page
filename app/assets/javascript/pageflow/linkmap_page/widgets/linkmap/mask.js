@@ -27,26 +27,11 @@ pageflow.linkmapPage.Mask = function Mask(options) {
       return false;
     }
 
-    var context = sprite.getContext('2d');
-    var pixel = context.getImageData(spriteOffset + spriteX, spriteY, 1, 1).data;
-
-    return pixel[3] > 0;
+    return sprite.nonTransparentAt(spriteOffset + spriteX, spriteY);
   };
 
-  this.draw = function(context, left, top, currentWidth) {
-    left = left || 0;
-    top = top || 0;
-
+  this.draw = function(context, currentWidth) {
     var scale = currentWidth / options.originalWidth;
-
-    context.drawImage(sprite,
-                      spriteOffset,
-                      0,
-                      boundingBox.width,
-                      boundingBox.height,
-                      boundingBox.left * scale - left,
-                      boundingBox.top * scale - top,
-                      boundingBox.width * scale,
-                      boundingBox.height * scale);
+    sprite.draw(context, spriteOffset, boundingBox, scale);
   };
 };

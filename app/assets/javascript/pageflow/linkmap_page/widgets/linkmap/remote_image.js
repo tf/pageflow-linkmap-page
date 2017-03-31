@@ -11,8 +11,13 @@ pageflow.linkmapPage.RemoteImage = function(url, image) {
     return image.height;
   };
 
-  this.draw = function(canvas) {
+  this.draw = function(canvas, options) {
+    options = options || {};
     var context = canvas.getContext('2d');
+
+    if (options.disableImageSmoothing) {
+      context.imageSmoothingEnabled = false;
+    }
 
     context.drawImage(image,
                       0,

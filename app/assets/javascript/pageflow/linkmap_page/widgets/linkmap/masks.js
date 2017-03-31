@@ -1,5 +1,8 @@
 pageflow.linkmapPage.Masks = (function() {
-  function Masks(masks) {
+  var SPRITE_IMAGE_ID = 'id';
+  var COLOR_MAP = 'c';
+
+  function Masks(masks, sprite, colorMap) {
     this.findByPermaId = function(permaId) {
       return _(masks).detect(function(mask) {
         return mask.permaId === permaId;
@@ -14,7 +17,7 @@ pageflow.linkmapPage.Masks = (function() {
 
     this.draw = function(context, width) {
       _(masks).each(function(mask) {
-        mask.draw(context, 0, 0, width);
+        mask.draw(context, width);
       });
     };
 
@@ -25,35 +28,52 @@ pageflow.linkmapPage.Masks = (function() {
     this.isEmpty = function() {
       return !masks.length;
     };
+
+    this.serialize = function(spriteId) {
+      var data = {};
+
+      data[SPRITE_IMAGE_ID] = spriteId;
+      data[COLOR_MAP] = colorMap.serialize();
+
+      return data;
+    };
+
+    this.getSpriteDataUrl = function() {
+      return sprite.toDataURL();
+    };
   }
 
   Masks.empty = new Masks([]);
 
-  Masks.loadColorMap = function(url) {
-    return pageflow.linkmapPage.ColorMap.load(url).then(function(colorMap) {
-      return Masks.fromColorMap(colorMap);
+  Masks.loadColorMapImage = function(url) {
+    return pageflow.linkmapPage.ImageData.load(url).then(function(colorMapImageData) {
+      var colorMap = pageflow.linkmapPage.ColorMap.fromImageData(colorMapImageData);
+
+      return fromMaskSpriteAndColorMap(
+        pageflow.linkmapPage.MaskSprite.fromColorMapImageData(colorMapImageData, colorMap),
+        colorMap
+      );
     });
   };
 
-  Masks.fromColorMap = function(colorMap) {
-    var sprite = document.createElement('canvas');
-    document.body.appendChild(sprite);
-    sprite.className = 'sprite';
+  Masks.deserialize = function(data, maskSpriteUrlTemplate) {
+    var s = new Date();
+    return pageflow.linkmapPage.MaskSprite.load(maskSpriteUrlTemplate, data[SPRITE_IMAGE_ID]).then(function(sprite) {
+      window.sss_mask_load = new Date() - s;
+      return fromMaskSpriteAndColorMap(
+        sprite,
+        pageflow.linkmapPage.ColorMap.deserialize(data[COLOR_MAP])
+      );
+    });
+  };
 
-    sprite.width = colorMap.sumOfComponentWidths();
-    sprite.height = colorMap.maxComponentHeight();
-
-    var context = sprite.getContext('2d');
+  function fromMaskSpriteAndColorMap(sprite, colorMap) {
     var masks = [];
     var permaId = 0;
 
     _(colorMap.components).reduce(function(offset, component) {
-      copyColor(colorMap.getImageData(component),
-                component.color,
-                context, offset);
-
       masks.push(new pageflow.linkmapPage.Mask({
-        permaId: colorMap.id + ':' + permaId.toString(),
+        permaId: sprite.id + ':' + permaId.toString(),
 
         sprite: sprite,
         spriteOffset: offset,
@@ -69,22 +89,7 @@ pageflow.linkmapPage.Masks = (function() {
       return offset + component.boundingBox.width;
     }, 0);
 
-    return new Masks(masks);
-  };
-
-  function copyColor(imageData, color, destinationContext, destinationX) {
-    var data = imageData.data;
-
-    for (var i = 0; i < data.length; i += 4) {
-      if (data[i] != color[0] ||
-          data[i + 1] != color[1] ||
-          data[i + 2] != color[2]) {
-
-        data[i + 3] = 0;
-      }
-    }
-
-    destinationContext.putImageData(imageData, destinationX, 0);
+    return new Masks(masks, sprite, colorMap);
   }
 
   return Masks;

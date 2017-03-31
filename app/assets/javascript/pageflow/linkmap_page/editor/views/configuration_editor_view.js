@@ -59,7 +59,7 @@ pageflow.linkmapPage.ConfigurationEditorView = pageflow.ConfigurationEditorView.
         visibleBindingValue: 'hover_video'
       });
 
-      this.input('mask_image_id', pageflow.FileInputView, {
+      this.input('linkmap_color_map_image_id', pageflow.FileInputView, {
         collection: pageflow.imageFiles,
         positioning: false,
         visibleBinding: 'background_type',

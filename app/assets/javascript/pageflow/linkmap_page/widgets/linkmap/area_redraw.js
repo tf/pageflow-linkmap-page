@@ -14,7 +14,8 @@ $.fn.linkmapAreaRedraw = function(options) {
       canvas.height = options.height;
 
       if (mask) {
-        mask.draw(context, 0, 0, options.width);
+        console.log('redraw with mask');
+        mask.draw(context, options.width);
         context.globalCompositeOperation = 'source-in';
       }
 

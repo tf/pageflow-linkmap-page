@@ -5,17 +5,19 @@ module Pageflow
     describe AreasHelper do
       describe '#linkmap_area_divs' do
         it 'renders div with attribute name as class' do
+          entry = create(:entry)
           configuration = {}
 
-          html = helper.linkmap_areas_div(configuration, 'linkmap_page_link_areas')
+          html = p helper.linkmap_areas_div(entry, configuration)
 
-          expect(html).to have_selector('div.linkmap_areas.linkmap_page_link_areas')
+          expect(html).to have_selector('div.linkmap_areas')
         end
 
         it 'renders linkmap areas' do
-          configuration = {'linkmap_page_link_areas' => [{}]}
+          entry = create(:entry)
+          configuration = {'linkmap_areas' => [{}]}
 
-          html = helper.linkmap_areas_div(configuration, 'linkmap_page_link_areas')
+          html = p helper.linkmap_areas_div(entry, configuration)
 
           expect(html).to have_selector('div a[href]')
         end

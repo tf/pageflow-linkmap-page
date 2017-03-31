@@ -46,7 +46,7 @@
         positionOverlay($(this));
       });
 
-      pageElement.on('click', function() {
+      pageElement.on('click linkmapbackgroundclick', function() {
         that.overlayBox.removeClass('active');
         that.activeAreas.removeClass('hover hover_mobile');
       });
@@ -60,23 +60,29 @@
       });
 
       that.activeAreas.each(function() {
-        $(this).on('click touchstart', function(e) {
-          if (pageflow.browser.has('mobile platform')) {
-            if($(this).hasClass('hover_mobile')) {
+        var area = $(this);
+
+        if (pageflow.browser.has('mobile platform')) {
+          area.on('linkmapareatouchstart', function(e) {
+            if (area.hasClass('hover_mobile')) {
               that.activeAreas.removeClass('active');
-              $(this).addClass('active');
-              return;
+              area.addClass('active');
             }
-            that.activeAreas.removeClass('hover hover_mobile');
-            $(this).addClass('hover hover_mobile');
-            positionOverlay($(this));
-            return false;
-          }
-          else {
+            else {
+              that.activeAreas.removeClass('hover hover_mobile');
+              area.addClass('hover hover_mobile');
+
+              positionOverlay($(this));
+              return false;
+            }
+          });
+        }
+        else {
+          area.on('linkmapareaclick', function(e) {
             that.activeAreas.removeClass('active');
-            $(this).addClass('active');
-          }
-        })
+            area.addClass('active');
+          });
+        }
       });
 
       var positionOverlay = function(area) {

@@ -1,18 +1,8 @@
 pageflow.linkmapPage.ColorMap = (function() {
-  function ColorMap(id, canvas, components) {
-    this.id = id;
+  function ColorMap(width, height, components) {
+    this.width = width;
+    this.height = height;
     this.components = components;
-
-    this.width = canvas.width;
-    this.height = canvas.height;
-
-    this.getImageData = function(component) {
-      var context = canvas.getContext('2d');
-      return context.getImageData(component.boundingBox.left,
-                                  component.boundingBox.top,
-                                  component.boundingBox.width,
-                                  component.boundingBox.height);
-    };
 
     this.sumOfComponentWidths = function() {
       return _(components).reduce(function(result, component) {
@@ -25,30 +15,49 @@ pageflow.linkmapPage.ColorMap = (function() {
         return Math.max(result, rect.boundingBox.height);
       }, 0);
     };
+
+    this.serialize = function() {
+      return {
+        w: this.width,
+        h: this.height,
+        c: _(components).map(function(component) {
+          return {
+            c: component.color,
+            l: component.boundingBox.left,
+            t: component.boundingBox.top,
+            w: component.boundingBox.width,
+            h: component.boundingBox.height
+          };
+        })
+      };
+    };
   }
 
-  ColorMap.load = function(url) {
-    return pageflow.linkmapPage.RemoteImage.load(url).then(function(image) {
-        return ColorMap.fromImage(image);
-    });
+  ColorMap.deserialize = function(data) {
+    return new ColorMap(
+      data.w,
+      data.h,
+      _(data.c).map(function(item) {
+        return {
+          color: item.c,
+          boundingBox: {
+            left: item.l,
+            top: item.t,
+            width: item.w,
+            height: item.h,
+            right: item.l + item.w,
+            bottom: item.t + item.h
+          }
+        };
+      })
+    );
   };
 
-  ColorMap.fromImage = function(image) {
-    var canvas = document.createElement('canvas');
-    canvas.className = 'colormap';
-    document.body.appendChild(canvas);
+  ColorMap.fromImageData = function(imageData) {
+    var width = imageData.width;
+    var height = imageData.height;
 
-    var context = canvas.getContext('2d');
-
-    var width = image.width();
-    var height = image.height();
-
-    canvas.width = width;
-    canvas.height = height;
-
-    image.draw(canvas);
-
-    var data = context.getImageData(0, 0, width, height).data;
+    var data = imageData.get(0, 0, width, height).data;
     var i, key, component;
 
     var componentsByKey = {};
@@ -83,7 +92,7 @@ pageflow.linkmapPage.ColorMap = (function() {
       }
     }
 
-    return new ColorMap(image.id(), canvas, _(components).map(function(component) {
+    return new ColorMap(width, height, _(components).map(function(component) {
       return {
         color: component.color,
         boundingBox: {

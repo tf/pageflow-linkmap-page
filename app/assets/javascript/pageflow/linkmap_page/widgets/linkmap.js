@@ -36,13 +36,25 @@
         var area = widget.areaAt(widget.positionFromEvent(event));
 
         if (area.length) {
-          area.trigger('linkmapareaclick');
+          area.first().trigger('linkmapareaclick');
         }
         else {
           widget._trigger('backgroundclick');
         }
 
         return false;
+      });
+
+      this.element.on('touchstart', function(event) {
+        var area = widget.areaAt(widget.positionFromEvent(event.originalEvent.touches[0]));
+
+        var areaEvent = jQuery.Event('linkmapareatouchstart');
+
+        area.first().trigger(areaEvent);
+
+        if (areaEvent.isDefaultPrevented()) {
+          event.preventDefault();
+        }
       });
 
       this.element.on('mousemove mouseleave', function(event) {
@@ -138,6 +150,11 @@
           height: height,
           masks: masks
         });
+
+        if (!window.ssss) {
+          window.ssss = true;
+          alert('time to load: ' + window.sss_load + ', mask load: ' + window.sss_mask_load + ', image data load: '+ window.sss_image_data_load + ', remote load: ' + window.sss_remote_load + ', first refresh: ' + (new Date() - window.sss));
+        };
       });
 
       hoverAreas.linkmapAreaClip();
@@ -158,15 +175,21 @@
 
     loadMasks: function() {
       var widget = this;
+      var maskImageId = this.options.masksData && this.options.masksData.id;
 
-      if (this.lastMaskImageUrl !== this.options.maskImageUrl) {
-        this.lastMaskImageUrl = this.options.maskImageUrl;
+      if (this.lastMaskImageId !== maskImageId) {
+        this.lastMaskImageId = maskImageId;
+        console.log('changed');
+        window.sss = new Date();
 
-        this.masksPromise = this.options.maskImageUrl ?
-          pageflow.linkmapPage.Masks.loadColorMap(this.options.maskImageUrl) :
+        this.masksPromise = this.options.masksData ?
+          pageflow.linkmapPage.Masks.deserialize(this.options.masksData,
+                                                 this.options.maskSpriteUrlTemplate) :
           $.when(pageflow.linkmapPage.Masks.empty);
 
         this.masksPromise.then(function(masks) {
+          console.log('deserialized');
+          window.sss_load = new Date() - window.sss;
           widget._trigger('updatemasks', null, {masks: masks});
         });
       }

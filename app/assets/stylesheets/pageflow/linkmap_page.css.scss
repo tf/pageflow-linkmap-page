@@ -118,7 +118,7 @@
       left: 0;
       visibility: hidden;
       opacity: 0;
-      @include transition(opacity 0.5s ease, visibility 0.5s ease);
+//      @include transition(opacity 0.5s ease, visibility 0.5s ease);
     }
 
     &.hover,
@@ -145,10 +145,14 @@
       z-index: 1;
     }
 
+    .linkmap_marker {
+      position: absolute;
+      z-index: 2;
+    }
+
     &.dynamic_marker {
       .linkmap_marker {
         background-color: transparent;
-        position: absolute;
         top: 5%;
         left: 5%;
         width: 90%;
@@ -159,7 +163,6 @@
         @include transition(0.15s);
         opacity: 0.1;
         box-shadow: 1px 2px 3px rgba(0,0,0,0.3);
-        z-index: 2;
       }
 
       &.hover,
@@ -257,4 +260,12 @@
       }
     }
   }
+}
+
+canvas.colorma {
+  position:absolute;
+  top: 5px;
+  left: 5px;
+  z-index:20;
+  outline: solid 2px red;
 }
