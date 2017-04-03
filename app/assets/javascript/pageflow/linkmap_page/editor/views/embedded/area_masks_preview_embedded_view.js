@@ -147,7 +147,7 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
 
     this.options.masks.each(function(mask) {
       if (!this.maskIsUsed(mask)) {
-        mask.draw(context, 0, 0, canvas.width);
+        mask.draw(context, canvas.width);
       }
     }, this);
   },
@@ -169,7 +169,7 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     if (this.currentMask) {
-      this.currentMask.draw(context, 0, 0, canvas.width);
+      this.currentMask.draw(context, canvas.width);
 
       context.globalCompositeOperation = 'source-in';
       this.usePattern(context);

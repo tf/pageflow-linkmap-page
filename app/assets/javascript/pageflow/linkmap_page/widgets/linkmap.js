@@ -158,12 +158,14 @@
 
     loadMasks: function() {
       var widget = this;
+      var maskImageId = this.options.masksData && this.options.masksData.id;
 
-      if (this.lastMaskImageUrl !== this.options.maskImageUrl) {
-        this.lastMaskImageUrl = this.options.maskImageUrl;
+      if (this.lastMaskImageId !== maskImageId) {
+        this.lastMaskImageId = maskImageId;
 
-        this.masksPromise = this.options.maskImageUrl ?
-          pageflow.linkmapPage.Masks.loadColorMap(this.options.maskImageUrl) :
+        this.masksPromise = this.options.masksData ?
+          pageflow.linkmapPage.Masks.deserialize(this.options.masksData,
+                                                 this.options.maskSpriteUrlTemplate) :
           $.when(pageflow.linkmapPage.Masks.empty);
 
         this.masksPromise.then(function(masks) {

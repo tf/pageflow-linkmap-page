@@ -1,8 +1,4 @@
 pageflow.linkmapPage.RemoteImage = function(url, image) {
-  this.id = function() {
-    return url.match(/\/(\d{3}\/)+/g).join().replace(/\//g, '').replace(/^0+/g, '');
-  };
-
   this.width = function() {
     return image.width;
   };
@@ -11,8 +7,13 @@ pageflow.linkmapPage.RemoteImage = function(url, image) {
     return image.height;
   };
 
-  this.draw = function(canvas) {
+  this.draw = function(canvas, options) {
+    options = options || {};
     var context = canvas.getContext('2d');
+
+    if (options.disableImageSmoothing) {
+      context.imageSmoothingEnabled = false;
+    }
 
     context.drawImage(image,
                       0,

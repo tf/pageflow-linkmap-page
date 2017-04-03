@@ -6,7 +6,9 @@ module Pageflow
       def linkmap_areas_div(entry, configuration)
         hover_image_file = Pageflow::ImageFile.find_by_id(configuration['hover_image_id'])
         visited_image_file = Pageflow::ImageFile.find_by_id(configuration['visited_image_id'])
-        mask_image_file = Pageflow::ImageFile.find_by_id(configuration['mask_image_id'])
+
+        mask_sprite_url_template = MaskSprite.new(id: 1, attachment_file_name: 'data').attachment.url
+          .gsub(%r'(\d{3}/)+', ':id_partition/')
 
         render('pageflow/linkmap_page/areas/div',
                entry: entry,
@@ -16,8 +18,7 @@ module Pageflow
                    hover_image_file.attachment.url(:panorama_large),
                  visited_image_url: visited_image_file &&
                    visited_image_file.attachment.url(:panorama_large),
-                 mask_image_url: mask_image_file &&
-                   mask_image_file.attachment.url(:panorama_large)
+                 mask_sprite_url_template: mask_sprite_url_template
                })
       end
 

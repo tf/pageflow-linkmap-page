@@ -46,7 +46,8 @@ pageflow.pageType.register('linkmap_page', _.extend({
     this.linkmapAreas.linkmap({
       hoverImageUrl: this.linkmapAreas.data('hoverImageUrl'),
       visitedImageUrl: this.linkmapAreas.data('visitedImageUrl'),
-      maskImageUrl: this.linkmapAreas.data('maskImageUrl'),
+      maskSpriteUrlTemplate: this.linkmapAreas.data('maskSpriteUrlTemplate'),
+      masksData: configuration.linkmap_masks,
 
       baseImage: function() {
         return pageElement.find('.panorama.active');
@@ -234,10 +235,8 @@ pageflow.pageType.register('linkmap_page', _.extend({
                                   styleGroup: 'panorama'
                                 }));
       this.linkmapAreas.linkmap('option',
-                                'maskImageUrl',
-                                configuration.getImageFileUrl('mask_image_id', {
-                                  styleGroup: 'panorama'
-                                }));
+                                'masksData',
+                                configuration.get('linkmap_masks'));
 
       this.content.linkmapPanorama('update',
                                    configuration.get('add_environment'),
