@@ -3,8 +3,11 @@ module Pageflow
     class MaskSpritesController < ActionController::Base
       respond_to :json
 
+      before_filter :authenticate_user!
+
       def create
         image_file = ImageFile.find(params[:image_file_id])
+        authorize!(:update, image_file)
 
         mask_sprite = MaskSprite
           .create_with(permitted_params)
