@@ -45,21 +45,23 @@
       z-index: 4;
     }
 
+    .hover_area {
+      z-index: 2;
+    }
+
     .without_mask.selected .click_trap {
       cursor: move;
     }
 
     .hover_area.selected {
+      z-index: 3;
+
       .area_type_pictogram {
         display: block;
       }
 
       &.editing .area_type_pictogram {
         display: none;
-      }
-
-      &.editing {
-        z-index: 3;
       }
 
       &:before,
