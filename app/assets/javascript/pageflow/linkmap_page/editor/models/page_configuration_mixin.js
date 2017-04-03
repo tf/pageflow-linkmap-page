@@ -7,9 +7,22 @@ pageflow.linkmapPage.pageConfigurationMixin = {
                                       this.getImageFileUrl('linkmap_color_map_image_id', {
                                         styleGroup: 'panorama'
                                       }))
-          .then(function(masks) {
-            model.set('linkmap_masks', masks);
-          });
+          .then(
+            function(masks) {
+              model.set('linkmap_masks', masks);
+            },
+            function(error) {
+              model.unset('linkmap_masks');
+              model.unset('linkmap_color_map_image_id');
+
+              if (error.i18nKey) {
+                alert(I18n.t(error.i18nKey));
+              }
+              else {
+                throw(error);
+              }
+            }
+          );
       }
       else {
         model.unset('linkmap_masks');

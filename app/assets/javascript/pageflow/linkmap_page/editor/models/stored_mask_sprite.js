@@ -20,6 +20,6 @@ pageflow.linkmapPage.StoredMaskSprite.findOrCreateForImageFileId = function(imag
           deferred.resolve(masks.serialize(storedMaskSprite.id));
         }
       });
-    });
+    }, deferred.reject);
   }).promise();
 };

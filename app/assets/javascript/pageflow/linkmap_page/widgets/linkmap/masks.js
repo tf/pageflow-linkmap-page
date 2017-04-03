@@ -47,12 +47,17 @@ pageflow.linkmapPage.Masks = (function() {
 
   Masks.loadColorMapImage = function(url) {
     return pageflow.linkmapPage.ImageData.load(url).then(function(colorMapImageData) {
-      var colorMap = pageflow.linkmapPage.ColorMap.fromImageData(colorMapImageData);
+      try {
+        var colorMap = pageflow.linkmapPage.ColorMap.fromImageData(colorMapImageData);
 
-      return fromMaskSpriteAndColorMap(
-        pageflow.linkmapPage.MaskSprite.fromColorMapImageData(colorMapImageData, colorMap),
-        colorMap
-      );
+        return fromMaskSpriteAndColorMap(
+          pageflow.linkmapPage.MaskSprite.fromColorMapImageData(colorMapImageData, colorMap),
+          colorMap
+        );
+      }
+      catch(e) {
+        return new $.Deferred().reject(e).promise();
+      }
     });
   };
 

@@ -14,8 +14,10 @@ de:
           mask_perma_id: "Farbiger Bereich im Maskenbild, der die Form des Hotspots bestimmt."
           mask_perma_id_disabled: "Farbiger Bereich im Maskenbild, der die Form des Hotspots bestimmt. Wähle zunächst ein Masken-Bild im 'Dateien'-Tab der Hotspot-Seite."
     linkmap_page:
+      color_map:
+        too_many_components: "Das ausgewählte Bild enthält zu viele verschiedene Farbtöne. Es können maximal 20 Bereiche durch das Maskenbild bestimmt werden. Stellen Sie sicher, dass bei der Erstellung des Maskenbildes keine Kantenglättung verwendet wurde, da dies die Zahl der im Bild auftretenden Farbtöne stark erhöhen kann."
       page_attributes:
-        mask_image_id:
+        linkmap_color_map_image_id:
           label: "Masken-Bild"
           inline_help: "Bild mit farbigen Bereichen, die die Umrisse von Hotspots bestimmen. Weitere Hinweise im Hilfe-Eintrag des Hotspot-Seitentyps."
       editor:

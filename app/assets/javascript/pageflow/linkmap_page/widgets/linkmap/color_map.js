@@ -76,8 +76,8 @@ pageflow.linkmapPage.ColorMap = (function() {
               color: [data[i], data[i + 1], data[i + 2]],
               left: x,
               top: y,
-              right: x,
-              bottom: y
+              right: x + 1,
+              bottom: y + 1
             };
 
             components.push(component);
@@ -85,11 +85,15 @@ pageflow.linkmapPage.ColorMap = (function() {
           else {
             component.left = Math.min(component.left, x);
             component.top = Math.min(component.top, y);
-            component.right = Math.max(component.right, x);
-            component.bottom = Math.max(component.bottom, y);
+            component.right = Math.max(component.right, x + 1);
+            component.bottom = Math.max(component.bottom, y + 1);
           }
         }
       }
+    }
+
+    if (components.length > 20) {
+      throw tooManyComponentsError();
     }
 
     return new ColorMap(width, height, _(components).map(function(component) {
@@ -106,6 +110,13 @@ pageflow.linkmapPage.ColorMap = (function() {
       };
     }));
   };
+
+  function tooManyComponentsError() {
+    var error = new Error('Too many color components.');
+    error.i18nKey = 'pageflow.linkmap_page.color_map.too_many_components';
+
+    return error;
+  }
 
   return ColorMap;
 }());
