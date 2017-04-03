@@ -1,5 +1,5 @@
 Pageflow::LinkmapPage::Engine.routes.draw do
-  resources :entries, only: [], shallow: true do
-    resources :sites
+  resources :image_files, only: [] do
+    resource :mask_sprite, only: [:show, :create]
   end
 end

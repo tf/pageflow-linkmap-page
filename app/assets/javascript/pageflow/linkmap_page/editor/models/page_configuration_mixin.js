@@ -1,4 +1,22 @@
 pageflow.linkmapPage.pageConfigurationMixin = {
+  initialize: function() {
+    this.listenTo(this, 'change:linkmap_color_map_image_id', function(model, imageFileId) {
+      if (imageFileId) {
+        pageflow.linkmapPage.StoredMaskSprite
+          .findOrCreateForImageFileId(imageFileId,
+                                      this.getImageFileUrl('linkmap_color_map_image_id', {
+                                        styleGroup: 'panorama'
+                                      }))
+          .then(function(masks) {
+            model.set('linkmap_masks', masks);
+          });
+      }
+      else {
+        model.unset('linkmap_masks');
+      }
+    });
+  },
+
   linkmapPageLinks: function() {
     this._linkmapPageLinks = this._linkmapPageLinks || new pageflow.linkmapPage.PageLinksCollection({
       areas: this.linkmapAreas()
