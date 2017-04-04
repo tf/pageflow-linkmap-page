@@ -1,3 +1,5 @@
+require 'pageflow-external-links'
+
 module Pageflow
   module LinkmapPage
     class Engine < Rails::Engine
