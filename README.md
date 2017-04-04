@@ -1,6 +1,7 @@
 # Pageflow Linkmap Page
 
 [![Gem Version](https://badge.fury.io/rb/pageflow-linkmap-page.svg)](http://badge.fury.io/rb/pageflow-linkmap-page)
+[![Build Status](https://travis-ci.org/codevise/pageflow-linkmap-page.svg?branch=master)](https://travis-ci.org/codevise/pageflow-linkmap-page)
 
 Page type to display customizable link areas to internal/external
 pages and inline audio players.

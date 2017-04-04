@@ -1,7 +1,12 @@
 ENV['RAILS_ENV'] ||= 'test'
-# ENV['PAGEFLOW_PLUGIN_ENGINE'] = 'pageflow_linkmap_page'
+ENV['PAGEFLOW_PLUGIN_ENGINE'] = 'pageflow_linkmap_page'
 
-require 'pageflow'
+require 'factory_girl_rails'
+
+require 'pageflow/support'
+Pageflow::Dummy.setup
+
+require 'pageflow-linkmap-page'
 require 'rspec/rails'
 
 engine_root = File.join(File.dirname(__FILE__), '..')
