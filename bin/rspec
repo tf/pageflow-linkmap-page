@@ -9,7 +9,4 @@ rescue LoadError
 end
 require 'bundler/setup'
 
-require 'pageflow/support'
-Pageflow::Dummy.setup
-
 load Gem.bin_path('rspec-core', 'rspec')
