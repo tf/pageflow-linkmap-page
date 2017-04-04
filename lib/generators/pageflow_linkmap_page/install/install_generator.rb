@@ -15,6 +15,7 @@ module PageflowLinkmapPage
     end
 
     def install_migrations
+      rake "pageflow_#{engine_name_suffix}:install:migrations"
       rake 'pageflow_external_links:install:migrations'
     end
 

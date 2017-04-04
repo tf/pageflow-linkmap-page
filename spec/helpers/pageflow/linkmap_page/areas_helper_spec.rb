@@ -22,13 +22,13 @@ module Pageflow
           expect(html).to have_selector('div a[href]')
         end
 
-        it 'renders hover image inside linkmap areas' do
+        it 'renders hover image canvas inside linkmap areas' do
           entry = create(:entry)
           configuration = {'linkmap_areas' => [{}], 'hover_image_id' => 5}
 
           html = helper.linkmap_areas_div(entry, configuration)
 
-          expect(html).to have_selector('a div[class~="image_panorama_5"]')
+          expect(html).to have_selector('a canvas.hover_image')
         end
       end
 

@@ -1,6 +1,6 @@
 module Pageflow
   module LinkmapPage
-    class MaskSpritesController < ActionController::Base
+    class MaskSpritesController < Pageflow::ApplicationController
       respond_to :json
 
       before_filter :authenticate_user!
