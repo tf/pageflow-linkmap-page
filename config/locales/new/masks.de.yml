@@ -3,10 +3,6 @@ de:
     attributes:
       pageflow/linkmap_page/area:
         mask_perma_id: "Maske"
-    values:
-      pageflow/linkmap_page/area:
-        marker:
-          mask: "Maske"
   pageflow:
     ui:
       inline_help:
