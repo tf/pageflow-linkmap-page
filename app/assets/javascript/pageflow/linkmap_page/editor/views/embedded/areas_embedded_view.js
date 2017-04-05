@@ -51,6 +51,7 @@ pageflow.linkmapPage.AreasEmbeddedView = Backbone.Marionette.View.extend({
     var editable = this.model.page.get('areas_editable');
 
     this.$el.toggleClass('editable', !!editable);
-    this.$el.toggleClass('masks_available', !this.masks.isEmpty());
+    this.$el.toggleClass('masks_available',
+                         !this.masks.isEmpty() && this.model.get('background_type') !== 'hover_video');
   }
 });

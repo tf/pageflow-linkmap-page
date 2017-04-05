@@ -12,7 +12,7 @@ de:
       inline_help:
         pageflow/linkmap_page/area:
           mask_perma_id: "Farbiger Bereich im Maskenbild, der die Form des Hotspots bestimmt."
-          mask_perma_id_disabled: "Farbiger Bereich im Maskenbild, der die Form des Hotspots bestimmt. Wähle zunächst ein Masken-Bild im 'Dateien'-Tab der Hotspot-Seite."
+          mask_perma_id_disabled: "Farbiger Bereich im Maskenbild, der die Form des Hotspots bestimmt. Nur verfügbar, wenn ein Masken-Bild im 'Dateien'-Tab der Hotspot-Seite festgelegt wurde und als Panorama-Typ nicht 'Hover Video' ausgewählt wurde."
     linkmap_page:
       color_map:
         too_many_components: "Das ausgewählte Bild enthält zu viele verschiedene Farbtöne. Es können maximal 20 Bereiche durch das Maskenbild bestimmt werden. Stellen Sie sicher, dass bei der Erstellung des Maskenbildes keine Kantenglättung verwendet wurde, da dies die Zahl der im Bild auftretenden Farbtöne stark erhöhen kann."
