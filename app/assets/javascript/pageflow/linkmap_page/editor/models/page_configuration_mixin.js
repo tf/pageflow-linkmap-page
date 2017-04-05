@@ -42,6 +42,12 @@
 
         return collection;
       }
+    },
+
+    getLinkmapAreaMask: function(masks, permaId) {
+      if (this.get('background_type') !== 'hover_video') {
+        return masks.findByPermaId(permaId);
+      }
     }
   };
 

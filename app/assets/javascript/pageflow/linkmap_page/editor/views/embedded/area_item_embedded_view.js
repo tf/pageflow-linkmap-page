@@ -61,6 +61,7 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
     this.setupDraggableAndResizable();
     this.setupAudioPlayer();
 
+    this.listenTo(this.options.pageConfiguration, 'change:background_type', this.update);
     this.update();
   },
 
@@ -138,10 +139,9 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
 
   update: function() {
     var audioFileId = this.model.get('target_id');
-    var maskPermaId = this.model.get('mask_perma_id');
     var mask = this.getMask();
 
-    this.$el.attr('data-mask-id', maskPermaId ? maskPermaId : '');
+    this.$el.attr('data-mask-id', mask ? this.model.get('mask_perma_id') : '');
     this.$el.attr('data-audio-file', audioFileId ? audioFileId + '.' + this.cid : '');
     this.$el.attr('data-target-type', this.model.get('target_type'));
     this.$el.attr('data-target-id', this.model.get('target_id'));
@@ -202,6 +202,9 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
   },
 
   getMask: function() {
-    return this.options.masks.findByPermaId(this.model.get('mask_perma_id'));
+    return this.options.pageConfiguration.getLinkmapAreaMask(
+      this.options.masks,
+      this.model.get('mask_perma_id')
+    );
   }
 });

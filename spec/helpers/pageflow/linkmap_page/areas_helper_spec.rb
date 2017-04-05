@@ -30,6 +30,27 @@ module Pageflow
 
           expect(html).to have_selector('a canvas.hover_image')
         end
+
+        it 'sets data-mask-id attribute if area has mask_perma_id' do
+          entry = create(:entry)
+          configuration = {'linkmap_areas' => [{'mask_perma_id' => '1:2'}]}
+
+          html = helper.linkmap_areas_div(entry, configuration)
+
+          expect(html).to have_selector('a[data-mask-id="1:2"]')
+        end
+
+        it 'does not set data-mask-id attribute if background type is hover_video' do
+          entry = create(:entry)
+          configuration = {
+            'linkmap_areas' => [{'mask_perma_id' => '1:2'}],
+            'background_type' => 'hover_video'
+          }
+
+          html = helper.linkmap_areas_div(entry, configuration)
+
+          expect(html).not_to have_selector('a[data-mask-id]')
+        end
       end
 
       describe '#linkmap_area' do

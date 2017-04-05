@@ -22,11 +22,11 @@ module Pageflow
                })
       end
 
-      def linkmap_area(entry, attributes, index, &block)
-        Link.new(self, entry, attributes.symbolize_keys, index).render(&block)
+      def linkmap_area(entry, attributes, index, background_type = nil, &block)
+        Link.new(self, entry, attributes.symbolize_keys, index, background_type).render(&block)
       end
 
-      class Link < Struct.new(:template, :entry, :attributes, :index)
+      class Link < Struct.new(:template, :entry, :attributes, :index, :background_type)
         delegate :content_tag, to: :template
 
         def render(&block)
@@ -64,6 +64,7 @@ module Pageflow
         end
 
         def data_attributes
+          mask_id = background_type != 'hover_video' && attributes[:mask_perma_id]
           audio_file_id = attributes[:target_id]
 
           {
@@ -71,7 +72,7 @@ module Pageflow
             target_id: attributes[:target_id],
             audio_file: audio_file_id.present? ? "#{audio_file_id}.area_#{index}" : nil,
             page_transition: attributes[:page_transition],
-            mask_id: attributes[:mask_perma_id],
+            mask_id: mask_id,
             width: attributes[:width],
             height: attributes[:height]
           }.delete_if { |key, value| value.blank? }
