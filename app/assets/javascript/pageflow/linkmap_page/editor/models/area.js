@@ -26,8 +26,13 @@ pageflow.linkmapPage.Area = Backbone.Model.extend({
   },
 
   title: function() {
-    var target = this.target();
-    return target ? target.title() : null;
+    if (this.get('target_type') === 'text_only') {
+      return this.get('link_title');
+    }
+    else {
+      var target = this.target();
+      return target ? target.title() : null;
+    }
   },
 
   thumbnailFile: function() {
