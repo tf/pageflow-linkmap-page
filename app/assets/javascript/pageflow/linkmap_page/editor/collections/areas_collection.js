@@ -9,6 +9,7 @@ pageflow.linkmapPage.AreasCollection = Backbone.Collection.extend({
     };
 
     this.listenTo(this, 'select', this.updateSelectedAttributes);
+    this.listenTo(this, 'add', this.updateSelectedAttributes);
   },
 
   canAddLink: function() {
