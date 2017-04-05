@@ -14,16 +14,18 @@ pageflow.linkmapPage.AreaOutlinesEmbeddedView = Backbone.Marionette.ItemView.ext
     this.listenTo(this.options.areas, 'change:dimensions change:editing add remove', this.redraw);
     this.listenTo(pageflow.app, 'resize', this.redraw);
 
-    this.listenTo(this.model.page, 'change:areas_outlined', function() {
-      this.$el.toggle(!!this.model.page.get('areas_outlined'));
-    });
-
-    this.$el.toggle(!!this.model.page.get('areas_outlined'));
+    this.listenTo(this.model.page, 'change:areas_outlined', this.update);
+    this.update();
   },
 
   maskFromPoint: function(event) {
     return this.options.masks.atPoint(event.offsetX / this.$el.width(),
                                       event.offsetY / this.$el.height());
+  },
+
+  update: function() {
+    this.$el.toggle(!!this.model.page.get('areas_outlined'));
+    this.redrawAll();
   },
 
   redraw: function() {
@@ -87,7 +89,7 @@ pageflow.linkmapPage.AreaOutlinesEmbeddedView = Backbone.Marionette.ItemView.ext
     var mask = this.options.masks.findByPermaId(area.get('mask_perma_id'));
 
     if (mask) {
-      mask.draw(context, 0, 0, canvas.width);
+      mask.draw(context, canvas.width);
     }
     else {
       context.fillRect(area.get('left') * canvas.width / 100,
