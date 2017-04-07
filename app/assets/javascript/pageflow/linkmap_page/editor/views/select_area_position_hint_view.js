@@ -14,7 +14,7 @@ pageflow.linkmapPage.SelectAreaPostionHintView = Backbone.Marionette.ItemView.ex
   },
 
   onRender: function() {
-    if (this.model.configuration.getImageFileUrl('mask_image_id')) {
+    if (this.model.configuration.has('linkmap_masks')) {
       if (this.options.selection.type === 'mask') {
         this.ui.hint.text(this.t('select_mask_hint'));
       }
