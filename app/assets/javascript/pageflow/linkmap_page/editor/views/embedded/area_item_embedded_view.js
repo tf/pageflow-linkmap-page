@@ -61,7 +61,9 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
     this.setupDraggableAndResizable();
     this.setupAudioPlayer();
 
+    this.listenTo(this.options.masks, 'update', this.update);
     this.listenTo(this.options.pageConfiguration, 'change:background_type', this.update);
+
     this.update();
   },
 
