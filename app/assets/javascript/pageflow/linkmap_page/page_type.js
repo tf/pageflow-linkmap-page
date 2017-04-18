@@ -21,7 +21,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
         return pageElement.find('.panorama.active');
       },
       scroller: this.scroller,
-      activeAreasSelector: '.linkmap_areas > *',
+      activeAreasSelector: '.linkmap_areas > .hover_area',
       limitScrolling: configuration.limit_scrolling,
       minScaling: pageflow.browser.has('mobile platform'),
       addEnvironment: configuration.add_environment,
