@@ -2,7 +2,6 @@
   $.widget('pageflow.linkmapPanorama', {
     scrollHoverMargin : 0.2,
     environmentMargin : 0.2,
-    minScaling: true,
     minScalingSize: 80,
     lastMouseMoveEvent: null,
 
@@ -13,6 +12,7 @@
       this.addEnvironment = this.options.addEnvironment;
       this.panorama = this.options.panorama();
       this.limitScrolling = this.options.limitScrolling;
+      this.minScaling = this.options.minScaling;
       this.scroller = this.options.scroller;
 
       this.activeAreas = pageElement.find(this.options.activeAreasSelector);

@@ -23,6 +23,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
       scroller: this.scroller,
       activeAreasSelector: '.linkmap_areas > *',
       limitScrolling: configuration.limit_scrolling,
+      minScaling: pageflow.browser.has('mobile platform'),
       addEnvironment: configuration.add_environment,
       marginScrollingDisabled: configuration.margin_scrolling_disabled,
       startScrollPosition: this.getPanoramaStartScrollPosition(configuration)
