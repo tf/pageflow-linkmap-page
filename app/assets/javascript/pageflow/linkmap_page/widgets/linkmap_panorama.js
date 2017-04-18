@@ -298,22 +298,22 @@
         this.innerScrollerElement.width(this.scrollArea.right - this.scrollArea.left);
         this.innerScrollerElement.height(this.scrollArea.bottom - this.scrollArea.top);
 
+        var centerX = Math.max(0, (pageElement.width() - (this.scrollArea.right - this.scrollArea.left)) / 2);
+        var centerY = Math.max(0, (pageElement.height() - (this.scrollArea.bottom - this.scrollArea.top)) / 2);
+
+        var translateX = this.scrollArea.left - centerX;
+        var translateY = this.scrollArea.top - centerY;
+
         var maxTranslateX = this.panoramaSize.width - pageElement.width();
         var maxTranslateY = this.panoramaSize.height - pageElement.height();
 
         this.panoramaWrapper.css({
-          left: -Math.min(maxTranslateX, this.scrollArea.left) +'px',
-          top: -Math.min(maxTranslateY, this.scrollArea.top) + 'px'
+          left: -Math.min(maxTranslateX, Math.max(0, translateX)) +'px',
+          top: -Math.min(maxTranslateY, Math.max(0, translateY)) + 'px'
         });
 
         this.innerScrollerElement.removeClass('measuring');
         this.scroller.refresh();
-
-        var leftToCenterInnerScroller = (pageElement.width() - (this.scrollArea.right - this.scrollArea.left)) / 2;
-        var topToCenterInnerScroller = (pageElement.height() - (this.scrollArea.bottom - this.scrollArea.top)) / 2;
-
-        this.innerScrollerElement.css('left', (this.scroller.maxX() == 0 && this.panoramaSize.width > this.scrollArea.right - this.scrollArea.left ? Math.min(leftToCenterInnerScroller, this.scrollArea.left) : 0) + "px");
-        this.innerScrollerElement.css('top', (this.scroller.maxY() == 0 && this.panoramaSize.height > pageElement.height() ? Math.min(topToCenterInnerScroller, this.scrollArea.top) : 0) + "px");
       });
     },
 
