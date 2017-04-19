@@ -71,6 +71,10 @@ pageflow.linkmapPage.ConfigurationEditorView = pageflow.ConfigurationEditorView.
     });
 
     this.tab('areas', function() {
+      this.view(pageflow.linkmapPage.ScaledOnPhoneHintView, {
+        model: this.model.page
+      });
+
       this.view(pageflow.linkmapPage.AreasListView, {
         model: this.model
       });

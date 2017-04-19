@@ -1,0 +1,11 @@
+de:
+  pageflow:
+    linkmap_page:
+      editor:
+        views:
+          scaled_on_phone_hint:
+            text: "Das Panorama wird im %{orientation} skaliert, um eine Mindestgröße der Hotspots für die Touch-Eingabe zu gewährleisten. Hotspots vergrößern, um Skalierung zu vermeiden."
+            orientations:
+              both: "Phone Layout"
+              landscape: "Landscape Phone Layout"
+              portrait: "Portrait Phone Layout"

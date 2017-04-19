@@ -23,6 +23,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
       scroller: this.scroller,
       activeAreasSelector: '.linkmap_areas > *',
       limitScrolling: configuration.limit_scrolling,
+      minScaling: pageflow.browser.has('mobile platform'),
       addEnvironment: configuration.add_environment,
       marginScrollingDisabled: configuration.margin_scrolling_disabled,
       startScrollPosition: this.getPanoramaStartScrollPosition(configuration)
@@ -219,6 +220,9 @@ pageflow.pageType.register('linkmap_page', _.extend({
                                    this.getPanoramaStartScrollPosition(configuration.attributes),
                                    minScaling);
 
+      this.updateScaledOnPhoneFlags(configuration.page,
+                                    this.content.linkmapPanorama('instance'));
+
       this.content.linkmapLookaround('update',
                                      configuration.get('margin_scrolling_disabled'));
       this.setupHoverImages(pageElement, configuration.attributes);
@@ -227,6 +231,22 @@ pageflow.pageType.register('linkmap_page', _.extend({
       this.linkmapAreas.linkmap('refresh');
       this.scroller.refresh();
     });
+  },
+
+  updateScaledOnPhoneFlags: function(page, panorama) {
+    page.set('scaled_on_portrait_phone',
+             panorama.getPanoramaSize({
+               pageWidth: 360,
+               pageHeight: 640,
+               minScaling: true
+             }).scaled);
+
+    page.set('scaled_on_landscape_phone',
+             panorama.getPanoramaSize({
+               pageWidth: 640,
+               pageHeight: 360,
+               minScaling: true
+             }).scaled);
   },
 
   updateVideoPlayState: function(configuration) {

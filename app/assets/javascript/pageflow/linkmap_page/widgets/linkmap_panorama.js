@@ -2,8 +2,6 @@
   $.widget('pageflow.linkmapPanorama', {
     scrollHoverMargin : 0.2,
     environmentMargin : 0.2,
-    minScaling: true,
-    minScalingSize: 80,
     lastMouseMoveEvent: null,
 
     _create: function() {
@@ -13,6 +11,7 @@
       this.addEnvironment = this.options.addEnvironment;
       this.panorama = this.options.panorama();
       this.limitScrolling = this.options.limitScrolling;
+      this.minScaling = this.options.minScaling;
       this.scroller = this.options.scroller;
 
       this.activeAreas = pageElement.find(this.options.activeAreasSelector);
@@ -239,33 +238,6 @@
       }
 
       return scrollArea;
-
-    },
-
-    getMinScale: function(activeAreas) {
-      var smallestScale;
-      var that = this;
-      var minimumSize = this.minScalingSize;
-      var smallestSize = Math.min(this.panorama.attr('data-width'), this.panorama.attr('data-height'));
-
-      if(this.minScaling) {
-
-        for (var i = 0; i < activeAreas.length; i++) {
-          var el = $(activeAreas[i]);
-
-          if(el.attr('data-height') / 100 *  that.panorama.attr('data-height') < smallestSize) {
-            smallestSize = el.attr('data-height') / 100 *  that.panorama.attr('data-height');
-          }
-          if(el.attr('data-width') / 100 *  that.panorama.attr('data-width')  < smallestSize) {
-            smallestSize = el.attr('data-width') / 100 *  that.panorama.attr('data-width');
-          }
-          smallestScale = minimumSize / smallestSize;
-        }
-      } else {
-        smallestScale = 0;
-      }
-
-      return smallestScale;
     },
 
     update: function(addEnvironment, limitScrolling, startScrollPosition, minScaling) {
@@ -283,7 +255,13 @@
 
         this.panorama = this.options.panorama();
 
-        this.panoramaSize = this.getPanoramaSize(pageElement);
+        this.panoramaSize = this.getPanoramaSize({
+          pageWidth: pageElement.width(),
+          pageHeight: pageElement.height(),
+
+          minScaling: this.minScaling
+        });
+
         this.panorama.width(this.panoramaSize.width);
         this.panorama.height(this.panoramaSize.height);
 
@@ -317,37 +295,25 @@
       });
     },
 
-    getPanoramaSize: function(pageElement) {
-      var result = {};
-      var windowRatio = pageElement.width() / pageElement.height();
-      var environmentMargin = this.addEnvironment ? (1 + this.environmentMargin) : 1;
-      var smallestScale = this.getMinScale(this.activeAreas);
-      var imageRatio;
+    getPanoramaSize: function(options) {
+      return pageflow.linkmapPage.getPanoramaSize({
+        pageWidth: options.pageWidth,
+        pageHeight: options.pageHeight,
 
-      if (this.panorama.attr('data-height') > 0) {
-        imageRatio = this.panorama.attr('data-width') / this.panorama.attr('data-height');
-      }
-      else {
-        imageRatio = 1;
-      }
+        panoramaWidth: this.panorama.attr('data-width'),
+        panoramaHeight: this.panorama.attr('data-height'),
 
-      if(imageRatio > windowRatio) {
-        result.height = pageElement.height() * environmentMargin;
-        result.width = result.height * imageRatio;
-        result.orientation = 'h';
-      }
-      else {
-        result.width = pageElement.width() * environmentMargin;
-        result.height = result.width / imageRatio;
-        result.orientation = 'v';
-      }
+        areaDimensions: this.activeAreas.map(function() {
+          var el = $(this);
+          return {
+            width: el.attr('data-width'),
+            height: el.attr('data-height')
+          };
+        }).get(),
 
-      if (result.width < this.panorama.attr('data-width') * smallestScale) {
-        result.width = this.panorama.attr('data-width') * smallestScale;
-        result.height = this.panorama.attr('data-height') * smallestScale;
-      }
-
-      return result;
+        minScaling: options.minScaling,
+        addEnvironment: this.addEnvironment
+      });
     },
 
     resetScrollPosition: function() {
