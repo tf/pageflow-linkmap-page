@@ -61,13 +61,15 @@
         that.initialGamma = null;
       });
 
-      this.element.on('mousemove', function(e) {
-        var containerWidth = that.element.width();
-        var containerHeight = that.element.height();
+      if (!pageflow.browser.has('mobile platform')) {
+        this.element.on('mousemove', function(e) {
+          var containerWidth = that.element.width();
+          var containerHeight = that.element.height();
 
-        that.scrollStrategyX.updateMouse(e.pageX / containerWidth);
-        that.scrollStrategyY.updateMouse(e.pageY / containerHeight);
-      });
+          that.scrollStrategyX.updateMouse(e.pageX / containerWidth);
+          that.scrollStrategyY.updateMouse(e.pageY / containerHeight);
+        });
+      }
     },
 
     enable: function() {
