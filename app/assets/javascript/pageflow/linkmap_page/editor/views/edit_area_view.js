@@ -76,7 +76,10 @@ pageflow.linkmapPage.EditAreaView = Backbone.Marionette.Layout.extend({
       });
 
       this.input('link_title', pageflow.TextInputView);
-      this.input('link_description', pageflow.TextAreaInputView, {size: 'short'});
+      this.input('link_description', pageflow.TextAreaInputView, {
+        size: 'short',
+        disableLinks: true
+      });
     });
 
     configurationEditor.tab('appearance', function() {
