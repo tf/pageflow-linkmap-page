@@ -1,5 +1,11 @@
 # CHANGELOG
 
+### Changes on `master`
+
+[Compare changes](http://github.com/codevise/pageflow-linkmap-page/compare/v0.2.0...master)
+
+None so far.
+
 ### Version 0.2.0
 
 2017-04-21
