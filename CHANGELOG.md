@@ -4,6 +4,20 @@
 
 [Compare changes](http://github.com/codevise/pageflow-linkmap-page/compare/v0.2.0...master)
 
+##### Manual Update Step
+
+The plugin now provides additional routes and migrations. Mount the engine:
+
+    # config/routes.rb
+    mount Pageflow::LinkmapPage::Engine, at: '/linkmap_page'
+
+Install and run migrations:
+
+    $ rake pageflow_linkmap_page:install:migrations
+    $ rake db:migrate
+
+##### Features
+
 - Support mask image for non rectangular areas
   ([#22](https://github.com/codevise/pageflow-linkmap-page/pull/22))
 

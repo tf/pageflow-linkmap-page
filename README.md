@@ -19,6 +19,11 @@ Register the page type inside the configure block in `config/initializers/pagefl
       config.plugin(Pageflow::LinkmapPage.plugin)
     end
 
+Mount the engine:
+
+    # config/routes.rb
+    mount Pageflow::LinkmapPage::Engine, at: '/linkmap_page'
+
 Include javascripts and stylesheets:
 
     # app/assets/javascripts/pageflow/application.js
@@ -45,6 +50,11 @@ Import default theme additions:
 Install dependencies:
 
     bundle install
+
+Install and run migrations:
+
+    $ rake pageflow_linkmap_page:install:migrations
+    $ rake db:migrate
 
 Then follow the installation instructions for the [pageflow-external-links](https://github.com/codevise/pageflow-external-links) gem.
 
