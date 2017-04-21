@@ -1,8 +1,10 @@
 # CHANGELOG
 
-### Changes on `master`
+### Version 0.2.0
 
-[Compare changes](http://github.com/codevise/pageflow-linkmap-page/compare/v0.1.0...master)
+2017-04-21
+
+[Compare changes](http://github.com/codevise/pageflow-linkmap-page/compare/v0.1.0...v0.2.0)
 
 - Add vertical scroll indicators
   ([#7](https://github.com/codevise/pageflow-linkmap-page/pull/7))
