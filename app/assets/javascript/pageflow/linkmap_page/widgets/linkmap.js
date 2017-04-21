@@ -6,6 +6,9 @@
     _create: function() {
       var widget = this;
 
+      this.lastImageUrls = {};
+      this.imagePromises = {};
+
       this.refresh();
 
       if (widget.options.hoverVideoEnabled) {
@@ -28,6 +31,84 @@
           widget.options.hoverVideo.pause();
         }
       });
+
+      this.element.on('click', function(event) {
+        var area = widget.areaAt(widget.positionFromEvent(event));
+
+        if (area.length) {
+          area.first().trigger('linkmapareaclick');
+        }
+        else {
+          widget._trigger('backgroundclick');
+        }
+
+        return false;
+      });
+
+      this.element.on('touchstart', function(event) {
+        var area = widget.areaAt(widget.positionFromEvent(event.originalEvent.touches[0]));
+
+        var areaEvent = jQuery.Event('linkmapareatouchstart');
+
+        area.first().trigger(areaEvent);
+
+        if (areaEvent.isDefaultPrevented()) {
+          event.preventDefault();
+        }
+      });
+
+      this.element.on('mousemove mouseleave', function(event) {
+        widget.updateHoverStates(event);
+      });
+    },
+
+    areaAt: function(position) {
+      return this.element.find('.hover_area').filter(function() {
+        return $(this).linkmapAreaContains(position);
+      }).first();
+    },
+
+    updateHoverStates: function(event) {
+      var position = this.positionFromEvent(event);
+
+      this.element.find('.hover_area').each(function() {
+        var area = $(this);
+        var hovered = area.linkmapAreaContains(position);
+
+        if (area.hasClass('hover') && !hovered) {
+          area.trigger('linkmaparealeave');
+        }
+      });
+
+      this.element.find('.hover_area').each(function() {
+        var area = $(this);
+        var hovered = area.linkmapAreaContains(position);
+
+        if (!area.hasClass('hover') && hovered) {
+          area.trigger('linkmapareaenter');
+        }
+
+        area.css('cursor',
+                 hovered &&
+                 area.attr('data-target-type') !== 'text_only' ?
+                 'pointer' : 'default');
+
+        area.toggleClass('hover', hovered);
+      });
+    },
+
+    positionFromEvent: function(event) {
+      var clientRect = this.element[0].getBoundingClientRect();
+
+      var left = event.clientX - clientRect.left;
+      var top = event.clientY - clientRect.top;
+
+      return {
+        leftInPixel: left,
+        topInPixel: top,
+        leftInPercent: left / this.element.width() * 100,
+        topInPercent: top / this.element.height() * 100
+      };
     },
 
     updateHoverVideoEnabled: function(value) {
@@ -42,29 +123,76 @@
     },
 
     refresh: function() {
-      var hoverAreas = this.element.find('.hover_area'),
-          hoverImages = this.element.find('.background_image');
+      var hoverAreas = this.element.find('.hover_area');
+      var widget = this;
 
-      this._resizeToBaseImage(hoverImages);
+      $.when(
+        this.loadImage('hover'),
+        this.loadImage('visited'),
+        this.loadMasks()
+      ).then(function(hoverImage, visitedImage, masks) {
+        var baseImage = widget.options.baseImage();
+        var width = baseImage.width();
+        var height = baseImage.height();
+
+        hoverAreas.linkmapAreaRedraw({
+          target: '.hover_image',
+          image: hoverImage,
+          width: width,
+          height: height,
+          masks: masks
+        });
+
+        hoverAreas.linkmapAreaRedraw({
+          target: '.visited_image',
+          image: visitedImage,
+          width: width,
+          height: height,
+          masks: masks
+        });
+      });
 
       hoverAreas.linkmapAreaClip();
       hoverAreas.linkmapAreaFormat();
       hoverAreas.linkmapAreaVisited();
     },
 
-    _resizeToBaseImage: function(target) {
-      var baseImage = this.options.baseImage();
+    loadImage: function(name) {
+      var url = this.options[name + 'ImageUrl'];
 
-      target
-        .width(baseImage.width())
-        .height(baseImage.height());
+      if (this.lastImageUrls[name] !== url) {
+        this.lastImageUrls[name] = url;
+        this.imagePromises[name] = url && pageflow.linkmapPage.RemoteImage.load(url);
+      }
+
+      return this.imagePromises[name];
+    },
+
+    loadMasks: function() {
+      var widget = this;
+      var maskImageId = this.options.masksData && this.options.masksData.id;
+
+      if (this.lastMaskImageId !== maskImageId) {
+        this.lastMaskImageId = maskImageId;
+
+        this.masksPromise = this.options.masksData ?
+          pageflow.linkmapPage.Masks.deserialize(this.options.masksData,
+                                                 this.options.maskSpriteUrlTemplate) :
+          $.when(pageflow.linkmapPage.Masks.empty);
+
+        this.masksPromise.then(function(masks) {
+          widget._trigger('updatemasks', null, {masks: masks});
+        });
+      }
+
+      return this.masksPromise;
     }
   });
 
   $.fn.linkmapAreaClip = function(optionalPosition) {
     this.each(function() {
       var hoverArea = $(this);
-      var clippedElement = hoverArea.find('.panorama_video, .background_image');
+      var clippedElement = hoverArea.find('.panorama_video, .hover_image, .visited_image');
       var position = optionalPosition || hoverArea.position();
 
       clippedElement.css({

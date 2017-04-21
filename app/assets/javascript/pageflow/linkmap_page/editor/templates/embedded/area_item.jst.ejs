@@ -1,11 +1,20 @@
-<div class="background_image visited_image" data-style-group="panorama"></div>
-<div class="background_image hover_image" data-style-group="panorama"></div>
+<canvas class="visited_image" />
+<canvas class="hover_image" />
 <div class="linkmap_marker"></div>
 <span class="area_type_pictogram"></span>
 <div class="linkmap_description">
   <div class="link_title"></div>
   <div class="link_description"></div>
 </div>
-<a class="toggle_marker" href="" title="<%= I18n.t('pageflow.linkmap_page.editor.templates.embedded.area_item.toggle_marker') %>">
-<a class="edit" href="" title="<%= I18n.t('pageflow.linkmap_page.editor.templates.embedded.area_item.edit') %>">
-</a>
+
+<div class="click_trap"></div>
+<div class="action_buttons">
+  <a class="action_button show_marker toggle_marker" href="" title="<%= I18n.t('pageflow.linkmap_page.editor.templates.embedded.area_item.show_marker') %>">
+  </a>
+  <a class="action_button hide_marker toggle_marker" href="" title="<%= I18n.t('pageflow.linkmap_page.editor.templates.embedded.area_item.hide_marker') %>">
+  </a>
+  <a class="action_button set_mask" href="" title="<%= I18n.t('pageflow.linkmap_page.editor.templates.embedded.area_item.set_mask') %>">
+  </a>
+  <a class="action_button unset_mask" href="" title="<%= I18n.t('pageflow.linkmap_page.editor.templates.embedded.area_item.unset_mask') %>">
+  </a>
+</div>

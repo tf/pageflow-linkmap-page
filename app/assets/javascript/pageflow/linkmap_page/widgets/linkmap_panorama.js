@@ -41,16 +41,16 @@
         that.calcAreaOpacity(that.activeAreas, e.pageX, e.pageY);
       });
 
-      pageElement.on('mouseenter', '.hover_area', function() {
+      pageElement.on('linkmapareaenter', '.hover_area', function() {
         positionOverlay($(this));
       });
 
-      pageElement.on('click', function() {
+      pageElement.on('click linkmapbackgroundclick', function() {
         that.overlayBox.removeClass('active');
-        that.activeAreas.removeClass('hover');
+        that.activeAreas.removeClass('hover hover_mobile');
       });
 
-      $('body').on('mouseleave', '.hover_area', function() {
+      $('body').on('linkmaparealeave', '.hover_area', function() {
         that.overlayBox.removeClass('active');
       });
 
@@ -59,23 +59,29 @@
       });
 
       that.activeAreas.each(function() {
-        $(this).on('click touchstart', function(e) {
-          if (pageflow.browser.has('mobile platform')) {
-            if($(this).hasClass('hover')) {
+        var area = $(this);
+
+        if (pageflow.browser.has('mobile platform')) {
+          area.on('linkmapareatouchstart', function(e) {
+            if (area.hasClass('hover_mobile')) {
               that.activeAreas.removeClass('active');
-              $(this).addClass('active');
-              return;
+              area.addClass('active');
             }
-            that.activeAreas.removeClass('hover');
-            $(this).addClass('hover');
-            positionOverlay($(this));
-            return false;
-          }
-          else {
+            else {
+              that.activeAreas.removeClass('hover hover_mobile');
+              area.addClass('hover hover_mobile');
+
+              positionOverlay($(this));
+              return false;
+            }
+          });
+        }
+        else {
+          area.on('linkmapareaclick', function(e) {
             that.activeAreas.removeClass('active');
-            $(this).addClass('active');
-          }
-        })
+            area.addClass('active');
+          });
+        }
       });
 
       var positionOverlay = function(area) {

@@ -42,7 +42,7 @@
       }
     }
 
-    &.hover {
+    &.hover_mobile {
       .linkmap_marker {
         &:before {
           opacity: 1;
@@ -112,7 +112,6 @@
         }
       }
 
-      &:hover,
       &.hover,
       &.playing,
       &:focus,
@@ -320,7 +319,7 @@
   }
 
   .hover_area {
-    &:hover, &.hover {
+    &.hover {
       .linkmap_audio_player_controls {
         .play:before {
           background-color: rgba(0,0,0,0.7);

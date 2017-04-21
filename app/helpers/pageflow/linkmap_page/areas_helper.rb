@@ -4,16 +4,29 @@ module Pageflow
       include BackgroundImageHelper
 
       def linkmap_areas_div(entry, configuration)
+        hover_image_file = Pageflow::ImageFile.find_by_id(configuration['hover_image_id'])
+        visited_image_file = Pageflow::ImageFile.find_by_id(configuration['visited_image_id'])
+
+        mask_sprite_url_template = MaskSprite.new(id: 1, attachment_file_name: 'data').attachment.url
+          .gsub(%r'(\d{3}/)+', ':id_partition/')
+
         render('pageflow/linkmap_page/areas/div',
                entry: entry,
-               configuration: configuration)
+               configuration: configuration,
+               data_attributes: {
+                 hover_image_url: hover_image_file &&
+                   hover_image_file.attachment.url(:panorama_large),
+                 visited_image_url: visited_image_file &&
+                   visited_image_file.attachment.url(:panorama_large),
+                 mask_sprite_url_template: mask_sprite_url_template
+               })
       end
 
-      def linkmap_area(entry, attributes, index, &block)
-        Link.new(self, entry, attributes.symbolize_keys, index).render(&block)
+      def linkmap_area(entry, attributes, index, background_type = nil, &block)
+        Link.new(self, entry, attributes.symbolize_keys, index, background_type).render(&block)
       end
 
-      class Link < Struct.new(:template, :entry, :attributes, :index)
+      class Link < Struct.new(:template, :entry, :attributes, :index, :background_type)
         delegate :content_tag, to: :template
 
         def render(&block)
@@ -51,6 +64,7 @@ module Pageflow
         end
 
         def data_attributes
+          mask_id = background_type != 'hover_video' && attributes[:mask_perma_id]
           audio_file_id = attributes[:target_id]
 
           {
@@ -58,6 +72,7 @@ module Pageflow
             target_id: attributes[:target_id],
             audio_file: audio_file_id.present? ? "#{audio_file_id}.area_#{index}" : nil,
             page_transition: attributes[:page_transition],
+            mask_id: mask_id,
             width: attributes[:width],
             height: attributes[:height]
           }.delete_if { |key, value| value.blank? }

@@ -1,33 +1,14 @@
 .editor {
+  @import "./editor/inputs/area_mask";
   @import "./editor/areas_list";
+  @import "./editor/select_area_position_hint";
 }
 
 .linkmap_areas {
   @import "./editor/resizable";
-
-  .edit {
-    @include icon-only-button(white);
-    @include pencil-icon;
-    position: absolute;
-    display: none;
-    z-index: 2;
-    top: 5px;
-    right: 5px;
-    background-color: #fff;
-    border: solid 1px #888;
-  }
-
-  .toggle_marker {
-    @include icon-only-button(white);
-    @include eye-icon;
-    position: absolute;
-    display: none;
-    z-index: 2;
-    top: 5px;
-    right: 40px;
-    background-color: #fff;
-    border: solid 1px #888;
-  }
+  @import "./editor/action_buttons";
+  @import "./editor/masks_preview";
+  @import "./editor/area_outlines";
 
   .area_type_pictogram {
     @include background-icon-center($color: #fff);
@@ -40,7 +21,7 @@
     height: 25px;
     border-radius: 5px;
     background-color: rgba(0, 0, 0, 0.4);
-    z-index: 2;
+    z-index: 3;
   }
 
   .page_area,
@@ -52,23 +33,35 @@
   }
 
   &.editable {
-    .hover_area {
-      cursor: move;
+    pointer-events: all;
 
-      &:hover .edit,
-      &:hover .toggle_marker,
-      &:hover .area_type_pictogram {
+    .click_trap {
+      cursor: default;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 4;
+    }
+
+    .hover_area {
+      z-index: 2;
+    }
+
+    .without_mask.selected .click_trap {
+      cursor: move;
+    }
+
+    .hover_area.selected {
+      z-index: 3;
+
+      .area_type_pictogram {
         display: block;
       }
 
-      &.editing .edit,
-      &.editing .toggle_marker,
       &.editing .area_type_pictogram {
         display: none;
-      }
-
-      &.editing {
-        z-index: 2;
       }
 
       &:before,
@@ -79,14 +72,8 @@
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: 1;
+        z-index: 2;
         @include box-sizing(border-box);
-      }
-
-      &.highlighted:before,
-      &.editing:before,
-      &:hover:before {
-        background-color: rgba(255, 255, 255, 0.3);
       }
 
       &:before {

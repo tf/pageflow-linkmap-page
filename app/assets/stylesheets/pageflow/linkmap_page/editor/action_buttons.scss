@@ -1,0 +1,66 @@
+.action_buttons {
+  display: none;
+}
+
+&.editable {
+  .selected .action_buttons {
+    display: block;
+  }
+
+  .editing .action_buttons {
+    display: none;
+  }
+}
+
+.action_button {
+  @include icon-only-button(white);
+  display: none;
+  position: absolute;
+  z-index: 5;
+  top: 5px;
+  right: 5px;
+  background-color: #fff;
+  border: solid 1px #888;
+  font-weight: normal;
+}
+
+.show_marker {
+  @include fa-eye-icon;
+}
+
+.hide_marker {
+  @include fa-eye-slash-icon;
+}
+
+.set_mask {
+  @include fa-crop-icon;
+  right: 42px;
+}
+
+.unset_mask {
+  @include fa-arrows-alt-icon;
+}
+
+&.masks_available {
+  .set_mask {
+    display: block;
+  }
+}
+
+.with_mask {
+  .unset_mask {
+    display: block;
+  }
+}
+
+.dynamic_marker {
+  .hide_marker {
+    display: block;
+  }
+}
+
+.without_mask {
+  .show_marker {
+    display: block;
+  }
+}

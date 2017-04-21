@@ -21,7 +21,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
         return pageElement.find('.panorama.active');
       },
       scroller: this.scroller,
-      activeAreasSelector: '.linkmap_areas > *',
+      activeAreasSelector: '.linkmap_areas > .hover_area',
       limitScrolling: configuration.limit_scrolling,
       minScaling: pageflow.browser.has('mobile platform'),
       addEnvironment: configuration.add_environment,
@@ -44,6 +44,11 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
     this.linkmapAreas = pageElement.find('.linkmap_areas');
     this.linkmapAreas.linkmap({
+      hoverImageUrl: this.linkmapAreas.data('hoverImageUrl'),
+      visitedImageUrl: this.linkmapAreas.data('visitedImageUrl'),
+      maskSpriteUrlTemplate: this.linkmapAreas.data('maskSpriteUrlTemplate'),
+      masksData: configuration.linkmap_masks,
+
       baseImage: function() {
         return pageElement.find('.panorama.active');
       },
@@ -53,8 +58,8 @@ pageflow.pageType.register('linkmap_page', _.extend({
     });
 
     this.setupPageLinkAreas(pageElement);
+    this.setupExternalLinkAreas(pageElement);
     this.setupAudioFileAreas(pageElement, configuration);
-    this.setupTextOnlyAreas(pageElement);
   },
 
   getPanoramaStartScrollPosition: function(configuration) {
@@ -113,13 +118,25 @@ pageflow.pageType.register('linkmap_page', _.extend({
   },
 
   setupPageLinkAreas: function(pageElement) {
-    pageElement.on('click', '[data-target-type="page"]', function(e) {
+    pageElement.on('linkmapareaclick', '[data-target-type="page"]', function(e) {
       var area = $(this);
 
       pageflow.slides.goToByPermaId(area.data('targetId'), {
         transition: area.data('pageTransition')
       });
-      return false;
+    });
+  },
+
+  setupExternalLinkAreas: function(pageElement) {
+    pageElement.on('linkmapareaclick', '[data-target-type="external_site"]', function(e) {
+      var area = $(this);
+
+      if (area.attr('target')) {
+        window.open(area.attr('href'), area.attr('target'));
+      }
+      else {
+        window.location.href = area.attr('href');
+      }
     });
   },
 
@@ -135,12 +152,6 @@ pageflow.pageType.register('linkmap_page', _.extend({
     });
 
     pageElement.find('[data-target-type="audio_file"]').linkmapAudioPlayerControls();
-  },
-
-  setupTextOnlyAreas: function(pageElement) {
-    pageElement.on('click', '[data-target-type="text_only"]', function(e) {
-      return false;
-    });
   },
 
   resize: function(pageElement, configuration) {
@@ -205,7 +216,6 @@ pageflow.pageType.register('linkmap_page', _.extend({
   },
 
   update: function(pageElement, configuration) {
-    this.setupDefaultAreaPositions(configuration);
     this.setupPanoramaBackground(pageElement, configuration.attributes);
     this.updateCommonPageCssClasses(pageElement, configuration);
 
@@ -213,6 +223,20 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
     this.afterEmbeddedViewsUpdate(function() {
       var minScaling = false;
+
+      this.linkmapAreas.linkmap('option',
+                                'hoverImageUrl',
+                                configuration.getImageFileUrl('hover_image_id', {
+                                  styleGroup: 'panorama'
+                                }));
+      this.linkmapAreas.linkmap('option',
+                                'visitedImageUrl',
+                                configuration.getImageFileUrl('visited_image_id', {
+                                  styleGroup: 'panorama'
+                                }));
+      this.linkmapAreas.linkmap('option',
+                                'masksData',
+                                configuration.get('linkmap_masks'));
 
       this.content.linkmapPanorama('update',
                                    configuration.get('add_environment'),
@@ -257,30 +281,6 @@ pageflow.pageType.register('linkmap_page', _.extend({
       else {
         this.pauseVideo(configuration.attributes);
       }
-    }
-  },
-
-  setupDefaultAreaPositions: function(configuration) {
-    if (!this.defaultPositionDefined) {
-      var scroller = this.scroller;
-
-      _.each(['linkmap_page_link_areas', 'linkmap_audio_file_areas'], function(propertyName) {
-        configuration.linkmapAreas(propertyName).setDefaultPosition(function() {
-          return {
-            left: getPercent(scroller.positionX(), scroller.maxX()),
-            top: getPercent(scroller.positionY(), scroller.maxY())
-          };
-        });
-      });
-      this.defaultPositionDefined = true;
-    }
-
-    function getPercent(value, max) {
-      if (max === 0) {
-        return 20;
-      }
-
-      return Math.max(3, Math.min(90, value / max * 100));
     }
   },
 

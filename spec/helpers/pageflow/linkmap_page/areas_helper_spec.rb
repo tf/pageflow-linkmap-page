@@ -22,13 +22,34 @@ module Pageflow
           expect(html).to have_selector('div a[href]')
         end
 
-        it 'renders hover image inside linkmap areas' do
+        it 'renders hover image canvas inside linkmap areas' do
           entry = create(:entry)
           configuration = {'linkmap_areas' => [{}], 'hover_image_id' => 5}
 
           html = helper.linkmap_areas_div(entry, configuration)
 
-          expect(html).to have_selector('a div[class~="image_panorama_5"]')
+          expect(html).to have_selector('a canvas.hover_image')
+        end
+
+        it 'sets data-mask-id attribute if area has mask_perma_id' do
+          entry = create(:entry)
+          configuration = {'linkmap_areas' => [{'mask_perma_id' => '1:2'}]}
+
+          html = helper.linkmap_areas_div(entry, configuration)
+
+          expect(html).to have_selector('a[data-mask-id="1:2"]')
+        end
+
+        it 'does not set data-mask-id attribute if background type is hover_video' do
+          entry = create(:entry)
+          configuration = {
+            'linkmap_areas' => [{'mask_perma_id' => '1:2'}],
+            'background_type' => 'hover_video'
+          }
+
+          html = helper.linkmap_areas_div(entry, configuration)
+
+          expect(html).not_to have_selector('a[data-mask-id]')
         end
       end
 
