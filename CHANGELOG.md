@@ -4,7 +4,8 @@
 
 [Compare changes](http://github.com/codevise/pageflow-linkmap-page/compare/v0.2.0...master)
 
-None so far.
+- Support mask image for non rectangular areas
+  ([#22](https://github.com/codevise/pageflow-linkmap-page/pull/22))
 
 ### Version 0.2.0
 
