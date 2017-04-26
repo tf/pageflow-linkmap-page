@@ -63,13 +63,26 @@ pageflow.linkmapPage.ColorMap = (function() {
     var componentsByKey = {};
     var components = [];
 
+    var currentStreakKey, currentStreakLength;
+
     for (var y = 0; y < height; y++) {
+      currentStreakKey = null;
+      currentStreakLength = 0;
+
       for (var x = 0; x < width; x++) {
         i = (y * width + x) * 4;
 
-        if (data[i + 3] > 0) {
+        if (!blackOrTransparent(data, i)) {
           key = [data[i], data[i + 1], data[i + 2]].join('-');
           component = componentsByKey[key];
+
+          if (currentStreakKey === key && sameColorAboveAndBelow(data, i, width)) {
+            currentStreakLength += 1;
+          }
+          else {
+            currentStreakKey = key;
+            currentStreakLength = 1;
+          }
 
           if (!component) {
             component = componentsByKey[key] = {
@@ -77,7 +90,8 @@ pageflow.linkmapPage.ColorMap = (function() {
               left: x,
               top: y,
               right: x + 1,
-              bottom: y + 1
+              bottom: y + 1,
+              longestStreak: currentStreakLength
             };
 
             components.push(component);
@@ -87,13 +101,18 @@ pageflow.linkmapPage.ColorMap = (function() {
             component.top = Math.min(component.top, y);
             component.right = Math.max(component.right, x + 1);
             component.bottom = Math.max(component.bottom, y + 1);
+            component.longestStreak = Math.max(component.longestStreak, currentStreakLength);
           }
         }
       }
     }
 
-    if (components.length > 20) {
-      throw tooManyComponentsError();
+    components = _(components).select(function(component) {
+      return component.longestStreak > 7;
+    });
+
+    if (components.length === 0) {
+      throw noComponentsError();
     }
 
     return new ColorMap(width, height, _(components).map(function(component) {
@@ -111,9 +130,30 @@ pageflow.linkmapPage.ColorMap = (function() {
     }));
   };
 
-  function tooManyComponentsError() {
-    var error = new Error('Too many color components.');
-    error.i18nKey = 'pageflow.linkmap_page.color_map.too_many_components';
+  function blackOrTransparent(data, i) {
+    return (data[i] === 0 && data[i + 1] === 0 && data[i + 2] === 0) ||
+      data[i + 3] === 0;
+  }
+  function sameColorAboveAndBelow(data, i, width) {
+    var above = i - width * 4;
+    var below = i + width * 4;
+
+    return above >= 0 &&
+      below < data.length &&
+      sameColor(data, i, above) &&
+      sameColor(data, i, below);
+  }
+
+  function sameColor(data, i, j) {
+    return data[i] === data[j] &&
+      data[i + 1] === data[j + 1] &&
+      data[i + 2] === data[j + 2] &&
+      data[i + 3] === data[j + 3];
+  }
+
+  function noComponentsError() {
+    var error = new Error('No big enough components detected.');
+    error.i18nKey = 'pageflow.linkmap_page.errors.no_big_enough_color_map_components';
 
     return error;
   }
