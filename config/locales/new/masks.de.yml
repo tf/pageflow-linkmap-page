@@ -10,8 +10,12 @@ de:
           mask_perma_id: "Farbiger Bereich im Maskenbild, der die Form des Hotspots bestimmt."
           mask_perma_id_disabled: "Farbiger Bereich im Maskenbild, der die Form des Hotspots bestimmt. Nur verfügbar, wenn ein Masken-Bild im 'Dateien'-Tab der Hotspot-Seite festgelegt wurde und als Panorama-Typ nicht 'Hover Video' ausgewählt wurde."
     linkmap_page:
-      color_map:
-        too_many_components: "Das ausgewählte Bild enthält zu viele verschiedene Farbtöne. Es können maximal 20 Bereiche durch das Maskenbild bestimmt werden. Stellen Sie sicher, dass bei der Erstellung des Maskenbildes keine Kantenglättung verwendet wurde, da dies die Zahl der im Bild auftretenden Farbtöne stark erhöhen kann."
+      errors:
+        mask_image_failed: "Beim Verarbeiten des Maskenbildes ist ein Fehler aufgetreten."
+        no_big_enough_color_map_components: "Es konnten keine Farb-Bereiche erkannt werden. Stellen Sie sicher, dass die Bereiche midestens 7x7 Pixel groß sind."
+        loading_remote_image_failed: "Beim Laden des Bildes ist ein Fehler aufgetreten."
+        saving_mask_image_failed: "Beim Speichern des Maskenbildes ist ein Fehler aufgetreten."
+        invalid_image_data: "Bei der Erkennung der Farbbereiche im Maskenbild ist ein Fehler aufgetreten. Stellen Sie sicher, dass die farbigen Bereiche im Maskenbild begrenzt und alle anderen Teile des Bildes transparent sind."
       page_attributes:
         linkmap_color_map_image_id:
           label: "Masken-Bild"

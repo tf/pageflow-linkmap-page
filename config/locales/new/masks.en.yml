@@ -10,6 +10,12 @@ en:
           mask_perma_id: "Colored area inside mask image which determines the shape of the hotspot."
           mask_perma_id_disabled: "Colored area inside mask image which determines the shape of the hotspot. Only available if a mask image has been selected on the hotspot page's 'Files' tab and the panorama type is not 'Hover video'."
     linkmap_page:
+      errors:
+        mask_image_failed: "There was an error while processing the mask image."
+        no_big_enough_color_map_components: "No color components identified. Ensure each component is at least 7x7 pixels big."
+        loading_remote_image_failed: "Error while loading the image."
+        saving_mask_image_failed: "There has been an error while saving the mask image."
+        invalid_image_data: "There has been an error while identifying color components. Ensure color areas are bounded inside the image and all other parts of the image are transparent."
       color_map:
         too_many_components: "The selected image contains too many different color values. There is a maximal number of 20 areas that can be determined via the mask image. Make sure that anti aliasing was turned off while creating the mask image. Anti aliasing leads to color gradients inside the image which prevent usage as mask image."
       page_attributes:
