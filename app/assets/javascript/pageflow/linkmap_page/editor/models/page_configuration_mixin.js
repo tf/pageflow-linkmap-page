@@ -65,7 +65,7 @@
   function generateMaskSprite(configuration, imageFile) {
     pageflow.linkmapPage.StoredMaskSprite
       .findOrCreateForImageFileId(imageFile.id,
-                                  imageFile.get('panorama_url'))
+                                  imageFile.get('panorama_mask_url'))
       .then(
         function(masks) {
           configuration.set('linkmap_masks', masks);
