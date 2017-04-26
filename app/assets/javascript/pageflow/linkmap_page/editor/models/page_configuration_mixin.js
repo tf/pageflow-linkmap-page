@@ -63,8 +63,10 @@
   }
 
   function generateMaskSprite(configuration, imageFile) {
+    // panorama_mask_url is available in Pageflow >= 12.1
     pageflow.linkmapPage.StoredMaskSprite
       .findOrCreateForImageFileId(imageFile.id,
+                                  imageFile.get('panorama_mask_url') ||
                                   imageFile.get('panorama_url'))
       .then(
         function(masks) {
