@@ -27,6 +27,9 @@ pageflow.linkmapPage.ImageData = (function() {
 
           data[i + 3] = 0;
         }
+        else {
+          data[i + 3] = 255;
+        }
       }
 
       destinationContext.putImageData(imageData, destinationX, destinationY);
