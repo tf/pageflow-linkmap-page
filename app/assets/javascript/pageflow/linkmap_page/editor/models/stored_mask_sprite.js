@@ -10,16 +10,28 @@ pageflow.linkmapPage.StoredMaskSprite = Backbone.Model.extend({
 pageflow.linkmapPage.StoredMaskSprite.findOrCreateForImageFileId = function(imageFileId, imageFileUrl) {
   return new $.Deferred(function(deferred) {
     pageflow.linkmapPage.Masks.loadColorMapImage(imageFileUrl).then(function(masks) {
-      var storedMaskSprite = new pageflow.linkmapPage.StoredMaskSprite({
-        image_file_id: imageFileId,
-        attachment: masks.getSpriteDataUrl()
-      });
+      try {
+        var storedMaskSprite = new pageflow.linkmapPage.StoredMaskSprite({
+          image_file_id: imageFileId,
+          attachment: masks.getSpriteDataUrl()
+        });
 
-      storedMaskSprite.save(null, {
-        success: function() {
-          deferred.resolve(masks.serialize(storedMaskSprite.id));
-        }
-      });
+        storedMaskSprite.save(null, {
+          success: function() {
+            deferred.resolve(masks.serialize(storedMaskSprite.id));
+          },
+
+          error: function() {
+            deferred.reject({
+              message: 'Error saving mask sprite to the server.',
+              i18nKey: 'pageflow.linkmap_page.errors.saving_mask_image_failed'
+            });
+          }
+        });
+      }
+      catch (e) {
+        deferred.reject(e);
+      }
     }, deferred.reject);
   }).promise();
 };

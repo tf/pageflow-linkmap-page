@@ -80,6 +80,7 @@
             alert(I18n.t(error.i18nKey));
           }
           else {
+            alert(I18n.t('pageflow.linkmap_page.errors.mask_image_failed'));
             throw(error);
           }
         }
