@@ -22,6 +22,8 @@
       this.overlayTitle = pageElement.find('.description_overlay .link_title');
       this.overlayDescription = pageElement.find('.description_overlay .link_description');
 
+      this.touchIndicator = pageElement.find('.touch_indicator');
+
       this.startScrollPosition = _.clone(this.options.startScrollPosition);
 
       this.currentScrollPosition = null;
@@ -48,6 +50,7 @@
       pageElement.on('click linkmapbackgroundclick', function() {
         that.overlayBox.removeClass('active');
         that.activeAreas.removeClass('hover hover_mobile');
+        that.touchIndicator.hide();
       });
 
       $('body').on('linkmaparealeave', '.hover_area', function() {
@@ -72,6 +75,11 @@
               area.addClass('hover hover_mobile');
 
               positionOverlay($(this));
+
+              if (!area.hasClass('dynamic_marker')) {
+                displayTouchIndicator(event);
+              }
+
               return false;
             }
           });
@@ -154,7 +162,27 @@
             that.overlayInnerBox.css('top', '0px');
           }
         }
-      }
+      };
+
+      var displayTouchIndicator = function(event) {
+        var parentClientRect = that.panoramaWrapper[0].getBoundingClientRect();
+        var touch = event.touches ? event.touches[0] : event;
+
+        that.touchIndicator.css({
+          left: touch.clientX - parentClientRect.left,
+          top: touch.clientY - parentClientRect.top
+        });
+
+        animateTouchIndicator();
+      };
+
+      var animateTouchIndicator = function() {
+        that.touchIndicator.hide();
+
+        setTimeout(function() {
+          that.touchIndicator.show();
+        }, 500);
+      };
 
       this.refresh();
     },
