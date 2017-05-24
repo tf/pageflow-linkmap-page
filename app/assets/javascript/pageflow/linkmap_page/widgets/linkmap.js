@@ -45,18 +45,6 @@
         return false;
       });
 
-      this.element.on('touchstart', function(event) {
-        var area = widget.areaAt(widget.positionFromEvent(event.originalEvent.touches[0]));
-
-        var areaEvent = jQuery.Event('linkmapareatouchstart');
-
-        area.first().trigger(areaEvent);
-
-        if (areaEvent.isDefaultPrevented()) {
-          event.preventDefault();
-        }
-      });
-
       this.element.on('mousemove mouseleave', function(event) {
         widget.updateHoverStates(event);
       });

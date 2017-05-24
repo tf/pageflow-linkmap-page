@@ -62,7 +62,7 @@
         var area = $(this);
 
         if (pageflow.browser.has('mobile platform')) {
-          area.on('linkmapareatouchstart', function(e) {
+          area.on('linkmapareaclick', function(e) {
             if (area.hasClass('hover_mobile')) {
               that.activeAreas.removeClass('active');
               area.addClass('active');
