@@ -36,7 +36,7 @@
         var area = widget.areaAt(widget.positionFromEvent(event));
 
         if (area.length) {
-          area.first().trigger('linkmapareaclick');
+          area.first().trigger($.Event('linkmapareaclick', {originalEvent: event}));
         }
         else {
           widget._trigger('backgroundclick');

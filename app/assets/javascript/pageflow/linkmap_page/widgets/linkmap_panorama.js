@@ -23,6 +23,8 @@
       this.overlayDescription = pageElement.find('.description_overlay .link_description');
 
       this.touchIndicator = pageElement.find('.touch_indicator');
+      this.externalLinkLoadingIndicator = pageElement.find('.external_link_loading_indicator');
+      this.globalIndicators = this.touchIndicator.add(this.externalLinkLoadingIndicator);
 
       this.startScrollPosition = _.clone(this.options.startScrollPosition);
 
@@ -50,7 +52,7 @@
       pageElement.on('click linkmapbackgroundclick', function() {
         that.overlayBox.removeClass('active');
         that.activeAreas.removeClass('hover hover_mobile');
-        that.touchIndicator.hide();
+        that.globalIndicators.hide();
       });
 
       $('body').on('linkmaparealeave', '.hover_area', function() {
@@ -64,8 +66,8 @@
       that.activeAreas.each(function() {
         var area = $(this);
 
-        if (pageflow.browser.has('mobile platform')) {
-          area.on('linkmapareaclick', function(e) {
+        area.on('linkmapareaclick', function(event) {
+          if (pageflow.browser.has('mobile platform')) {
             if (area.hasClass('hover_mobile')) {
               that.activeAreas.removeClass('active');
               area.addClass('active');
@@ -77,19 +79,21 @@
               positionOverlay($(this));
 
               if (!area.hasClass('dynamic_marker')) {
-                displayTouchIndicator(event);
+                displayTouchIndicator(event.originalEvent);
               }
 
               return false;
             }
-          });
-        }
-        else {
-          area.on('linkmapareaclick', function(e) {
+          }
+          else {
             that.activeAreas.removeClass('active');
             area.addClass('active');
-          });
-        }
+          }
+
+          if (!area.hasClass('dynamic_marker') && area.hasClass('external_site_area')) {
+            displayExternalLinkLoadingIndicator(event.originalEvent);
+          }
+        });
       });
 
       var positionOverlay = function(area) {
@@ -164,15 +168,13 @@
         }
       };
 
+      var displayExternalLinkLoadingIndicator = function(event) {
+        positionGlobalIndicator(that.externalLinkLoadingIndicator, event);
+        that.externalLinkLoadingIndicator.show();
+      };
+
       var displayTouchIndicator = function(event) {
-        var parentClientRect = that.panoramaWrapper[0].getBoundingClientRect();
-        var touch = event.touches ? event.touches[0] : event;
-
-        that.touchIndicator.css({
-          left: touch.clientX - parentClientRect.left,
-          top: touch.clientY - parentClientRect.top
-        });
-
+        positionGlobalIndicator(that.touchIndicator, event);
         animateTouchIndicator();
       };
 
@@ -182,6 +184,16 @@
         setTimeout(function() {
           that.touchIndicator.show();
         }, 500);
+      };
+
+      var positionGlobalIndicator = function(indicator, event) {
+        var parentClientRect = that.panoramaWrapper[0].getBoundingClientRect();
+        var touch = event.touches ? event.touches[0] : event;
+
+        indicator.css({
+          left: touch.clientX - parentClientRect.left,
+          top: touch.clientY - parentClientRect.top
+        });
       };
 
       this.refresh();

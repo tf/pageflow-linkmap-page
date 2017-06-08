@@ -77,6 +77,10 @@
     @include animation(linkmap_touch_indicator_animation 1s);
   }
 
+  .external_link_loading_indicator .circle_innerst {
+    border: 4px solid $linkmap-audio-progress-color;
+  }
+
   .linkmap_audio_player_controls {
     .progress_inner {
       height: 96%;
