@@ -32,15 +32,15 @@ Include javascripts and stylesheets:
     # app/assets/javascripts/pageflow/editor.js
     //= require pageflow/linkmap_page/editor
 
-    # app/assets/stylesheets/pageflow/application.css.scss
+    # app/assets/stylesheets/pageflow/application.scss
     @import "pageflow/linkmap_page";
 
-    # app/assets/stylesheets/pageflow/editor.css.scss
+    # app/assets/stylesheets/pageflow/editor.scss
     @import "pageflow/linkmap_page/editor";
 
 Import default theme additions:
 
-    # app/assets/stylesheets/pageflow/themes/default.css.scss
+    # app/assets/stylesheets/pageflow/themes/default.scss
 
     @import "pageflow/linkmap_page/themes/default";
 
