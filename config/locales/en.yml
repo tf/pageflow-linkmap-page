@@ -2,9 +2,11 @@ en:
   activerecord:
     attributes:
       pageflow/linkmap_page/area:
+        inverted: Invert
         link_description: Link decription text
         link_title: Link description title
         marker: Link display
+        mask_perma_id: Mask
         name: Label
         page_transition: Page transition
         target_id: Target
@@ -18,22 +20,30 @@ en:
           audio_file: Audio file
           external_site: External link
           page: Page link
+          text_only: Text only
   pageflow:
     linkmap_page:
-      default_page_transition: (Default)
+      color_map:
+        too_many_components: The selected image contains too many different color values. There is a maximal number of 20 areas that can be determined via the mask image. Make sure that anti aliasing was turned off while creating the mask image. Anti aliasing leads to color gradients inside the image which prevent usage as mask image.
+      default_page_transition: "(Default)"
       editor:
         area_types:
           audio_file: Audio file
           external_site: External link
           page: Page link
+          text_only: Text only
         templates:
           edit_area:
             back: Back
             destroy: Delete
           embedded:
             area_item:
-              edit: Edit
-              toggle_marker: Toggle display
+              edit: DELETE
+              hide_marker: Hide marker
+              set_mask: Select mask
+              show_marker: Show marker
+              toggle_marker: DELETE
+              unset_mask: Detach from mask
           file_area_item:
             edit: Edit
             remove: Remove
@@ -41,19 +51,146 @@ en:
           file_areas:
             add: Add
             label: Label
+          select_area_position_hint:
+            cancel: Cancel
         views:
+          area_mask_input_view:
+            present: "(Active)"
           areas_list:
             add: Add
             label: Areas
           edit_area_view:
             confirm_destroy: Really delete this area?
+          embedded:
+            area_item:
+              external_link_disabled: External links are deactivated inside the editor.
+          scaled_on_phone_hint:
+            orientations:
+              both: phones
+              landscape: phones in landscape orientation
+              portrait: phones in portrait orientation
+            text: The panorama will be scaled on %{orientation} to ensure minimum hotspot size for touch interaction. Increase hotspot size to prevent scaling.
+          select_area_position_hint:
+            drag_hint: Select the hotspot's dimension by clicking and dragging somewhere inside the panorama.
+            select_mask_hint: Click on one of the colored areas of the mask image to determine the hotspots shape and position.
+            select_mask_or_drag_hint: Click on one of the colored areas of the mask image or select the hotspot's dimensions by clicking and dragging somewhere inside the panorama.
       help_entries:
         page_type:
           menu_item: Hotspots
+          text: |-
+            # Hotspots
+
+            Links with configurable click areas.
+
+            Hotspots can play audio files, link to other pages in a Pageflow or to external websites. You can define as many hotspots as you want.
+
+            Decide if you want to show a background image or a background video. (Keep in mind, that background videos will not be played on mobile devices, therefore use an additional fallback image for the mobile version)
+
+            The hotspot page type allows to use panoramic images that are wider and taller than the screen-size. It enables users to explore these images by horizontal or vertical scrolling.
+
+            To add a Hotspot just click on „Areas“ and choose between „Audio“, „Internal link“, or „External link“.
+
+            There are two ways to display hotspot areas:
+
+            ##  Hotspots as circles
+
+            Display a white circle whose position and size can be defined by dragging. Click on the eye-symbol button of the corresponding hotspot and move this circle onto the desired position. If you use an audio file, a headphone-symbol will appear within the circle. The size of the symbol depends on the circle´s size. The circle becomes more visible when the cursor moves closer to it.
+
+            ## Individually designed hotspots
+
+            Alternatively, an additional panorama image can be used to determine the look of hotspots when the cursor hovers above them. Two images have to be prepared:
+
+            1. An image with all hotspots in an inactive state (e.g. a map with cities represented by black dots)
+            2. An image with all hotspots in an active state (e.g. the same map with red dots representing cities)
+
+            Now the rectangular hotspot areas are positioned to cover the graphic representations of the hotspots. When the cursor hovers above one of the hotspots, the corresponding part of the hover-image will be displayed inside the hotspot's area. That way the hotspot is displayed in its active state while all others remain inactive.
+
+            It is also possible to use videos instead of images. The following combinations are possible:
+
+            1. Background image with hover image
+            2. Background video with hover image
+            3. Background image with hover video
+
+            If you wish to mark hotspots as \"already visited\" you can also upload a „Visited-Image“ which then shows a certain spot in a different color after visiting the linked page.
+
+            ## Free form hotspots
+
+            It's not always possible to cover the visual elements of a
+            panorama image with rectangular hotspots without creating
+            overlapping hotspot areas. For example, trying to turn the
+            countries on a map into clickable areas that change color
+            when the cursor hovers a country is not possible with a
+            single hover image: soon as a hotspot is not properly
+            contained inside a county's borders, a part of the
+            neighbor country changes its color together with the
+            hovered country.
+
+            For cases like this, we can use a so called mask image,
+            allowing us to freely determine the shape of our
+            hotspots. We need to create PNG image with transparent
+            background on which the desired hotspot areas are
+            represented as unicolor areas. The dimensions of the image
+            have to match those of the panorama and hover images.
+
+            For the map example, we could come up with an identically
+            proportioned map image, in which each country's shape is
+            filled with a different color leaving oceans and other
+            non-clickable parts transparent.
+
+            Once the map image has been selected, we can not only
+            create new hotspots by dragging rectangular shapes, but
+            also by clicking on of predefined colored areas given in
+            the mask image.
+
+            The shape of the hotspot corresponds exactly to the
+            selected color area. Also when the hotspot is hovered the
+            hover image is displayed cropped to that shape.
+
+            When determining hotspot areas, only the area's color is
+            taking into account: areas do not need to be connected.
+
+            Hence, turning to the map example one last time, islands
+            belonging to a country can also be highlighted together
+            with the mainland when it is hovered, while the sea
+            surrounding those islands need not be part of the
+            clickable area.
+
+            Important: Make sure that anti aliasing is turned off in
+            your image composing application while preparing the mask
+            image. We require a mask image with sharp edges and
+            clearly separated areas. Anti aliasing on the other hand
+            creates tiny color gradients which are then treated as
+            multiple pixel sized areas. If an image contains too many
+            different color values, trying to select it as a mask
+            image leads to an error message inside the editor.
+
+            At the moment, it is not possible to use mask images in
+            combintation with hover images.
+
+            ## Text options
+
+            Both of these hotspot types can be entitled and have additional text/description.
+            The description editor contains basic formatting options like bold, italic & underline.
+
+            ## Atmo options
+
+            Every Hotspot page, can play an additional backround sound that can optionally stop or continue playing (at the same or a lower volume) while an audio-Hotspot is playing.
+
+            ## Further options
+
+            Restrict scrolling to hotspot areas: Only scroll between hotspots.
+
+            Force scrolling: Ensure there is a margin which ensures the panorama can be scrolled both vertically and horizontally.
+
+            Deactivate scrolling at image border: Do not scroll in panorama view when user moves the cursor.
+
+            Examples of application: Menu site, multiple choice, exploration tour
       manage_sites: Manage links
       page:
+        scroll_down: Scroll down
         scroll_left: Scroll left
         scroll_right: Scroll right
+        scroll_up: Scroll up
       page_attributes:
         add_environment:
           inline_help: Zoom panorama to allow scrolling in both directions.
@@ -63,7 +200,7 @@ en:
         background_type:
           label: Panorama type
           values:
-            hover_video: Backgrund image/hover video
+            hover_video: Background image/hover video
             image: Background image/hover image
             video: Background video/hover image
         hover_image_id:
@@ -78,11 +215,14 @@ en:
             label: Hover video
         limit_scrolling:
           inline_help: Enable scrolling only if there hotspot areas outside the view port.
-          label: Restict to hotspot areas
+          label: Restrict to hotspot areas
         linked_linkmap_page_perma_ids:
           label: Page links
         linkmap_areas:
           label: Link areas
+        linkmap_color_map_image_id:
+          inline_help: Image with colored areas which determine the shape of hotspots. Further instructions can be found in the help entry of the hotspot page type.
+          label: Mask image
         margin_scrolling_disabled:
           inline_help: Do not scroll panorama when the cursor moves.
           label: Disable autoscroll in page margin
@@ -110,8 +250,11 @@ en:
           areas: Areas
       inline_help:
         pageflow/linkmap_page/area:
+          inverted: Display dark pictograms to improve visibility on light backgrounds.
           link_title: The description is displayed inside an overlay when the cursor hovers the hotspot.
-          marker: ! 'Choose the hotspot''s visual appearance. '
+          marker: 'Choose the hotspot''s visual appearance. '
+          mask_perma_id: Colored area inside mask image which determines the shape of the hotspot.
+          mask_perma_id_disabled: Colored area inside mask image which determines the shape of the hotspot. Only available if a mask image has been selected on the hotspot page's 'Files' tab and the panorama type is not 'Hover video'.
           name: Choose a label to recognize the link within the overview. This label is for your orientation only and will not be displayed to the reader.
           page_transition: Choose the animation, that will be used to transition to the link's target page.
           target_id: Object the hotspot links to.
