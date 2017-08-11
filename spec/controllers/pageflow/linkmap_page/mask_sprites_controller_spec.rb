@@ -15,7 +15,7 @@ module Pageflow
 
         it 'responds with success for member' do
           user = create(:user)
-          entry = create(:entry, with_member: user)
+          entry = create(:entry, with_editor: user)
           image_file = create(:image_file, used_in: entry.draft)
 
           sign_in(user)
@@ -29,7 +29,7 @@ module Pageflow
 
         it 'includes id of created mask sprite in response' do
           user = create(:user)
-          entry = create(:entry, with_member: user)
+          entry = create(:entry, with_editor: user)
           image_file = create(:image_file, used_in: entry.draft)
 
           sign_in(user)
@@ -45,7 +45,7 @@ module Pageflow
 
         it 'creates mask sprite for image' do
           user = create(:user)
-          entry = create(:entry, with_member: user)
+          entry = create(:entry, with_editor: user)
           image_file = create(:image_file, used_in: entry.draft)
 
           sign_in(user)
@@ -61,7 +61,7 @@ module Pageflow
 
         it 'does not recreate mask sprite if it already exists' do
           user = create(:user)
-          entry = create(:entry, with_member: user)
+          entry = create(:entry, with_editor: user)
           image_file = create(:image_file, used_in: entry.draft)
 
           sign_in(user)
