@@ -72,5 +72,5 @@ doesn't help, consider
 ## Contributing Locales
 
 Edit the translations directly on the
-[pageflow-internal-links](http://www.localeapp.com/projects/public?search=tf/pageflow-linkmap-page)
+[pageflow-linkmap-page](http://www.localeapp.com/projects/public?search=tf/pageflow-linkmap-page)
 locale project.

@@ -1,8 +1,10 @@
 # CHANGELOG
 
-### Unreleased Changes
+### Version 1.0.0
 
-[Compare changes](http://github.com/codevise/pageflow-linkmap-page/compare/0-2-stable...master)
+2017-08-11
+
+[Compare changes](https://github.com/codevise/pageflow-linkmap-page/compare/0-2-stable...v1.0.0)
 
 ##### Manual Update Step
 
@@ -20,6 +22,12 @@ Install and run migrations:
 
 - Support mask image for non rectangular areas
   ([#22](https://github.com/codevise/pageflow-linkmap-page/pull/22))
+- Add support for pageflow-external-links 1.x
+  ([#26](https://github.com/codevise/pageflow-linkmap-page/pull/26))
+- Rename the last `css.scss` files
+  ([#25](https://github.com/codevise/pageflow-linkmap-page/pull/25))
+- Require pageflow 12
+  ([#24](https://github.com/codevise/pageflow-linkmap-page/pull/24))
 
 See
 [0-2-stable branch](https://github.com/codevise/pageflow-linkmap-page/blob/0-2-stable/CHANGELOG.md)
