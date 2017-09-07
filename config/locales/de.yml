@@ -23,8 +23,6 @@ de:
           text_only: Nur Text
   pageflow:
     linkmap_page:
-      color_map:
-        too_many_components: Das ausgewählte Bild enthält zu viele verschiedene Farbtöne. Es können maximal 20 Bereiche durch das Maskenbild bestimmt werden. Stellen Sie sicher, dass bei der Erstellung des Maskenbildes keine Kantenglättung verwendet wurde, da dies die Zahl der im Bild auftretenden Farbtöne stark erhöhen kann.
       default_page_transition: "(Standard)"
       editor:
         area_types:
@@ -38,11 +36,9 @@ de:
             destroy: Löschen
           embedded:
             area_item:
-              edit: DELETE
               hide_marker: Linkmarkierung deaktivieren
               set_mask: Maske auswählen
               show_marker: Linkmarkierung aktivieren
-              toggle_marker: DELETE
               unset_mask: Frei positionierbar machen
           file_area_item:
             edit: Bearbeiten
@@ -74,6 +70,12 @@ de:
             drag_hint: Wähle einen Bereich für den Hotspot durch Klicken und Ziehen mit der Maus.
             select_mask_hint: Klicke auf einen der farbigen Bereiche des Masken-Bildes, um einen Bereich für den Hotspot auszuwählen.
             select_mask_or_drag_hint: Klicke auf einen der farbigen Bereiche des Masken-Bildes oder wähle einen frei positionierten Bereich durch Klicken und Ziehen mit der Maus.
+      errors:
+        invalid_image_data: Bei der Erkennung der Farbbereiche im Maskenbild ist ein Fehler aufgetreten. Stellen Sie sicher, dass die farbigen Bereiche im Maskenbild begrenzt und alle anderen Teile des Bildes transparent sind.
+        loading_remote_image_failed: Beim Laden des Bildes ist ein Fehler aufgetreten.
+        mask_image_failed: Beim Verarbeiten des Maskenbildes ist ein Fehler aufgetreten.
+        no_big_enough_color_map_components: Es konnten keine Farb-Bereiche erkannt werden. Stellen Sie sicher, dass die Bereiche midestens 7x7 Pixel groß sind.
+        saving_mask_image_failed: Beim Speichern des Maskenbildes ist ein Fehler aufgetreten.
       help_entries:
         page_type:
           menu_item: Hotspots

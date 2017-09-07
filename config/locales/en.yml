@@ -23,8 +23,6 @@ en:
           text_only: Text only
   pageflow:
     linkmap_page:
-      color_map:
-        too_many_components: The selected image contains too many different color values. There is a maximal number of 20 areas that can be determined via the mask image. Make sure that anti aliasing was turned off while creating the mask image. Anti aliasing leads to color gradients inside the image which prevent usage as mask image.
       default_page_transition: "(Default)"
       editor:
         area_types:
@@ -38,11 +36,9 @@ en:
             destroy: Delete
           embedded:
             area_item:
-              edit: DELETE
               hide_marker: Hide marker
               set_mask: Select mask
               show_marker: Show marker
-              toggle_marker: DELETE
               unset_mask: Detach from mask
           file_area_item:
             edit: Edit
@@ -74,6 +70,12 @@ en:
             drag_hint: Select the hotspot's dimension by clicking and dragging somewhere inside the panorama.
             select_mask_hint: Click on one of the colored areas of the mask image to determine the hotspots shape and position.
             select_mask_or_drag_hint: Click on one of the colored areas of the mask image or select the hotspot's dimensions by clicking and dragging somewhere inside the panorama.
+      errors:
+        invalid_image_data: There has been an error while identifying color components. Ensure color areas are bounded inside the image and all other parts of the image are transparent.
+        loading_remote_image_failed: Error while loading the image.
+        mask_image_failed: There was an error while processing the mask image.
+        no_big_enough_color_map_components: No color components identified. Ensure each component is at least 7x7 pixels big.
+        saving_mask_image_failed: There has been an error while saving the mask image.
       help_entries:
         page_type:
           menu_item: Hotspots
