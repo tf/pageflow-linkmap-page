@@ -36,25 +36,13 @@
         var area = widget.areaAt(widget.positionFromEvent(event));
 
         if (area.length) {
-          area.first().trigger('linkmapareaclick');
+          area.first().trigger($.Event('linkmapareaclick', {originalEvent: event}));
         }
         else {
           widget._trigger('backgroundclick');
         }
 
         return false;
-      });
-
-      this.element.on('touchstart', function(event) {
-        var area = widget.areaAt(widget.positionFromEvent(event.originalEvent.touches[0]));
-
-        var areaEvent = jQuery.Event('linkmapareatouchstart');
-
-        area.first().trigger(areaEvent);
-
-        if (areaEvent.isDefaultPrevented()) {
-          event.preventDefault();
-        }
       });
 
       this.element.on('mousemove mouseleave', function(event) {

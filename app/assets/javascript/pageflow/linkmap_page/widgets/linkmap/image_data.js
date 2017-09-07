@@ -27,6 +27,9 @@ pageflow.linkmapPage.ImageData = (function() {
 
           data[i + 3] = 0;
         }
+        else {
+          data[i + 3] = 255;
+        }
       }
 
       destinationContext.putImageData(imageData, destinationX, destinationY);
@@ -42,8 +45,21 @@ pageflow.linkmapPage.ImageData = (function() {
     };
 
     this.toDataURL = function() {
-      return canvas.toDataURL();
+      var result = canvas.toDataURL();
+
+      if (!result.match(/^data:image/)) {
+        throw new invalidImageDataUrl();
+      }
+
+      return result;
     };
+  }
+
+  function invalidImageDataUrl() {
+    var error = new Error('Invalid data url from canvas.');
+    error.i18nKey = 'pageflow.linkmap_page.errors.invalid_image_data';
+
+    return error;
   }
 
   ImageData.load = function(url) {

@@ -1,5 +1,25 @@
 @include pageflow-page-type-pictograms("linkmap_page");
 
+@include keyframes(linkmap_touch_indicator_animation) {
+  0% {
+    @include transform(translate(-50%, -50%) scale(1));
+    opacity: 1;
+  }
+
+  25% {
+    @include transform(translate(-50%, -50%) scale(1.3));
+  }
+
+  50% {
+    @include transform(translate(-50%, -50%) scale(1));
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
 .linkmap_page {
   $linkmap-icon-font: "FontAwesome" !default;
   $linkmap-icon-line-height: 1.1em !default;
@@ -19,38 +39,46 @@
   $linkmap-audio-progress-color: $linkmap-main-color !default;
   $linkmap-audio-current-time-color: $linkmap-overlay-text-color !default;
 
-  .hover_area.page_area, .hover_area.external_site_area {
-    .linkmap_marker {
-      &:before {
-        content: $linkmap-marker-icon;
-        font-family: $linkmap-icon-font;
-        color: white;
-        font-size: 30px;
-        background-color: rgba(255, 255, 255, 0.3);
-        padding: 10px;
-        border-radius: 50%;
-        width: 35px;
-        height: 35px;
-        @include transform(translate(-50%,-50%));
-        left: 50%;
-        top: 50%;
-        position: absolute;
-        text-align: center;
-        opacity: 0;
-        line-height: $linkmap-icon-line-height;
-        @include transition(0.5s);
-      }
-    }
+  .hover_area.page_area .linkmap_marker:before,
+  .hover_area.external_site_area .linkmap_marker:before,
+  .touch_indicator:before {
+    content: $linkmap-marker-icon;
+    font-family: $linkmap-icon-font;
+    color: white;
+    font-size: 30px;
+    background-color: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    @include transform(translate(-50%,-50%));
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    text-align: center;
+    opacity: 0;
+    line-height: $linkmap-icon-line-height;
+    @include transition(0.5s);
+  }
 
-    &.hover_mobile {
-      .linkmap_marker {
-        &:before {
-          opacity: 1;
-          background-color: rgba(0,0,0,0.7);
-          color: $linkmap-icon-color;
-        }
-      }
-    }
+  .hover_area.page_area.hover_mobile.dynamic_marker .linkmap_marker:before,
+  .hover_area.external_site_area.hover_mobile.dynamic_marker .linkmap_marker:before,
+  .touch_indicator:before {
+    opacity: 1;
+    background-color: rgba(0,0,0,0.7);
+    color: $linkmap-icon-color;
+  }
+
+  .touch_indicator {
+    display: none;
+    position: absolute;
+    z-index: 2;
+    opacity: 0;
+    @include animation(linkmap_touch_indicator_animation 1s);
+  }
+
+  .external_link_loading_indicator .circle_innerst {
+    border: 4px solid $linkmap-audio-progress-color;
   }
 
   .linkmap_audio_player_controls {

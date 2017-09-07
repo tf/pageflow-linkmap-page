@@ -1,5 +1,5 @@
 pageflow.linkmapPage.getPanoramaSize = (function() {
-  var MIN_SCALING_SIZE = 80;
+  var MIN_SCALING_SIZE = 30;
   var ENVIRONMENT_MARGIN = 1.2;
 
   return function getPanoramaSize(options) {

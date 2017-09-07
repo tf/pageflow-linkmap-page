@@ -63,8 +63,10 @@
   }
 
   function generateMaskSprite(configuration, imageFile) {
+    // panorama_mask_url is available in Pageflow >= 12.1
     pageflow.linkmapPage.StoredMaskSprite
       .findOrCreateForImageFileId(imageFile.id,
+                                  imageFile.get('panorama_mask_url') ||
                                   imageFile.get('panorama_url'))
       .then(
         function(masks) {
@@ -78,6 +80,7 @@
             alert(I18n.t(error.i18nKey));
           }
           else {
+            alert(I18n.t('pageflow.linkmap_page.errors.mask_image_failed'));
             throw(error);
           }
         }
