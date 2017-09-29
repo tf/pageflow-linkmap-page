@@ -6,7 +6,12 @@ $.fn.linkmapAreaRedraw = function(options) {
     var mask = options.masks && options.masks.findByPermaId(area.attr('data-mask-id'));
     area.data('mask', mask || null);
 
-    var canvas = area.find(options.target)[0];
+    var canvas = area.find('canvas').filter(options.target)[0];
+
+    if (!canvas) {
+      return;
+    }
+
     var context = canvas.getContext('2d');
 
     if (options.image) {
