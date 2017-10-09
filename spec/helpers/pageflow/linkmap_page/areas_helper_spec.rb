@@ -51,6 +51,16 @@ module Pageflow
 
           expect(html).not_to have_selector('a[data-mask-id]')
         end
+
+        it 'renders attribute with url template for mask sprite' do
+          entry = create(:entry)
+          configuration = {}
+
+          html = helper.linkmap_areas_div(entry, configuration)
+
+          url_matcher = 'attachments/:id_partition/original'
+          expect(html).to have_selector("div[data-mask-sprite-url-template*='#{url_matcher}']")
+        end
       end
 
       describe '#linkmap_area' do

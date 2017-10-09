@@ -8,7 +8,7 @@ module Pageflow
         visited_image_file = Pageflow::ImageFile.find_by_id(configuration['visited_image_id'])
 
         mask_sprite_url_template = MaskSprite.new(id: 1, attachment_file_name: 'data').attachment.url
-          .gsub(%r'(\d{3}/)+', ':id_partition/')
+          .gsub(%r'/(\d{3}/)+', '/:id_partition/')
 
         render('pageflow/linkmap_page/areas/div',
                entry: entry,
