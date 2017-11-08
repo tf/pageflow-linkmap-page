@@ -21,8 +21,13 @@
         momentum: false,
         bounce: false,
         probeType: 3,
-        eventListenerTarget: this.options.scrollerEventListenerTarget[0]
+        eventListenerTarget: this.options.scrollerEventListenerTarget[0],
+        preventDefault: false
       });
+
+      if (this.options.disabled) {
+        this.scroller.disable();
+      }
 
       this._translatePagesVerticallyWhileScrolling();
       this._setupCarousel();
@@ -48,6 +53,10 @@
     },
 
     initScrollPosition: function() {
+      if (this.options.disabled) {
+        return;
+      }
+
       this.scrollerReady.resolve();
     },
 

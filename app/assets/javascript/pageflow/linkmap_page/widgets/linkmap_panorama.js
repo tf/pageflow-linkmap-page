@@ -33,40 +33,58 @@
       this.refresh();
 
       this.scroller.onScrollEnd(function() {
-        that.updateScrollPosition();
+        if (!that.options.disabled) {
+          that.updateScrollPosition();
+        }
       });
 
-      $(window).on('resize', function () {
-        that.centerToPoint(null, 0);
+      this._on(window, {
+        resize: function () {
+          that.centerToPoint(null, 0);
+        }
       });
 
-      this.element.on('mousemove', function(e) {
-        that.lastMouseMoveEvent = e;
-        that.calcAreaOpacity(that.activeAreas, e.pageX, e.pageY);
+      this._on({
+        mousemove: function(e) {
+          that.lastMouseMoveEvent = e;
+          that.calcAreaOpacity(that.activeAreas, e.pageX, e.pageY);
+        }
       });
 
-      pageElement.on('linkmapareaenter', '.hover_area', function() {
-        positionOverlay($(this));
+      this._on(pageElement, {
+        'linkmapareaenter .hover_area': function(event) {
+          positionOverlay($(event.currentTarget));
+        },
+
+        'click': resetIndicatorsAndOverlays,
+        'linkmapbackgroundclick': resetIndicatorsAndOverlays
       });
 
-      pageElement.on('click linkmapbackgroundclick', function() {
-        that.overlayBox.removeClass('active');
+      this._on($('body'), {
+        'linkmaparealeave .hover_area': resetOverlays
+      });
+
+      this._on(pageElement, {
+        'dragstart .hover_area': resetOverlays,
+        'resizestart .hover_area': resetOverlays
+      });
+
+      function resetIndicatorsAndOverlays() {
+        resetOverlays();
         that.activeAreas.removeClass('hover hover_mobile');
         that.globalIndicators.hide();
-      });
+      }
 
-      $('body').on('linkmaparealeave', '.hover_area', function() {
+      function resetOverlays() {
         that.overlayBox.removeClass('active');
-      });
-
-      pageElement.on('dragstart resizestart', '.hover_area', function() {
-        that.overlayBox.removeClass('active');
-      });
+      }
 
       that.activeAreas.each(function() {
         var area = $(this);
 
-        area.on('linkmapareaclick', function(event) {
+        that._on(area, {linkmapareaclick: onAreaClick});
+
+        function onAreaClick(event) {
           if (pageflow.browser.has('mobile platform')) {
             if (area.hasClass('hover_mobile')) {
               that.activeAreas.removeClass('active');
@@ -76,7 +94,7 @@
               that.activeAreas.removeClass('hover hover_mobile');
               area.addClass('hover hover_mobile');
 
-              positionOverlay($(this));
+              positionOverlay($(event.currentTarget));
 
               if (!area.hasClass('dynamic_marker')) {
                 displayTouchIndicator(event.originalEvent);
@@ -95,7 +113,7 @@
               area.hasClass('target_self')) {
             displayExternalLinkLoadingIndicator(event.originalEvent);
           }
-        });
+        }
       });
 
       var positionOverlay = function(area) {
@@ -229,6 +247,10 @@
     },
 
     highlightAreas: function() {
+      if (this.options.disabled) {
+        return;
+      }
+
       var element = this.element;
       element.find('.linkmap_marker').addClass('teasing');
 
@@ -242,6 +264,10 @@
     },
 
     resetAreaHighlighting: function() {
+      if (this.options.disabled) {
+        return;
+      }
+
       var element = this.element;
 
       element.find('.linkmap_marker').removeClass('no_transition teasing');
@@ -298,6 +324,10 @@
     },
 
     refresh: function() {
+      if (this.options.disabled) {
+        return;
+      }
+
       this.keepingScrollPosition(function() {
         var pageElement = this.options.page;
 
@@ -364,36 +394,11 @@
       });
     },
 
-    zoomTo: function(i) {
-      var area = $(this.activeAreas[i]);
-
-      if (!area.length) {
-        this.panoramaWrapper.css('transform', 'translate3d(0, 0, 0)');
-        this.lastScale = 1;
+    resetScrollPosition: function() {
+      if (this.options.disabled) {
         return;
       }
 
-      var lastScale = this.lastScale || 1;
-
-      var pageWidth = this.options.page.width();
-      var pageHeight = this.options.page.height();
-      var areaWidth = area.width();
-      var areaHeight = area.height();
-      var areaPosition = area.position();
-      var scale = Math.min(2,
-                           pageWidth / areaWidth,
-                           pageHeight / areaHeight);
-      var translateX = Math.min(0, Math.round((pageWidth - areaWidth * scale) / 2 - areaPosition.left / lastScale * scale));
-      var translateY = Math.min(0, Math.round((pageHeight - areaHeight * scale) / 2 - areaPosition.top / lastScale * scale));
-
-
-
-      this.lastScale = scale;
-      this.panoramaWrapper.css('transform',
-                               'translate3d(' + translateX + 'px,' + translateY + 'px, 0) scale(' + scale + ')');
-    },
-
-    resetScrollPosition: function() {
       this.centerToPoint(this.panoramaToScroller(this.startScrollPosition), 0);
     },
 
