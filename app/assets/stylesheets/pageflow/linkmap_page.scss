@@ -52,6 +52,8 @@
 
   .panorama_wrapper {
     position: absolute;
+    @include transition(transform 0.3s ease);
+    @include transform-origin(0 0);
   }
 
   .linkmap_areas {
