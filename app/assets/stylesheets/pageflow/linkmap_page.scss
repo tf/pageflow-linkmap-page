@@ -82,6 +82,11 @@
     margin-top: -$h;
     padding-top: $h;
 
+  }
+
+  .paginator-scroller {
+    margin-bottom: 25px;
+
     > div {
       position: absolute;
       top: 0;
@@ -102,6 +107,29 @@
     background: rgba(17, 17, 17, 0.9);
     position: absolute;
 //    @include transition(transform 0.2s);
+  }
+
+  .paginator-dots {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    @include transform(translateX(-50%));
+    @include transition(opacity 0.5s linear);
+
+    &.faded {
+      opacity: 0;
+    }
+  }
+
+  .paginator-dot {
+    border: solid 3px rgba(255, 255, 255, 0.4);
+    border-radius: 3px;
+    display: inline-block;
+    margin: 0 3px;
+
+    &.active {
+      border-color: #fff;
+    }
   }
 
   .panorama {
