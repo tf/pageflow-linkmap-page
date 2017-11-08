@@ -41,6 +41,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
         return pageElement.find('.hover_area');
       },
       scroller: this.scroller,
+      scrollerElement: this.content,
       innerScrollerElement: pageElement.find('.linkmap'),
       initialPosition: this.getPanoramaStartScrollPosition(configuration)
     });
@@ -75,6 +76,13 @@ pageflow.pageType.register('linkmap_page', _.extend({
       scrollerEventListenerTarget: this.content,
 
       change: function(currentPageIndex) {
+        that.content.linkmapPanZoom('applyMarginBottomForAreaByIndex',
+                                    currentPageIndex - 1,
+                                    0,
+                                    that.mobileInfoBox.linkmapPaginator('getCurrentPageHeight'),
+                                    0,
+                                    0);
+
         that.content.linkmapPanZoom('goToAreaByIndex', currentPageIndex - 1);
 
         if (currentPageIndex > 0) {
@@ -85,6 +93,15 @@ pageflow.pageType.register('linkmap_page', _.extend({
           that.scrollIndicator.enable();
           that.mobileInfoBox.linkmapPaginator('hideDots');
         }
+      },
+
+      changing: function(options) {
+        that.content.linkmapPanZoom('applyMarginBottomForAreaByIndex',
+                                    options.currentPageIndex - 1,
+                                    options.destinationPageIndex - 1,
+                                    options.currentPageHeight,
+                                    options.destinationPageHeight,
+                                    options.progress);
       }
     });
 
