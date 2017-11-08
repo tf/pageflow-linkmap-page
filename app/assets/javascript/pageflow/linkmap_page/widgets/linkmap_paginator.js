@@ -37,6 +37,11 @@
       this.scrollerReady.resolve();
     },
 
+    getCurrentPageHeight: function() {
+      var currentPageIndex = this.scroller.currentPage.pageX;
+      return this.pageHeights[currentPageIndex];
+    },
+
     _updatePageWidths: function() {
       var pageWidth = this.element.width();
 
@@ -75,8 +80,7 @@
       scroller.on('refresh', update);
 
       function update() {
-        var currentPageIndex = scroller.currentPage.pageX;
-        translateY(widget.container, widget.pageHeights[currentPageIndex]);
+        translateY(widget.container, widget.getCurrentPageHeight());
       }
     },
 

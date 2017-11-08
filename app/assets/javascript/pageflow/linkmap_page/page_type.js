@@ -14,7 +14,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
     this.setupHoverImages(pageElement, configuration);
     this.setupVideoPlayer(pageElement);
 
-    var content = this.content = pageElement.find('.scroller');
+    this.content = pageElement.find('.scroller');
     this.panorama = pageElement.find('.panorama');
 
     this.content.linkmapPanorama({
@@ -29,6 +29,20 @@ pageflow.pageType.register('linkmap_page', _.extend({
       addEnvironment: configuration.add_environment,
       marginScrollingDisabled: configuration.margin_scrolling_disabled,
       startScrollPosition: this.getPanoramaStartScrollPosition(configuration)
+    });
+
+    this.content.linkmapPanZoom({
+      page: pageElement,
+      panoramaWrapper: pageElement.find('.panorama_wrapper'),
+      panorama: function() {
+        return pageElement.find('.panorama.active');
+      },
+      areas: function() {
+        return pageElement.find('.hover_area');
+      },
+      scroller: this.scroller,
+      innerScrollerElement: pageElement.find('.linkmap'),
+      initialPosition: this.getPanoramaStartScrollPosition(configuration)
     });
 
     this.content.linkmapLookaround({
@@ -61,10 +75,10 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
     this.mobileInfoBox = pageElement.find('.pager');
     this.mobileInfoBox.linkmapPaginator({
-      scrollerEventListenerTarget: content,
+      scrollerEventListenerTarget: this.content,
 
       change: function(currentPageIndex) {
-        content.linkmapPanorama('zoomTo', currentPageIndex - 1);
+        that.content.linkmapPanZoom('goToAreaByIndex', currentPageIndex - 1);
 
         if (currentPageIndex > 0) {
           that.scrollIndicator.disable();
@@ -176,6 +190,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
   resize: function(pageElement, configuration) {
     this.content.linkmapPanorama('refresh');
+    this.content.linkmapPanZoom('refresh');
     this.linkmapAreas.linkmap('refresh');
     this.mobileInfoBox.linkmapPaginator('refresh');
   },
@@ -212,6 +227,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
     }
 
     this.content.linkmapPanorama('refresh');
+    this.content.linkmapPanZoom('refresh');
     this.linkmapAreas.linkmap('refresh');
     this.mobileInfoBox.linkmapPaginator('refresh');
 
@@ -265,6 +281,10 @@ pageflow.pageType.register('linkmap_page', _.extend({
                                    configuration.get('limit_scrolling'),
                                    this.getPanoramaStartScrollPosition(configuration.attributes),
                                    minScaling);
+
+      this.content.linkmapPanZoom('update', {
+        initialPosition: this.getPanoramaStartScrollPosition(configuration.attributes)
+      });
 
       this.updateScaledOnPhoneFlags(configuration.page,
                                     this.content.linkmapPanorama('instance'));
