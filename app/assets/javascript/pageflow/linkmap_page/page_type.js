@@ -18,6 +18,8 @@ pageflow.pageType.register('linkmap_page', _.extend({
     this.panorama = pageElement.find('.panorama');
 
     this.content.linkmapPanorama({
+      disabled: true,
+
       page: pageElement,
       panorama: function() {
         return pageElement.find('.panorama.active');
