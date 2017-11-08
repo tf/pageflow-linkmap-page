@@ -51,7 +51,7 @@
 
     _cachePageHeights: function() {
       this.pageHeights = this.pages.map(function() {
-        return $(this).outerHeight();
+        return $(this).outerHeight() - 30;
       }).get();
     },
 
