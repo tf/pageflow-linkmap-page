@@ -64,6 +64,46 @@
     bottom: 0;
   }
 
+  .controls:before {
+    display: none;
+  }
+
+  .add_info_box {
+    padding: 0 !important;
+    bottom: 0 !important;
+  }
+
+  .pager {
+    white-space: nowrap;
+//    pointer-events: all;
+
+    $h: 1000px;
+
+    margin-top: -$h;
+    padding-top: $h;
+
+    > div {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+
+  .pager-page {
+    float: left;
+    display: inline-block;
+    padding: 0 1%;
+    box-sizing: border-box;
+    padding-bottom: 10px;
+    white-space: normal;
+  }
+
+  .pager-pages {
+    background: rgba(17, 17, 17, 0.9);
+    position: absolute;
+//    @include transition(transform 0.2s);
+  }
+
   .panorama {
     height: 120%;
     width: auto;
