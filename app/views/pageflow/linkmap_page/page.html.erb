@@ -63,17 +63,19 @@
   <div class="controls" data-role="player_controls">
     <div class="add_info_box">
       <div class="pager">
-        <div>
-          <div class="pager-pages">
-            <div class="pager-page">
-              <h3>Swipe</h3>
-            </div>
-            <% (configuration['linkmap_areas'].presence || []).each_with_index do |attributes, index| %>
+        <div class="paginator-scroller">
+          <div>
+            <div class="pager-pages">
               <div class="pager-page">
-                <h3><%= attributes['link_title'] %></h3>
-                <p><%= attributes['link_description'] %></p>
+                <h3>Swipe</h3>
               </div>
-            <% end %>
+              <% (configuration['linkmap_areas'].presence || []).each_with_index do |attributes, index| %>
+                <div class="pager-page">
+                  <h3><%= attributes['link_title'] %></h3>
+                  <p><%= attributes['link_description'] %></p>
+                </div>
+              <% end %>
+            </div>
           </div>
         </div>
       </div>

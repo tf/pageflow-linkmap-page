@@ -8,6 +8,8 @@ pageflow.pageType.register('linkmap_page', _.extend({
   noHideTextOnSwipe: true,
 
   enhance: function(pageElement, configuration) {
+    var that = this;
+
     this.setupPanoramaBackground(pageElement, configuration);
     this.setupHoverImages(pageElement, configuration);
     this.setupVideoPlayer(pageElement);
@@ -63,6 +65,15 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
       change: function(currentPageIndex) {
         content.linkmapPanorama('zoomTo', currentPageIndex - 1);
+
+        if (currentPageIndex > 0) {
+          that.scrollIndicator.disable();
+          that.mobileInfoBox.linkmapPaginator('showDots');
+        }
+        else {
+          that.scrollIndicator.enable();
+          that.mobileInfoBox.linkmapPaginator('hideDots');
+        }
       }
     });
 
@@ -166,6 +177,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
   resize: function(pageElement, configuration) {
     this.content.linkmapPanorama('refresh');
     this.linkmapAreas.linkmap('refresh');
+    this.mobileInfoBox.linkmapPaginator('refresh');
   },
 
   prepare: function(pageElement, configuration) {
@@ -201,6 +213,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
     this.content.linkmapPanorama('refresh');
     this.linkmapAreas.linkmap('refresh');
+    this.mobileInfoBox.linkmapPaginator('refresh');
 
     this.content.linkmapLookaround('activate');
     this.content.linkmapPanorama('resetScrollPosition');
@@ -209,7 +222,6 @@ pageflow.pageType.register('linkmap_page', _.extend({
   },
 
   activated: function(pageElement, configuration) {
-    this.mobileInfoBox.linkmapPaginator('refresh');
     this.content.linkmapPanorama('highlightAreas');
   },
 

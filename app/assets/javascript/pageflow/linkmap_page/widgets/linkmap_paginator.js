@@ -3,14 +3,17 @@
 (function($) {
   $.widget('pageflow.linkmapPaginator', {
     _create: function() {
-      this.scrollerInner = this.element.children().first();
+      this.scrollerReady = $.Deferred();
+
+      this.scrollerElement = this.element.find('.paginator-scroller');
+      this.scrollerInner = this.scrollerElement.children().first();
       this.container = this.element.find('.pager-pages');
 
-      this.cloneFirstAndLastPageForCarousel();
+      this._cloneFirstAndLastPageForCarousel();
 
       this.pages = this.element.find('.pager-page');
 
-      this.scroller = new IScroll(this.element[0], {
+      this.scroller = new IScroll(this.scrollerElement[0], {
         scrollY: false,
         scrollX: true,
         snap: '.pager-page',
@@ -20,32 +23,34 @@
         eventListenerTarget: this.options.scrollerEventListenerTarget[0]
       });
 
-      this.translatePagesVerticallyWhileScrolling();
-      this.setupCarousel();
-      this.setupChangeCallbackTrigger();
+      this._translatePagesVerticallyWhileScrolling();
+      this._setupCarousel();
+      this._setupChangeCallbackTrigger();
+      this._setupIndicatorDots();
     },
 
     refresh: function() {
-      this.updatePageWidths();
-      this.cachePageHeights();
+      this._updatePageWidths();
+      this._cachePageHeights();
 
       this.scroller.refresh();
+      this.scrollerReady.resolve();
     },
 
-    updatePageWidths: function() {
+    _updatePageWidths: function() {
       var pageWidth = this.element.width();
 
       this.pages.css({width: pageWidth + 'px'});
       this.scrollerInner.css({width: (this.pages.length * pageWidth) + 'px'});
     },
 
-    cachePageHeights: function() {
+    _cachePageHeights: function() {
       this.pageHeights = this.pages.map(function() {
         return $(this).outerHeight();
       }).get();
     },
 
-    translatePagesVerticallyWhileScrolling: function() {
+    _translatePagesVerticallyWhileScrolling: function() {
       var widget = this;
       var scroller = this.scroller;
 
@@ -65,13 +70,9 @@
                    currentPageHeight * (1 - progress) + destinationPageHeight * progress);
       });
 
-      scroller.on('scrollEnd', function() {
-        update();
-      });
-
-      scroller.on('refresh', function() {
-        update();
-      });
+      scroller.on('initPosition', update);
+      scroller.on('scrollEnd', update);
+      scroller.on('refresh', update);
 
       function update() {
         var currentPageIndex = scroller.currentPage.pageX;
@@ -79,7 +80,7 @@
       }
     },
 
-    cloneFirstAndLastPageForCarousel: function() {
+    _cloneFirstAndLastPageForCarousel: function() {
       var pages = this.element.find('.pager-page');
       var container = this.element.find('.pager-pages');
 
@@ -87,7 +88,7 @@
       pages.last().clone().prependTo(container);
     },
 
-    setupCarousel: function() {
+    _setupCarousel: function() {
       var scroller = this.scroller;
       var pages = this.pages;
 
@@ -101,9 +102,14 @@
           scroller.goToPage(1, 0, 0);
         }
       });
+
+      this.scrollerReady.then(function() {
+        scroller.goToPage(1, 0, 0);
+        scroller._execEvent('initPosition');
+      });
     },
 
-    setupChangeCallbackTrigger: function() {
+    _setupChangeCallbackTrigger: function() {
       var changeCallback = this.options.change;
       var pages = this.pages;
       var scroller = this.scroller;
@@ -115,6 +121,33 @@
 
           changeCallback(currentPageIndexIgnoringClonedPages);
         });
+      }
+    },
+
+    hideDots: function() {
+      this.dotsContainer.addClass('faded');
+    },
+
+    showDots: function() {
+      this.dotsContainer.removeClass('faded');
+    },
+
+    _setupIndicatorDots: function() {
+      var scroller = this.scroller;
+      var container = this.dotsContainer = $('<div class="paginator-dots" />').appendTo(this.element);
+
+      _.times(this.pages.length - 2, function() {
+        container.append('<div class="paginator-dot" />');
+      });
+
+      var dots = container.children();
+
+      scroller.on('scrollEnd', update);
+      scroller.on('initPosition', update);
+
+      function update() {
+        dots.removeClass('active');
+        dots.eq(scroller.currentPage.pageX - 1).addClass('active');
       }
     }
   });
