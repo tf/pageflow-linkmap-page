@@ -58,6 +58,8 @@
     _translatePagesVerticallyWhileScrolling: function() {
       var widget = this;
       var scroller = this.scroller;
+      var changingCallback = this.options.changing;
+      var pages = this.pages;
 
       scroller.on('scroll', function() {
         var direction = scroller.x > scroller.currentPage.x ? -1 : 1;
@@ -73,6 +75,18 @@
 
         translateY(widget.container,
                    currentPageHeight * (1 - progress) + destinationPageHeight * progress);
+
+        if (changingCallback) {
+          changingCallback({
+            currentPageIndex: (currentPageIndex - 1)  % (pages.length - 2),
+            destinationPageIndex: (destinationPageIndex - 1)  % (pages.length - 2),
+
+            currentPageHeight: currentPageHeight,
+            destinationPageHeight: destinationPageHeight,
+
+            progress: progress
+          });
+        }
       });
 
       scroller.on('initPosition', update);

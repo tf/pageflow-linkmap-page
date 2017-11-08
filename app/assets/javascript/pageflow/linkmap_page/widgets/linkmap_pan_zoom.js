@@ -5,6 +5,7 @@
       this.panoramaWrapper = this.options.panoramaWrapper;
 
       this.scroller = this.options.scroller;
+      this.scrollerElement = this.options.scrollerElement;
       this.innerScrollerElement = this.options.innerScrollerElement;
 
       this.update(this.options);
@@ -45,6 +46,23 @@
       this.refresh();
     },
 
+    applyMarginBottomForAreaByIndex: function(sourceIndex, destinationIndex, sourceHeight, destinationHeight, progress) {
+      var sourceArea = sourceIndex >= 0 && this.options.areas().eq(sourceIndex);
+      var destinationArea = destinationIndex >= 0 && this.options.areas().eq(destinationIndex);
+
+      var sourceDimensions = sourceArea && this._getScaledAreaDimensions(sourceArea);
+      var destinationDimensions = destinationArea && this._getScaledAreaDimensions(destinationArea);
+
+      var sourceTranslateY = sourceDimensions && sourceDimensions.bottom < sourceHeight ? -sourceHeight : 0;
+      var destinationTranslateY = destinationDimensions && destinationDimensions.bottom < destinationHeight ? -destinationHeight : 0;
+
+      console.log(sourceIndex, destinationIndex, sourceHeight, destinationHeight, 'd', destinationDimensions.bottom, sourceTranslateY, destinationTranslateY, progress);
+
+      transform(this.scrollerElement, {
+        translateY: sourceTranslateY * (1 - progress) + destinationTranslateY * progress
+      });
+    },
+
     _ensureScrollerCanNotScroll: function() {
       this.innerScrollerElement.width(this.pageWidth);
       this.innerScrollerElement.height(this.pageHeight);
@@ -67,6 +85,21 @@
     },
 
     _getTransformForArea: function(area) {
+      var d = this._getScaledAreaDimensions(area);
+
+      return {
+        scale: d.scale,
+
+        translateX: Math.min(0,
+                             Math.max(this.pageWidth - this.panoramaSize.width * d.scale,
+                                      Math.round((this.pageWidth - d.width) / 2 - d.left))),
+        translateY: Math.min(0,
+                             Math.max(this.pageHeight - this.panoramaSize.height * d.scale,
+                                      Math.round((this.pageHeight - d.height) / 2 - d.top)))
+      };
+    },
+
+    _getScaledAreaDimensions: function(area) {
       var areaWidth = area.width();
       var areaHeight = area.height();
       var areaPosition = area.position();
@@ -75,22 +108,19 @@
                            this.pageWidth / areaWidth,
                            this.pageHeight / areaHeight);
 
-      var scaledAreaWidth = areaWidth * scale;
-      var scaledAreaHeight = areaHeight * scale;
-
-      var scaledAreaLeft = areaPosition.left / this.currentScale * scale;
-      var scaledAreaTop = areaPosition.top / this.currentScale * scale;
-
-      return {
+      var result = {
         scale: scale,
 
-        translateX: Math.min(0,
-                             Math.max(this.pageWidth - this.panoramaSize.width * scale,
-                                      Math.round((this.pageWidth - scaledAreaWidth) / 2 - scaledAreaLeft))),
-        translateY: Math.min(0,
-                             Math.max(this.pageHeight - this.panoramaSize.height * scale,
-                                      Math.round((this.pageHeight - scaledAreaHeight) / 2 - scaledAreaTop)))
+        width: areaWidth * scale,
+        height: areaHeight * scale,
+
+        left: areaPosition.left / this.currentScale * scale,
+        top: areaPosition.top / this.currentScale * scale
       };
+
+      result.bottom = this.panoramaSize.height * scale - result.top - result.height;
+
+      return result;
     },
 
     _getInitialTransform: function() {
@@ -104,6 +134,6 @@
 
   function transform(element, options) {
     element.css('transform',
-                'translate3d(' + options.translateX + 'px, ' + options.translateY + 'px, 0) scale(' + options.scale +')');
+                'translate3d(' + (options.translateX || 0) + 'px, ' + (options.translateY || 0) + 'px, 0) scale(' + (options.scale || 1) +')');
   }
 }(jQuery));
