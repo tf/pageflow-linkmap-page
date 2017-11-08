@@ -62,7 +62,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
       scrollerEventListenerTarget: content,
 
       change: function(currentPageIndex) {
-        content.linkmapPanorama('zoomTo', currentPageIndex);
+        content.linkmapPanorama('zoomTo', currentPageIndex - 1);
       }
     });
 
