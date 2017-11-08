@@ -364,6 +364,35 @@
       });
     },
 
+    zoomTo: function(i) {
+      var area = $(this.activeAreas[i]);
+
+      if (!area.length) {
+        this.panoramaWrapper.css('transform', 'translate3d(0, 0, 0)');
+        this.lastScale = 1;
+        return;
+      }
+
+      var lastScale = this.lastScale || 1;
+
+      var pageWidth = this.options.page.width();
+      var pageHeight = this.options.page.height();
+      var areaWidth = area.width();
+      var areaHeight = area.height();
+      var areaPosition = area.position();
+      var scale = Math.min(2,
+                           pageWidth / areaWidth,
+                           pageHeight / areaHeight);
+      var translateX = Math.min(0, Math.round((pageWidth - areaWidth * scale) / 2 - areaPosition.left / lastScale * scale));
+      var translateY = Math.min(0, Math.round((pageHeight - areaHeight * scale) / 2 - areaPosition.top / lastScale * scale));
+
+
+
+      this.lastScale = scale;
+      this.panoramaWrapper.css('transform',
+                               'translate3d(' + translateX + 'px,' + translateY + 'px, 0) scale(' + scale + ')');
+    },
+
     resetScrollPosition: function() {
       this.centerToPoint(this.panoramaToScroller(this.startScrollPosition), 0);
     },
