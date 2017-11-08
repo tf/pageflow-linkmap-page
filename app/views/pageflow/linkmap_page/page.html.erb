@@ -1,5 +1,5 @@
 <div class="blackLayer"></div>
-<div class="content_and_background linkmap_page">
+<div class="content_and_background linkmap_page unplayed">
   <div class="backgroundArea">
     <%= background_image_div(configuration, 'fixed_background_image', class: 'fixed_background') %>
     <div class="scroller">
@@ -58,6 +58,33 @@
     </div>
     <div class="arrow_down">
       <span class="hint"><%= t('.scroll_down') %></span>
+    </div>
+  </div>
+  <div class="content">
+    <div class="linkmap-mobile_info_box">
+      <div class="linkmap-paginator">
+        <div class="linkmap-paginator-scroller">
+          <div>
+            <div class="linkmap-paginator-pages linkmap-mobile_info_box-inner">
+              <div class="linkmap-paginator-page">
+                <h3>Störche</h3>
+                <p>Sieh Dir an wer im Baum wohnt.</p>
+              </div>
+              <% (configuration['linkmap_areas'].presence || []).each do |attributes| %>
+                <div class="linkmap-paginator-page">
+                  <% if attributes['link_title'].present? %>
+                    <h3><%= attributes['link_title'] %></h3>
+                  <% end %>
+
+                  <% if attributes['link_description'].present? %>
+                    <p><%= attributes['link_description'] %></p>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

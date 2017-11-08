@@ -1,0 +1,23 @@
+$linkmap-mobile-info-box-background-color: rgba(17, 17, 17, 0.9) !default;
+
+$linkmap-mobile-info-box-text-color: #fff;
+
+.linkmap-mobile_info_box {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 2;
+  pointer-events: none;
+
+  &-inner {
+    background: $linkmap-mobile-info-box-background-color;
+  }
+
+  h3,
+  p {
+    width: auto;
+    margin: 10px 5% 0;
+    color: $linkmap-mobile-info-box-text-color;
+  }
+}

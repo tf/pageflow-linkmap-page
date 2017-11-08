@@ -8,11 +8,13 @@ pageflow.pageType.register('linkmap_page', _.extend({
   noHideTextOnSwipe: true,
 
   enhance: function(pageElement, configuration) {
+    var that = this;
+
     this.setupPanoramaBackground(pageElement, configuration);
     this.setupHoverImages(pageElement, configuration);
     this.setupVideoPlayer(pageElement);
 
-    this.content = pageElement.find('.scroller');
+    var content = this.content = pageElement.find('.scroller');
     this.panorama = pageElement.find('.panorama');
 
     this.content.linkmapPanorama({
@@ -53,6 +55,26 @@ pageflow.pageType.register('linkmap_page', _.extend({
       hoverVideo: pageElement.find('.hover_video').linkmapHoverVideo('instance'),
       hoverVideoEnabled: configuration.background_type === 'hover_video'
     });
+
+    this.mobileInfoBox = pageElement.find('.linkmap-paginator');
+    this.mobileInfoBox.linkmapPaginator({
+      scrollerEventListenerTarget: content,
+
+      change: function(currentPageIndex) {
+        content.linkmapPanorama('zoomTo', currentPageIndex - 1);
+
+        if (currentPageIndex > 0) {
+          that.scrollIndicator.disable();
+          that.mobileInfoBox.linkmapPaginator('showDots');
+        }
+        else {
+          that.scrollIndicator.enable();
+          that.mobileInfoBox.linkmapPaginator('hideDots');
+        }
+      }
+    });
+
+    pageElement.data('invertIndicator', false);
 
     this.setupPageLinkAreas(pageElement);
     this.setupExternalLinkAreas(pageElement);
@@ -173,6 +195,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
   resize: function(pageElement, configuration) {
     this.content.linkmapPanorama('refresh');
     this.linkmapAreas.linkmap('refresh');
+    this.mobileInfoBox.linkmapPaginator('refresh');
   },
 
   prepare: function(pageElement, configuration) {
@@ -208,6 +231,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
     this.content.linkmapPanorama('refresh');
     this.linkmapAreas.linkmap('refresh');
+    this.mobileInfoBox.linkmapPaginator('refresh');
 
     this.content.linkmapLookaround('activate');
     this.content.linkmapPanorama('resetScrollPosition');
@@ -216,6 +240,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
   },
 
   activated: function(pageElement, configuration) {
+    this.scrollIndicator.disable();
     this.content.linkmapPanorama('highlightAreas');
   },
 
@@ -226,6 +251,8 @@ pageflow.pageType.register('linkmap_page', _.extend({
   },
 
   deactivated: function(pageElement, configuration) {
+    this.mobileInfoBox.linkmapPaginator('showDots');
+
     if (this.isVideoEnabled(configuration)) {
       this.pauseVideo(configuration);
     }

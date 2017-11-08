@@ -27,6 +27,14 @@
 
   @include user-select(none);
 
+  .backgroundArea {
+    background: #000;
+  }
+
+  .content {
+    pointer-events: none;
+  }
+
   .scroller {
     overflow: hidden;
 
@@ -60,6 +68,10 @@
     left: 0;
     right: 0;
     bottom: 0;
+  }
+
+  .controls:before {
+    display: none;
   }
 
   .panorama {
