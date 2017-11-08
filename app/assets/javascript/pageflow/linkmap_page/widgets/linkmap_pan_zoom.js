@@ -84,16 +84,20 @@
       return {
         scale: scale,
 
-        translateX: Math.min(0, Math.round((this.pageWidth - scaledAreaWidth) / 2 - scaledAreaLeft)),
-        translateY: Math.min(0, Math.round((this.pageHeight - scaledAreaHeight) / 2 - scaledAreaTop))
+        translateX: Math.min(0,
+                             Math.max(this.pageWidth - this.panoramaSize.width * scale,
+                                      Math.round((this.pageWidth - scaledAreaWidth) / 2 - scaledAreaLeft))),
+        translateY: Math.min(0,
+                             Math.max(this.pageHeight - this.panoramaSize.height * scale,
+                                      Math.round((this.pageHeight - scaledAreaHeight) / 2 - scaledAreaTop)))
       };
     },
 
     _getInitialTransform: function() {
       return {
         scale: 1,
-        translateX: Math.max(0, (this.pageWidth - this.panoramaSize.width) * this.initialPosition.x),
-        translateY: Math.max(0, (this.pageHeight - this.panoramaSize.height) * this.initialPosition.y)
+        translateX: Math.min(0, (this.pageWidth - this.panoramaSize.width) * this.initialPosition.x),
+        translateY: Math.min(0, (this.pageHeight - this.panoramaSize.height) * this.initialPosition.y)
       };
     }
   });
