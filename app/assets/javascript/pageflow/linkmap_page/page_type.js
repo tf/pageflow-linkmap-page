@@ -12,7 +12,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
     this.setupHoverImages(pageElement, configuration);
     this.setupVideoPlayer(pageElement);
 
-    this.content = pageElement.find('.scroller');
+    var content = this.content = pageElement.find('.scroller');
     this.panorama = pageElement.find('.panorama');
 
     this.content.linkmapPanorama({
@@ -55,6 +55,15 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
       hoverVideo: pageElement.find('.hover_video').linkmapHoverVideo('instance'),
       hoverVideoEnabled: configuration.background_type === 'hover_video'
+    });
+
+    this.mobileInfoBox = pageElement.find('.pager');
+    this.mobileInfoBox.linkmapPaginator({
+      scrollerEventListenerTarget: content,
+
+      change: function(currentPageIndex) {
+        content.linkmapPanorama('zoomTo', currentPageIndex);
+      }
     });
 
     this.setupPageLinkAreas(pageElement);
@@ -200,6 +209,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
   },
 
   activated: function(pageElement, configuration) {
+    this.mobileInfoBox.linkmapPaginator('refresh');
     this.content.linkmapPanorama('highlightAreas');
   },
 
