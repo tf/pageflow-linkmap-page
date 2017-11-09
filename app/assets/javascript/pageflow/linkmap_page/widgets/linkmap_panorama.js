@@ -33,7 +33,7 @@
       this.refresh();
 
       this.scroller.onScrollEnd(function() {
-        if (!that.disabled) {
+        if (!that.options.disabled) {
           that.updateScrollPosition();
         }
       });
@@ -53,7 +53,7 @@
 
       this._on(pageElement, {
         'linkmapareaenter .hover_area': function(event) {
-          positionOverlay(event.currentTarget);
+          positionOverlay($(event.currentTarget));
         },
 
         'click': resetIndicatorsAndOverlays,
@@ -94,7 +94,7 @@
               that.activeAreas.removeClass('hover hover_mobile');
               area.addClass('hover hover_mobile');
 
-              positionOverlay(event.currentTarget);
+              positionOverlay($(event.currentTarget));
 
               if (!area.hasClass('dynamic_marker')) {
                 displayTouchIndicator(event.originalEvent);
@@ -245,7 +245,7 @@
     },
 
     highlightAreas: function() {
-      if (this.disabled) {
+      if (this.options.disabled) {
         return;
       }
 
@@ -262,7 +262,7 @@
     },
 
     resetAreaHighlighting: function() {
-      if (this.disabled) {
+      if (this.options.disabled) {
         return;
       }
 
@@ -322,7 +322,7 @@
     },
 
     refresh: function() {
-      if (this.disabled) {
+      if (this.options.disabled) {
         return;
       }
 
@@ -393,7 +393,7 @@
     },
 
     resetScrollPosition: function() {
-      if (this.disabled) {
+      if (this.options.disabled) {
         return;
       }
 

@@ -34,6 +34,8 @@ pageflow.pageType.register('linkmap_page', _.extend({
     });
 
     this.content.linkmapPanZoom({
+      disabled: false,
+
       page: pageElement,
       safeAreaWrapper: pageElement.find('.pan_zoom_safe_area_wrapper'),
       panoramaWrapper: pageElement.find('.panorama_wrapper'),
@@ -78,6 +80,8 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
     this.mobileInfoBox = pageElement.find('.linkmap-paginator');
     this.mobileInfoBox.linkmapPaginator({
+      disabled: false,
+
       scrollerEventListenerTarget: this.content,
 
       change: function(currentPageIndex) {

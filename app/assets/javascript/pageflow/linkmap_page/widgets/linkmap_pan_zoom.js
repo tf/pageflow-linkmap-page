@@ -17,6 +17,10 @@
     },
 
     refresh: function() {
+      if (this.options.disabled) {
+        return;
+      }
+
       this.pageWidth = this.pageElement.width();
       this.pageHeight = this.pageElement.height();
 
@@ -36,6 +40,10 @@
     },
 
     goToAreaByIndex: function(index) {
+      if (this.options.disabled) {
+        return;
+      }
+
       if (index >= 0) {
         this.currentArea = this.options.areas().eq(index);
       }
