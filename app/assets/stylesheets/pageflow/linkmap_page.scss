@@ -27,6 +27,14 @@
 
   @include user-select(none);
 
+  .backgroundArea {
+    background: #000;
+  }
+
+  .content {
+    pointer-events: none;
+  }
+
   .scroller {
     overflow: hidden;
 
@@ -66,71 +74,6 @@
 
   .controls:before {
     display: none;
-  }
-
-  .add_info_box {
-    padding: 0 !important;
-    bottom: 0 !important;
-    background: none !important;
-  }
-
-  .pager {
-    white-space: nowrap;
-//    pointer-events: all;
-
-    $h: 1000px;
-
-    margin-top: -$h;
-    padding-top: $h;
-
-  }
-
-  .paginator-scroller {
-    margin-bottom: 25px;
-
-    > div {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-  }
-
-  .pager-page {
-    float: left;
-    display: inline-block;
-    padding: 0 1%;
-    box-sizing: border-box;
-    padding-bottom: 40px;
-    white-space: normal;
-  }
-
-  .pager-pages {
-    background: rgba(17, 17, 17, 0.9);
-    position: absolute;
-//    @include transition(transform 0.2s);
-  }
-
-  .paginator-dots {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    @include transform(translateX(-50%));
-    @include transition(opacity 0.5s linear);
-
-    &.faded {
-      opacity: 0;
-    }
-  }
-
-  .paginator-dot {
-    border: solid 3px rgba(255, 255, 255, 0.4);
-    border-radius: 3px;
-    display: inline-block;
-    margin: 0 3px;
-
-    &.active {
-      border-color: #fff;
-    }
   }
 
   .panorama {

@@ -56,8 +56,6 @@
       var sourceTranslateY = sourceDimensions && sourceDimensions.bottom < sourceHeight ? -sourceHeight : 0;
       var destinationTranslateY = destinationDimensions && destinationDimensions.bottom < destinationHeight ? -destinationHeight : 0;
 
-      console.log(sourceIndex, destinationIndex, sourceHeight, destinationHeight, 'd', destinationDimensions.bottom, sourceTranslateY, destinationTranslateY, progress);
-
       transform(this.scrollerElement, {
         translateY: sourceTranslateY * (1 - progress) + destinationTranslateY * progress
       });

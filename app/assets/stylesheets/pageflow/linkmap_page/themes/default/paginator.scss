@@ -1,0 +1,48 @@
+$linkmap-paginator-dot-color: rgba(255, 255, 255, 0.4);
+$linkmap-paginator-active-dot-color: #fff;
+
+.linkmap-paginator {
+  &-scroller {
+    margin-bottom: 38px;
+
+    > div {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+
+  &-pages {
+    position: absolute;
+    padding-bottom: 40px;
+  }
+
+  &-page {
+    float: left;
+    box-sizing: border-box;
+    padding-bottom: 5px;
+  }
+
+  &-dots {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    @include transform(translateX(-50%));
+    @include transition(opacity 0.5s linear);
+
+    &.faded {
+      opacity: 0;
+    }
+  }
+
+  &-dot {
+    border: solid 3px $linkmap-paginator-dot-color;
+    border-radius: 3px;
+    display: inline-block;
+    margin: 0 3px;
+
+    &.active {
+      border-color: $linkmap-paginator-active-dot-color;
+    }
+  }
+}

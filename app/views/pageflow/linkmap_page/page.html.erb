@@ -60,19 +60,25 @@
       <span class="hint"><%= t('.scroll_down') %></span>
     </div>
   </div>
-  <div class="controls" data-role="player_controls">
-    <div class="add_info_box">
-      <div class="pager">
-        <div class="paginator-scroller">
+  <div class="content">
+    <div class="linkmap-mobile_info_box">
+      <div class="linkmap-paginator">
+        <div class="linkmap-paginator-scroller">
           <div>
-            <div class="pager-pages">
-              <div class="pager-page">
-                <h3>Swipe</h3>
+            <div class="linkmap-paginator-pages linkmap-mobile_info_box-inner">
+              <div class="linkmap-paginator-page">
+                <h3>Störche</h3>
+                <p>Sieh Dir an wer im Baum wohnt.</p>
               </div>
-              <% (configuration['linkmap_areas'].presence || []).each_with_index do |attributes, index| %>
-                <div class="pager-page">
-                  <h3><%= attributes['link_title'] %></h3>
-                  <p><%= attributes['link_description'] %></p>
+              <% (configuration['linkmap_areas'].presence || []).each do |attributes| %>
+                <div class="linkmap-paginator-page">
+                  <% if attributes['link_title'].present? %>
+                    <h3><%= attributes['link_title'] %></h3>
+                  <% end %>
+
+                  <% if attributes['link_description'].present? %>
+                    <p><%= attributes['link_description'] %></p>
+                  <% end %>
                 </div>
               <% end %>
             </div>

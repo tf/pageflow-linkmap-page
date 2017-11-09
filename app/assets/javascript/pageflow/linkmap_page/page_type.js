@@ -76,7 +76,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
       hoverVideoEnabled: configuration.background_type === 'hover_video'
     });
 
-    this.mobileInfoBox = pageElement.find('.pager');
+    this.mobileInfoBox = pageElement.find('.linkmap-paginator');
     this.mobileInfoBox.linkmapPaginator({
       scrollerEventListenerTarget: this.content,
 
@@ -109,6 +109,8 @@ pageflow.pageType.register('linkmap_page', _.extend({
                                     options.progress);
       }
     });
+
+    pageElement.data('invertIndicator', false);
 
     this.setupPageLinkAreas(pageElement);
     this.setupExternalLinkAreas(pageElement);
@@ -257,6 +259,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
   },
 
   activated: function(pageElement, configuration) {
+    this.scrollIndicator.disable();
     this.content.linkmapPanorama('highlightAreas');
   },
 
@@ -267,6 +270,8 @@ pageflow.pageType.register('linkmap_page', _.extend({
   },
 
   deactivated: function(pageElement, configuration) {
+    this.mobileInfoBox.linkmapPaginator('showDots');
+
     if (this.isVideoEnabled(configuration)) {
       this.pauseVideo(configuration);
     }

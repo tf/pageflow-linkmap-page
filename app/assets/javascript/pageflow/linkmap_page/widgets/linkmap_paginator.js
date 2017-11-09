@@ -5,18 +5,18 @@
     _create: function() {
       this.scrollerReady = $.Deferred();
 
-      this.scrollerElement = this.element.find('.paginator-scroller');
+      this.scrollerElement = this.element.find('.linkmap-paginator-scroller');
       this.scrollerInner = this.scrollerElement.children().first();
-      this.container = this.element.find('.pager-pages');
+      this.container = this.element.find('.linkmap-paginator-pages');
 
       this._cloneFirstAndLastPageForCarousel();
 
-      this.pages = this.element.find('.pager-page');
+      this.pages = this.element.find('.linkmap-paginator-page');
 
       this.scroller = new IScroll(this.scrollerElement[0], {
         scrollY: false,
         scrollX: true,
-        snap: '.pager-page',
+        snap: '.linkmap-paginator-page',
         momentum: false,
         bounce: false,
         probeType: 3,
@@ -51,7 +51,7 @@
 
     _cachePageHeights: function() {
       this.pageHeights = this.pages.map(function() {
-        return $(this).outerHeight() - 30;
+        return $(this).outerHeight();
       }).get();
     },
 
@@ -99,8 +99,8 @@
     },
 
     _cloneFirstAndLastPageForCarousel: function() {
-      var pages = this.element.find('.pager-page');
-      var container = this.element.find('.pager-pages');
+      var pages = this.element.find('.linkmap-paginator-page');
+      var container = this.element.find('.linkmap-paginator-pages');
 
       pages.first().clone().appendTo(container);
       pages.last().clone().prependTo(container);
@@ -152,10 +152,11 @@
 
     _setupIndicatorDots: function() {
       var scroller = this.scroller;
-      var container = this.dotsContainer = $('<div class="paginator-dots" />').appendTo(this.element);
+      var container = this.dotsContainer =
+        $('<div class="linkmap-paginator-dots" />').appendTo(this.element);
 
       _.times(this.pages.length - 2, function() {
-        container.append('<div class="paginator-dot" />');
+        container.append('<div class="linkmap-paginator-dot" />');
       });
 
       var dots = container.children();
