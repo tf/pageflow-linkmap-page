@@ -125,12 +125,17 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
   },
 
   updateDraggableAndResizable: function() {
-    if (this.model.get('selected') && !this.getMask()) {
+    if (this.model.get('selected')) {
       this.$el.resizable('enable');
-      this.$el.draggable('enable');
     }
     else {
       this.$el.resizable('disable');
+    }
+
+    if (this.model.get('selected') && !this.getMask()) {
+      this.$el.draggable('enable');
+    }
+    else {
       this.$el.draggable('disable');
     }
   },
