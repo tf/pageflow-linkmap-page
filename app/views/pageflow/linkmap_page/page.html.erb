@@ -4,43 +4,45 @@
     <%= background_image_div(configuration, 'fixed_background_image', class: 'fixed_background') %>
     <div class="scroller">
       <div class="linkmap">
-        <div class="panorama_wrapper">
-          <% if configuration['background_type'] == 'video' &&
-                !Pageflow::ImageFile.find_by_id(configuration['panorama_image_id']) %>
+        <div class="pan_zoom_safe_area_wrapper">
+          <div class="panorama_wrapper">
+            <% if configuration['background_type'] == 'video' &&
+                  !Pageflow::ImageFile.find_by_id(configuration['panorama_image_id']) %>
 
-            <%= background_image_div_with_size(configuration,
-                                               'panorama_video',
-                                               file_type: 'video_file',
-                                               class: 'panorama panorama_image') %>
-          <% else %>
-            <%= background_image_div_with_size(configuration,
-                                               'panorama_image',
-                                               class: 'panorama panorama_image',
-                                               style_group: :panorama) %>
-          <% end %>
+              <%= background_image_div_with_size(configuration,
+                                                 'panorama_video',
+                                                 file_type: 'video_file',
+                                                 class: 'panorama panorama_image') %>
+            <% else %>
+              <%= background_image_div_with_size(configuration,
+                                                 'panorama_image',
+                                                 class: 'panorama panorama_image',
+                                                 style_group: :panorama) %>
+            <% end %>
 
-          <div class="panorama panorama_video">
-            <%= lookup_video_tag(configuration['panorama_video_id'],
-                                 configuration['poster_image_id'],
-                                 loop: true,
-                                 unique_id: page.id,
-                                 preload: page.is_first) %>
-          </div>
-
-          <div class="hover_video">
-          </div>
-
-          <%= linkmap_areas_div(@entry, configuration) %>
-          <div class="description_overlay">
-            <div class="description_overlay_wrapper">
-              <div class="link_title"></div>
-              <div class="link_description"></div>
+            <div class="panorama panorama_video">
+              <%= lookup_video_tag(configuration['panorama_video_id'],
+                                   configuration['poster_image_id'],
+                                   loop: true,
+                                   unique_id: page.id,
+                                   preload: page.is_first) %>
             </div>
-          </div>
-          <div class="touch_indicator"></div>
-          <div class="external_link_loading_indicator">
-            <div class="circle_inner">
-              <div class="circle_innerst"></div>
+
+            <div class="hover_video">
+            </div>
+
+            <%= linkmap_areas_div(@entry, configuration) %>
+            <div class="description_overlay">
+              <div class="description_overlay_wrapper">
+                <div class="link_title"></div>
+                <div class="link_description"></div>
+              </div>
+            </div>
+            <div class="touch_indicator"></div>
+            <div class="external_link_loading_indicator">
+              <div class="circle_inner">
+                <div class="circle_innerst"></div>
+              </div>
             </div>
           </div>
         </div>
