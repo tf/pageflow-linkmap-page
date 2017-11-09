@@ -69,9 +69,15 @@
           <div>
             <div class="linkmap-paginator-pages linkmap-mobile_info_box-inner">
               <div class="linkmap-paginator-page">
-                <h3>Störche</h3>
-                <p>Sieh Dir an wer im Baum wohnt.</p>
+                <% if configuration['mobile_info_box_title'].present? %>
+                  <h3><%= configuration['mobile_info_box_title'] %></h3>
+                <% end %>
+
+                <% if configuration['mobile_info_box_description'].present? %>
+                  <p><%= raw(configuration['mobile_info_box_description']) %></p>
+                <% end %>
               </div>
+              <div class="linkmap-paginator-page_group">
               <% (configuration['linkmap_areas'].presence || []).each do |attributes| %>
                 <div class="linkmap-paginator-page">
                   <% if attributes['link_title'].present? %>
@@ -79,10 +85,11 @@
                   <% end %>
 
                   <% if attributes['link_description'].present? %>
-                    <p><%= attributes['link_description'] %></p>
+                    <p><%= raw(attributes['link_description']) %></p>
                   <% end %>
                 </div>
               <% end %>
+              </div>
             </div>
           </div>
         </div>

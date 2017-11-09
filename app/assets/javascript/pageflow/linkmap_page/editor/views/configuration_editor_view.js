@@ -107,6 +107,9 @@ pageflow.linkmapPage.ConfigurationEditorView = pageflow.ConfigurationEditorView.
       this.view(pageflow.linkmapPage.AreasListView, {
         model: this.model
       });
+
+      this.input('mobile_info_box_title', pageflow.TextInputView);
+      this.input('mobile_info_box_description', pageflow.TextAreaInputView);
     });
 
     this.tab('options', function() {

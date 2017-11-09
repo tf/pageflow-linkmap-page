@@ -17,6 +17,10 @@ $linkmap-paginator-active-dot-color: #fff;
     padding-bottom: 40px;
   }
 
+  &-page_group {
+    float: left;
+  }
+
   &-page {
     float: left;
     box-sizing: border-box;

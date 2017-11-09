@@ -46,19 +46,29 @@
       this.refresh();
     },
 
-    applyMarginBottomForAreaByIndex: function(sourceIndex, destinationIndex, sourceHeight, destinationHeight, progress) {
-      var sourceArea = sourceIndex >= 0 && this.options.areas().eq(sourceIndex);
-      var destinationArea = destinationIndex >= 0 && this.options.areas().eq(destinationIndex);
+    transitionBottomMargin: function(options) {
+      var fromBottomMargin = this._bottomMarginFor(options.from);
+      var toBottomMargin = this._bottomMarginFor(options.to);
 
-      var sourceDimensions = sourceArea && this._getScaledAreaDimensions(sourceArea);
-      var destinationDimensions = destinationArea && this._getScaledAreaDimensions(destinationArea);
+      this._setBottomMargin(
+        fromBottomMargin * (1 - options.progress) + toBottomMargin * options.progress
+      );
+    },
 
-      var sourceTranslateY = sourceDimensions && sourceDimensions.bottom < sourceHeight ? -sourceHeight : 0;
-      var destinationTranslateY = destinationDimensions && destinationDimensions.bottom < destinationHeight ? -destinationHeight : 0;
+    setBottomMarginFor: function(options) {
+      this._setBottomMargin(this._bottomMarginFor(options));
+    },
 
+    _setBottomMargin: function(height) {
       transform(this.safeAreaWrapper, {
-        translateY: sourceTranslateY * (1 - progress) + destinationTranslateY * progress
+        translateY: height
       });
+    },
+
+    _bottomMarginFor: function(options) {
+      var area = options.areaIndex >= 0 && this.options.areas().eq(options.areaIndex);
+      var dimensions = area && this._getScaledAreaDimensions(area);
+      return dimensions && dimensions.bottom < options.hiddenHeight ? -options.hiddenHeight : 0;
     },
 
     _ensureScrollerCanNotScroll: function() {
