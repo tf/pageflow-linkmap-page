@@ -35,6 +35,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
     this.content.linkmapPanZoom({
       page: pageElement,
+      safeAreaWrapper: pageElement.find('.pan_zoom_safe_area_wrapper'),
       panoramaWrapper: pageElement.find('.panorama_wrapper'),
       panorama: function() {
         return pageElement.find('.panorama.active');
@@ -43,7 +44,6 @@ pageflow.pageType.register('linkmap_page', _.extend({
         return pageElement.find('.hover_area');
       },
       scroller: this.scroller,
-      scrollerElement: this.content,
       innerScrollerElement: pageElement.find('.linkmap'),
       initialPosition: this.getPanoramaStartScrollPosition(configuration)
     });

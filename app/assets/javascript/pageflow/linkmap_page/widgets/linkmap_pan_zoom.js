@@ -5,7 +5,7 @@
       this.panoramaWrapper = this.options.panoramaWrapper;
 
       this.scroller = this.options.scroller;
-      this.scrollerElement = this.options.scrollerElement;
+      this.safeAreaWrapper = this.options.safeAreaWrapper;
       this.innerScrollerElement = this.options.innerScrollerElement;
 
       this.update(this.options);
@@ -56,7 +56,7 @@
       var sourceTranslateY = sourceDimensions && sourceDimensions.bottom < sourceHeight ? -sourceHeight : 0;
       var destinationTranslateY = destinationDimensions && destinationDimensions.bottom < destinationHeight ? -destinationHeight : 0;
 
-      transform(this.scrollerElement, {
+      transform(this.safeAreaWrapper, {
         translateY: sourceTranslateY * (1 - progress) + destinationTranslateY * progress
       });
     },
