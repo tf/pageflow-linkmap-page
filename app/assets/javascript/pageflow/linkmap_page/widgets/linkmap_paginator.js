@@ -1,6 +1,8 @@
 /*global IScroll*/
 
 (function($) {
+  var DOTS_BAR_HEIGHT = 38;
+
   $.widget('pageflow.linkmapPaginator', {
     _create: function() {
       this.scrollerReady = $.Deferred();
@@ -10,13 +12,12 @@
       this.container = this.element.find('.linkmap-paginator-pages');
 
       this._cloneFirstAndLastPageForCarousel();
-
-      this.pages = this.element.find('.linkmap-paginator-page');
+      this._findPages();
 
       this.scroller = new IScroll(this.scrollerElement[0], {
         scrollY: false,
         scrollX: true,
-        snap: '.linkmap-paginator-page',
+        snap: this.pages.toArray(),
         momentum: false,
         bounce: false,
         probeType: 3,
@@ -29,17 +30,33 @@
       this._setupIndicatorDots();
     },
 
-    refresh: function() {
+    update: function() {
+      this._findPages();
+      this.scroller.options.snap = this.pages.toArray();
+
+      this._updateClonedPages();
+      this._setupIndicatorDots();
+
+      this.refresh();
+    },
+
+    refresh: function(options) {
       this._updatePageWidths();
       this._cachePageHeights();
 
       this.scroller.refresh();
+    },
+
+    initScrollPosition: function() {
       this.scrollerReady.resolve();
     },
 
-    getCurrentPageHeight: function() {
-      var currentPageIndex = this.scroller.currentPage.pageX;
-      return this.pageHeights[currentPageIndex];
+    getCurrentHeight: function() {
+      return this._heightFromPageHeight(this._getCurrentPageHeight());
+    },
+
+    _findPages: function() {
+      this.pages = this.element.find('.linkmap-paginator-page');
     },
 
     _updatePageWidths: function() {
@@ -56,46 +73,59 @@
     },
 
     _translatePagesVerticallyWhileScrolling: function() {
-      var widget = this;
-      var scroller = this.scroller;
       var changingCallback = this.options.changing;
-      var pages = this.pages;
 
-      scroller.on('scroll', function() {
-        var direction = scroller.x > scroller.currentPage.x ? -1 : 1;
+      this.scroller.on('scroll', _.bind(function() {
+        var direction = this.scroller.x > this.scroller.currentPage.x ? -1 : 1;
 
-        var currentPageIndex = scroller.currentPage.pageX;
+        var currentPageIndex = this.scroller.currentPage.pageX;
         var destinationPageIndex = currentPageIndex + direction;
 
-        var currentPageHeight = widget.pageHeights[currentPageIndex];
-        var destinationPageHeight = widget.pageHeights[destinationPageIndex];
+        var currentPageHeight = this.pageHeights[currentPageIndex];
+        var destinationPageHeight = this.pageHeights[destinationPageIndex];
 
-        var pageWidth = scroller.pages[0][0].width;
-        var progress = Math.min(1, Math.abs(scroller.currentPage.x - scroller.x) / pageWidth);
+        var pageWidth = this.scroller.pages[0][0].width;
+        var progress = Math.min(1, Math.abs(this.scroller.currentPage.x - this.scroller.x) / pageWidth);
 
-        translateY(widget.container,
+        translateY(this.container,
                    currentPageHeight * (1 - progress) + destinationPageHeight * progress);
 
         if (changingCallback) {
           changingCallback({
-            currentPageIndex: (currentPageIndex - 1)  % (pages.length - 2),
-            destinationPageIndex: (destinationPageIndex - 1)  % (pages.length - 2),
+            currentPageIndex: this._pageIndexIgnoringClonedPages(currentPageIndex),
+            destinationPageIndex: this._pageIndexIgnoringClonedPages(destinationPageIndex),
 
-            currentPageHeight: currentPageHeight,
-            destinationPageHeight: destinationPageHeight,
+            currentHeight: this._heightFromPageHeight(currentPageHeight),
+            destinationHeight: this._heightFromPageHeight(destinationPageHeight),
 
             progress: progress
           });
         }
-      });
+      }, this));
 
-      scroller.on('initPosition', update);
-      scroller.on('scrollEnd', update);
-      scroller.on('refresh', update);
+      var update = _.bind(this._updateCurrentPageHeight, this);
 
-      function update() {
-        translateY(widget.container, widget.getCurrentPageHeight());
-      }
+      this.scroller.on('initPosition', update);
+      this.scroller.on('scrollEnd', update);
+      this.scroller.on('refresh', update);
+    },
+
+    updateHeight: function update() {
+      this._cachePageHeights();
+      this._updateCurrentPageHeight();
+    },
+
+    _updateCurrentPageHeight: function update() {
+      translateY(this.container, this._getCurrentPageHeight());
+    },
+
+    _getCurrentPageHeight: function() {
+      var currentPageIndex = this.scroller.currentPage.pageX;
+      return this.pageHeights[currentPageIndex];
+    },
+
+    _heightFromPageHeight: function(pageHeight) {
+      return pageHeight + DOTS_BAR_HEIGHT;
     },
 
     _cloneFirstAndLastPageForCarousel: function() {
@@ -106,20 +136,24 @@
       pages.last().clone().prependTo(container);
     },
 
+    _updateClonedPages: function() {
+      this.pages.first().html(this.pages.eq(-2).html());
+      this.pages.last().html(this.pages.eq(1).html());
+    },
+
     _setupCarousel: function() {
       var scroller = this.scroller;
-      var pages = this.pages;
 
-      scroller.on('scrollEnd', function() {
+      scroller.on('scrollEnd', _.bind(function() {
         var currentPageIndex = scroller.currentPage.pageX;
 
         if (currentPageIndex === 0) {
-          scroller.goToPage(pages.length - 2, 0, 0);
+          scroller.goToPage(this.pages.length - 2, 0, 0);
         }
-        else if (currentPageIndex == pages.length - 1) {
+        else if (currentPageIndex == this.pages.length - 1) {
           scroller.goToPage(1, 0, 0);
         }
-      });
+      }, this));
 
       this.scrollerReady.then(function() {
         scroller.goToPage(1, 0, 0);
@@ -129,16 +163,12 @@
 
     _setupChangeCallbackTrigger: function() {
       var changeCallback = this.options.change;
-      var pages = this.pages;
-      var scroller = this.scroller;
 
       if (changeCallback) {
-        scroller.on('scrollEnd', function() {
-          var currentPageIndex = scroller.currentPage.pageX;
-          var currentPageIndexIgnoringClonedPages = (currentPageIndex - 1) % (pages.length - 2);
-
-          changeCallback(currentPageIndexIgnoringClonedPages);
-        });
+        this.scroller.on('scrollEnd', _.bind(function() {
+          var currentPageIndex = this.scroller.currentPage.pageX;
+          changeCallback(this._pageIndexIgnoringClonedPages(currentPageIndex));
+        }, this));
       }
     },
 
@@ -152,8 +182,10 @@
 
     _setupIndicatorDots: function() {
       var scroller = this.scroller;
-      var container = this.dotsContainer =
+      var container = this.dotsContainer = this.dotsContainer ||
         $('<div class="linkmap-paginator-dots" />').appendTo(this.element);
+
+      container.children().remove();
 
       _.times(this.pages.length - 2, function() {
         container.append('<div class="linkmap-paginator-dot" />');
@@ -168,7 +200,11 @@
         dots.removeClass('active');
         dots.eq(scroller.currentPage.pageX - 1).addClass('active');
       }
-    }
+    },
+
+    _pageIndexIgnoringClonedPages: function(index) {
+      return (index - 1) % (this.pages.length - 2);
+    },
   });
 
   function translateY(element, y) {

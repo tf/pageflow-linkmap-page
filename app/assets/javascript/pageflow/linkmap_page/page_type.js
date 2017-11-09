@@ -81,12 +81,10 @@ pageflow.pageType.register('linkmap_page', _.extend({
       scrollerEventListenerTarget: this.content,
 
       change: function(currentPageIndex) {
-        that.content.linkmapPanZoom('applyMarginBottomForAreaByIndex',
-                                    currentPageIndex - 1,
-                                    0,
-                                    that.mobileInfoBox.linkmapPaginator('getCurrentPageHeight'),
-                                    0,
-                                    0);
+        that.content.linkmapPanZoom('setBottomMarginFor', {
+          areaIndex: currentPageIndex - 1,
+          hiddenHeight: that.mobileInfoBox.linkmapPaginator('getCurrentHeight')
+        });
 
         that.content.linkmapPanZoom('goToAreaByIndex', currentPageIndex - 1);
 
@@ -101,12 +99,17 @@ pageflow.pageType.register('linkmap_page', _.extend({
       },
 
       changing: function(options) {
-        that.content.linkmapPanZoom('applyMarginBottomForAreaByIndex',
-                                    options.currentPageIndex - 1,
-                                    options.destinationPageIndex - 1,
-                                    options.currentPageHeight,
-                                    options.destinationPageHeight,
-                                    options.progress);
+        that.content.linkmapPanZoom('transitionBottomMargin', {
+          from: {
+            areaIndex: options.currentPageIndex - 1,
+            hiddenHeight: options.currentHeight
+          },
+          to: {
+            areaIndex: options.destinationPageIndex - 1,
+            hiddenHeight: options.destinationHeight
+          },
+          progress: options.progress
+        });
       }
     });
 
@@ -254,6 +257,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
     this.content.linkmapLookaround('activate');
     this.content.linkmapPanorama('resetScrollPosition');
+    this.mobileInfoBox.linkmapPaginator('initScrollPosition');
 
     this.content.linkmapPanorama('resetAreaHighlighting');
   },

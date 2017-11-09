@@ -29,6 +29,10 @@ pageflow.editor.pageTypes.register('linkmap_page', {
       view: pageflow.linkmapPage.AreasEmbeddedView
     },
 
+    '.linkmap-mobile_info_box': {
+      view: pageflow.linkmapPage.MobileInfoBoxEmbeddedView
+    },
+
     '.fixed_background': {
       view: pageflow.BackgroundImageEmbeddedView,
       options: {propertyName: 'fixed_background_image_id'}
