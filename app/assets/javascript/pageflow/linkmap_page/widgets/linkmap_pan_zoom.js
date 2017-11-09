@@ -51,7 +51,18 @@
         this.currentArea = null;
       }
 
+      this._highlightAreaAfterTransition(this.currentArea);
       this.refresh();
+    },
+
+    _highlightAreaAfterTransition: function(area) {
+      this.options.areas().removeClass('hover active');
+
+      if (area) {
+        this.panoramaWrapper.one('transitionend', function() {
+          area.addClass('hover active');
+        });
+      }
     },
 
     transitionBottomMargin: function(options) {
@@ -97,7 +108,11 @@
         this._getInitialTransform();
 
       this.currentScale = options.scale;
+
+      this.panoramaWrapper.css('transition-duration', '0.3s');
+
       transform(this.panoramaWrapper, options);
+      transformPercent(this.options.areas().find('.current_time, .play,.pause'), {translateY: -50, translateX: -50, scale: 1 / options.scale});
     },
 
     _getTransformForArea: function(area) {
@@ -151,5 +166,10 @@
   function transform(element, options) {
     element.css('transform',
                 'translate3d(' + (options.translateX || 0) + 'px, ' + (options.translateY || 0) + 'px, 0) scale(' + (options.scale || 1) +')');
+  }
+
+  function transformPercent(element, options) {
+    element.css('transform',
+                'translate3d(' + (options.translateX || 0) + '%, ' + (options.translateY || 0) + '%, 0) scale(' + (options.scale || 1) +')');
   }
 }(jQuery));
