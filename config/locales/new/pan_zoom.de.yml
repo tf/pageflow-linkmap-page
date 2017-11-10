@@ -1,0 +1,15 @@
+de:
+  pageflow:
+    linkmap_page:
+      page_attributes:
+        mobile_info_box_title:
+          label: "Titel für die mobile Info-Box"
+          inline_help: "Wird im Phone-Layout angezeigt, wenn kein Bereich ausgewählt ist."
+        mobile_info_box_description:
+          label: "Beschreibung für mobile Info-Box"
+        mobile_panorama_navigation:
+          label: "Phone-Panorama-Navigation"
+          inline_help: "Je nach Größe und Verteilung der Hotspot-Bereiche, kann es auf Telefonen schwierig sein, sich im Panorama zu orientieren und Hotspots anzuklicken. Es steht daher ein alternativer Bewegungsmodus zur Verfügung."
+          values:
+            free: "Standard (Per Drag-Geste)"
+            pan_zoom: "Geführt (Per rechts/links Swipe-Geste)"
