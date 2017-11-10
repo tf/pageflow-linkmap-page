@@ -11,6 +11,22 @@
       this.update(this.options);
     },
 
+    _setOptions: function(options) {
+      var changed = (this.options.disabled !== options.disabled);
+      this._super(options);
+
+      if (changed) {
+        if (this.options.disabled) {
+          transform(this.panoramaWrapper, {});
+          transform(this.safeAreaWrapper, {});
+          transformPercent(this.options.areas().find('.current_time, .play,.pause'), {translateY: -50, translateX: -50});
+        }
+        else {
+          this.refresh();
+        }
+      }
+    },
+
     getCurrentScale: function() {
       return this.currentScale;
     },

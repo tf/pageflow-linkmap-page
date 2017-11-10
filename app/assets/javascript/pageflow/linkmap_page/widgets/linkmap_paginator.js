@@ -25,14 +25,33 @@
         preventDefault: false
       });
 
-      if (this.options.disabled) {
-        this.scroller.disable();
-      }
+      this._updateEnabled();
 
       this._translatePagesVerticallyWhileScrolling();
       this._setupCarousel();
       this._setupChangeCallbackTrigger();
       this._setupIndicatorDots();
+    },
+
+    _setOptions: function(options) {
+      var changed = (this.options.disabled !== options.disabled);
+      this._super(options);
+
+      if (changed) {
+        this._updateEnabled();
+        this.update();
+      }
+    },
+
+    _updateEnabled: function() {
+      this.element.toggle(!this.options.disabled);
+
+      if (this.options.disabled) {
+        this.scroller.disable();
+      }
+      else {
+        this.scroller.enable();
+      }
     },
 
     update: function() {
