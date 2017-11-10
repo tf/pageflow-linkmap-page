@@ -59,6 +59,7 @@ pageflow.linkmapPage.AreasCollection = Backbone.Collection.extend({
   },
 
   resetSelection: function() {
+    this.trigger('resetSelection');
     this.updateSelectedAttributes(null);
   },
 
