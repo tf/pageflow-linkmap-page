@@ -10,9 +10,17 @@ module Pageflow
         mask_sprite_url_template = MaskSprite.new(id: 1, attachment_file_name: 'data').attachment.url
           .gsub(%r'/(\d{3}/)+', '/:id_partition/')
 
+        hide_overlay_boxes =
+          configuration['mobile_panorama_navigation'] == 'pan_zoom' &&
+          configuration['hide_linkmap_overlay_boxes']
+
         render('pageflow/linkmap_page/areas/div',
                entry: entry,
                configuration: configuration,
+               css_classes: [
+                 'linkmap_areas',
+                 hide_overlay_boxes ? 'hide_overlay_boxes' : nil
+               ].compact.join(' '),
                data_attributes: {
                  hover_image_url: hover_image_file &&
                    hover_image_file.attachment.url(:panorama_large),

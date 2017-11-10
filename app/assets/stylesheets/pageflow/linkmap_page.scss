@@ -201,7 +201,6 @@
     left: 0;
     top: 0;
     z-index: 1;
-    display: block;
     pointer-events: none;
     opacity: 0;
     max-width: 510px;
@@ -215,7 +214,6 @@
     @include transition(opacity 0.15s);
 
     &.active {
-      display: block;
       opacity: 1;
     }
 
@@ -231,6 +229,12 @@
       color: #999999;
       letter-spacing: 0.22px;
       line-height: 30px;
+    }
+  }
+
+  &.hide_overlay_boxes {
+    .description_overlay {
+      display: none;
     }
   }
 
