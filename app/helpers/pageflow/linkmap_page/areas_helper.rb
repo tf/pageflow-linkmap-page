@@ -9,11 +9,19 @@ module Pageflow
         masked_visited_image_file =
           MaskedImageFile.find_by_id(configuration['linkmap_masked_visited_image_id'])
 
+        hide_overlay_boxes =
+          configuration['mobile_panorama_navigation'] == 'pan_zoom' &&
+          configuration['hide_linkmap_overlay_boxes']
+
         render('pageflow/linkmap_page/areas/div',
                entry: entry,
                configuration: configuration,
                masked_hover_image_file: masked_hover_image_file,
                masked_visited_image_file: masked_visited_image_file,
+               css_classes: [
+                 'linkmap_areas',
+                 hide_overlay_boxes ? 'hide_overlay_boxes' : nil
+               ].compact.join(' '),
                data_attributes: {
                  color_map_file_id: configuration['color_map_file_id']
                })

@@ -308,6 +308,10 @@ pageflow.pageType.register('linkmap_page', _.extend({
   },
 
   update: function(pageElement, configuration) {
+    pageElement.find('.linkmap_page').toggleClass('hide_overlay_boxes',
+                                                  configuration.get('mobile_panorama_navigation') === 'pan_zoom' &&
+                                                  configuration.get('hide_linkmap_overlay_boxes'));
+
     this.setupPanoramaBackground(pageElement, configuration.attributes);
     this.updateCommonPageCssClasses(pageElement, configuration);
 

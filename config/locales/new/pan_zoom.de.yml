@@ -13,3 +13,6 @@ de:
           values:
             free: "Standard (Per Drag-Geste)"
             pan_zoom: "Geführt (Per rechts/links Swipe-Geste)"
+        hide_linkmap_overlay_boxes:
+          label: "Infoboxes nur auf Phone anzeigen"
+          inline_help: "Im Desktop und Tablet-Layout keine Infoboxes an den Hotspots einblenden."

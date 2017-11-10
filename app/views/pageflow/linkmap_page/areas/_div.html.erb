@@ -1,4 +1,4 @@
-<%= content_tag(:div, class: 'linkmap_areas', data: data_attributes) do %>
+<%= content_tag(:div, class: css_classes, data: data_attributes) do %>
   <% (configuration['linkmap_areas'].presence || []).each_with_index do |attributes, index| %>
     <%= linkmap_area(entry, attributes, index, configuration['background_type']) do %>
       <%= linkmap_area_background_image_div('visited',
