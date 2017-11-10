@@ -14,6 +14,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
     this.setupHoverImages(pageElement, configuration);
     this.setupVideoPlayer(pageElement);
 
+    this.contentAndBackground = pageElement.find('.linkmap_page');
     this.content = pageElement.find('.scroller');
     this.panorama = pageElement.find('.panorama');
 
@@ -54,7 +55,8 @@ pageflow.pageType.register('linkmap_page', _.extend({
       marginScrollingDisabled: this.getMarginScrollingDisabled(configuration),
     });
 
-    pageElement.find('.linkmap_page').linkmapScrollIndicators({
+    this.contentAndBackground.linkmapScrollIndicators({
+      disabled: this.isPanZoomEnabled(configuration),
       scroller: this.scroller
     });
 
@@ -398,12 +400,14 @@ pageflow.pageType.register('linkmap_page', _.extend({
   updateNavigationMode: function(configuration) {
     if (this.isPanZoomEnabled(configuration)) {
       this.content.linkmapPanorama('disable');
+      this.contentAndBackground.linkmapScrollIndicators('disable');
       this.content.linkmapPanZoom('enable');
       this.mobileInfoBox.linkmapPaginator('enable');
     }
     else {
       this.content.linkmapPanZoom('disable');
       this.mobileInfoBox.linkmapPaginator('disable');
+      this.contentAndBackground.linkmapScrollIndicators('enable');
       this.content.linkmapPanorama('enable');
     }
   },
