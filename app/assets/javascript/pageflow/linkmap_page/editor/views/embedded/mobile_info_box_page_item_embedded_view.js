@@ -9,7 +9,7 @@ pageflow.linkmapPage.MobileInfoBoxPageItemEmbeddedView = Backbone.Marionette.Ite
   },
 
   modelEvents: {
-    'change:link_title change:link_description': 'update',
+    'change:link_title change:link_description': 'update'
   },
 
   onRender: function() {

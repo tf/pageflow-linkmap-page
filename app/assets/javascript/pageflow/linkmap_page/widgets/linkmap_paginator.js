@@ -40,6 +40,11 @@
       if (changed) {
         this._updateEnabled();
         this.update();
+
+        if (!this.options.disabled) {
+          this.scroller.goToPage(1, 0, 100);
+          this.scroller._execEvent('initPosition');
+        }
       }
     },
 
@@ -81,6 +86,14 @@
 
     getCurrentHeight: function() {
       return this._heightFromPageHeight(this._getCurrentPageHeight());
+    },
+
+    goToPage: function(index) {
+      if (this.options.disabled) {
+        return;
+      }
+
+      this.scroller.goToPage(index + 1, 0, 100);
     },
 
     _findPages: function() {
