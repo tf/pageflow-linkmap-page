@@ -11,6 +11,10 @@
       this.update(this.options);
     },
 
+    getCurrentScale: function() {
+      return this.currentScale;
+    },
+
     update: function(options) {
       this.initialPosition = options.initialPosition;
       this.refresh();
