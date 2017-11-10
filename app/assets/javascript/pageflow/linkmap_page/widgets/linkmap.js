@@ -34,7 +34,7 @@
       this.element.on('click', function(event) {
         var area = widget.areaAt(widget.positionFromEvent(event));
 
-        if (area.length) {
+        if (area.length && area.hasClass('enabled')) {
           area.first().trigger($.Event('linkmapareaclick', {originalEvent: event}));
         }
         else {
@@ -71,16 +71,18 @@
         var area = $(this);
         var hovered = area.linkmapAreaContains(position);
 
-        if (!area.hasClass('hover') && hovered) {
-          area.trigger('linkmapareaenter');
+        if (area.hasClass('enabled')) {
+          if (!area.hasClass('hover') && hovered) {
+            area.trigger('linkmapareaenter');
+          }
+
+          area.toggleClass('hover', hovered);
         }
 
         area.css('cursor',
                  hovered &&
                  area.attr('data-target-type') !== 'text_only' ?
                  'pointer' : 'default');
-
-        area.toggleClass('hover', hovered);
       });
     },
 
