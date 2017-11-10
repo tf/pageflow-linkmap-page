@@ -123,7 +123,11 @@
     width: 20%;
     overflow: hidden;
     display: block;
-    pointer-events: all;
+    pointer-events: none;
+
+    &.enabled {
+      pointer-events: all;
+    }
 
     .hover_image,
     .visited_image {

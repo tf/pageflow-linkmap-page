@@ -382,6 +382,8 @@
 
         this.innerScrollerElement.removeClass('measuring');
         this.scroller.refresh();
+
+        this.activeAreas.addClass('enabled');
       });
     },
 

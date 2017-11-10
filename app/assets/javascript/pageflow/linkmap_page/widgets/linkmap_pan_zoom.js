@@ -28,7 +28,7 @@
     },
 
     getCurrentScale: function() {
-      return this.currentScale;
+      return this.options.disabled ? 1 : this.currentScale;
     },
 
     update: function(options) {
@@ -57,6 +57,7 @@
       this._ensureScrollerCanNotScroll();
       this._resizePanorama();
       this._transformPanoramaWrapper();
+      this._markAllButCurrentAreaAsDisabled();
     },
 
     goToAreaByIndex: function(index) {
@@ -120,6 +121,15 @@
     _resizePanorama: function() {
       this.panorama.width(this.panoramaSize.width);
       this.panorama.height(this.panoramaSize.height);
+    },
+
+    _markAllButCurrentAreaAsDisabled: function() {
+      var currentArea = this.currentArea;
+
+      this.options.areas().each(function() {
+        var area = $(this);
+        area.toggleClass('enabled', area.is(currentArea));
+      });
     },
 
     _transformPanoramaWrapper: function() {
