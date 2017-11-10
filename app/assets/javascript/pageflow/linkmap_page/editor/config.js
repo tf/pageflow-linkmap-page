@@ -41,7 +41,9 @@ pageflow.editor.pageTypes.register('linkmap_page', {
 
   pageLinks: function(configuration) {
     return configuration.linkmapPageLinks();
-  }
+  },
+
+  supportsPhoneEmulation: true
 });
 
 pageflow.editor.registerPageConfigurationMixin(pageflow.linkmapPage.pageConfigurationMixin);
