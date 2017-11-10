@@ -86,10 +86,14 @@
     },
 
     positionFromEvent: function(event) {
-      var clientRect = this.element[0].getBoundingClientRect();
+      // Older versions of Firefox do not support event.offsetX, which
+      // would be exactly what we need here.
 
-      var left = event.clientX - clientRect.left;
-      var top = event.clientY - clientRect.top;
+      var clientRect = this.element[0].getBoundingClientRect();
+      var scale = this.options.parentScale();
+
+      var left = (event.clientX - clientRect.left) / scale;
+      var top = (event.clientY - clientRect.top) / scale;
 
       return {
         leftInPixel: left,

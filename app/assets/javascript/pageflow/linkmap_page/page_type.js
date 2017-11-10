@@ -74,6 +74,10 @@ pageflow.pageType.register('linkmap_page', _.extend({
         return pageElement.find('.panorama.active');
       },
 
+      parentScale: function() {
+        return that.content.linkmapPanZoom('getCurrentScale');
+      },
+
       hoverVideo: pageElement.find('.hover_video').linkmapHoverVideo('instance'),
       hoverVideoEnabled: configuration.background_type === 'hover_video'
     });
