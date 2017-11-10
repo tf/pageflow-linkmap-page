@@ -66,9 +66,9 @@
           }
         );
 
-        configuration.listenTo(collection, 'add remove change', function() {
+        configuration.listenTo(collection, 'add remove change sort', function() {
           configuration.set('linkmap_areas', collection.map(function(area) {
-            return _.omit(area.attributes, 'highlighted', 'editing', 'selected');
+            return _.omit(area.attributes, 'highlighted', 'editing', 'selected', 'position');
           }));
         });
 
