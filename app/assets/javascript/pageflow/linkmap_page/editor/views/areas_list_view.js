@@ -12,6 +12,7 @@ pageflow.linkmapPage.AreasListView = Backbone.Marionette.View.extend({
       label: I18n.t('pageflow.linkmap_page.editor.views.areas_list.label'),
       collection: this.model.linkmapAreas(),
       highlight: true,
+      sortable: true,
 
       onEdit: function(model) {
         pageflow.editor.navigate(model.editPath(), {trigger: true});

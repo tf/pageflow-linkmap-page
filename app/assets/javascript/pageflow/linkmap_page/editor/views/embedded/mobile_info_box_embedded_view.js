@@ -22,6 +22,10 @@ pageflow.linkmapPage.MobileInfoBoxEmbeddedView = Backbone.Marionette.View.extend
       paginator.linkmapPaginator('update');
     });
 
+    this.listenTo(collection, 'sort', function() {
+      paginator.linkmapPaginator('update');
+    });
+
     this.update();
     paginator.linkmapPaginator('update');
 
