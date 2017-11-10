@@ -16,6 +16,7 @@ pageflow.linkmapPage.AreaOutlinesEmbeddedView = Backbone.Marionette.ItemView.ext
     this.listenTo(pageflow.app, 'resize', this.redraw);
 
     this.listenTo(this.model.page, 'change:areas_outlined', this.update);
+    this.listenTo(pageflow.entry, 'change:emulation_mode', this.update);
     this.update();
   },
 
@@ -25,7 +26,7 @@ pageflow.linkmapPage.AreaOutlinesEmbeddedView = Backbone.Marionette.ItemView.ext
   },
 
   update: function() {
-    this.$el.toggle(!!this.model.page.get('areas_outlined'));
+    this.$el.toggle(!!this.model.page.get('areas_outlined') && !pageflow.entry.has('emulation_mode'));
     this.redrawAll();
   },
 
