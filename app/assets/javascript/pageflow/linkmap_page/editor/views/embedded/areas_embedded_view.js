@@ -44,11 +44,15 @@ pageflow.linkmapPage.AreasEmbeddedView = Backbone.Marionette.View.extend({
       this.updateClassNames();
     });
 
+    this.listenTo(pageflow.entry, 'change:emulation_mode', function() {
+      this.updateClassNames();
+    });
+
     return this;
   },
 
   updateClassNames: function() {
-    var editable = this.model.page.get('areas_editable');
+    var editable = this.model.page.get('areas_editable') && !pageflow.entry.has('emulation_mode');
 
     this.$el.toggleClass('editable', !!editable);
     this.$el.toggleClass('masks_available',
