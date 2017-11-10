@@ -88,15 +88,32 @@ pageflow.linkmapPage.ConfigurationEditorView = pageflow.ConfigurationEditorView.
         model: this.model
       });
 
-      this.input('mobile_info_box_title', pageflow.TextInputView);
-      this.input('mobile_info_box_description', pageflow.TextAreaInputView);
+      this.input('limit_scrolling', pageflow.CheckBoxInputView);
+      this.input('add_environment', pageflow.CheckBoxInputView);
+      this.input('margin_scrolling_disabled', pageflow.CheckBoxInputView);
+
+      this.input('mobile_panorama_navigation', pageflow.SelectInputView, {
+        values: ['free', 'pan_zoom']
+      });
+
+      this.input('mobile_info_box_title', pageflow.TextInputView, {
+        visibleBinding: 'mobile_panorama_navigation',
+        visible: function(navigation) {
+          return navigation === 'pan_zoom';
+        }
+      });
+      this.input('mobile_info_box_description', pageflow.TextAreaInputView, {
+        size: 'short',
+        disableLinks: true,
+        visibleBinding: 'mobile_panorama_navigation',
+        visible: function(navigation) {
+          return navigation === 'pan_zoom';
+        }
+      });
     });
 
     this.tab('options', function() {
       this.group('options', {canPauseAtmo: true});
-      this.input('limit_scrolling', pageflow.CheckBoxInputView);
-      this.input('add_environment', pageflow.CheckBoxInputView);
-      this.input('margin_scrolling_disabled', pageflow.CheckBoxInputView);
     });
   }
 });
