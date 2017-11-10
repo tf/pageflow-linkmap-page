@@ -217,6 +217,20 @@
       this.refresh();
     },
 
+    _setOptions: function(options) {
+      var changed = (this.options.disabled !== options.disabled);
+      this._super(options);
+
+      if (changed) {
+        if (this.options.disabled) {
+
+        }
+        else {
+          this.refresh();
+        }
+      }
+    },
+
     calcAreaOpacity: function(activeAreas, mX, mY) {
       if (pageflow.browser.has('mobile platform')) {
         return;

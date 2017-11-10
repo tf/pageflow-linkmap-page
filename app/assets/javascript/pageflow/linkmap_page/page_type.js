@@ -18,7 +18,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
     this.panorama = pageElement.find('.panorama');
 
     this.content.linkmapPanorama({
-      disabled: true,
+      disabled: this.isPanZoomEnabled(configuration),
 
       page: pageElement,
       panorama: function() {
@@ -29,12 +29,11 @@ pageflow.pageType.register('linkmap_page', _.extend({
       limitScrolling: configuration.limit_scrolling,
       minScaling: pageflow.browser.has('mobile platform'),
       addEnvironment: configuration.add_environment,
-      marginScrollingDisabled: configuration.margin_scrolling_disabled,
       startScrollPosition: this.getPanoramaStartScrollPosition(configuration)
     });
 
     this.content.linkmapPanZoom({
-      disabled: false,
+      disabled: !this.isPanZoomEnabled(configuration),
 
       page: pageElement,
       safeAreaWrapper: pageElement.find('.pan_zoom_safe_area_wrapper'),
@@ -52,7 +51,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
     this.content.linkmapLookaround({
       scroller: this.scroller,
-      marginScrollingDisabled: configuration.margin_scrolling_disabled
+      marginScrollingDisabled: this.getMarginScrollingDisabled(configuration),
     });
 
     pageElement.find('.linkmap_page').linkmapScrollIndicators({
@@ -84,7 +83,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
     this.mobileInfoBox = pageElement.find('.linkmap-paginator');
     this.mobileInfoBox.linkmapPaginator({
-      disabled: false,
+      disabled: !this.isPanZoomEnabled(configuration),
 
       scrollerEventListenerTarget: this.content,
 
@@ -225,6 +224,9 @@ pageflow.pageType.register('linkmap_page', _.extend({
     this.content.linkmapPanZoom('refresh');
     this.linkmapAreas.linkmap('refresh');
     this.mobileInfoBox.linkmapPaginator('refresh');
+
+    this.updateNavigationMode(configuration);
+    this.content.linkmapLookaround('update', this.getMarginScrollingDisabled(configuration));
   },
 
   prepare: function(pageElement, configuration) {
@@ -312,6 +314,8 @@ pageflow.pageType.register('linkmap_page', _.extend({
                                 'masksData',
                                 configuration.get('linkmap_masks'));
 
+      this.updateNavigationMode(configuration.attributes);
+
       this.content.linkmapPanorama('update',
                                    configuration.get('add_environment'),
                                    configuration.get('limit_scrolling'),
@@ -326,7 +330,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
                                     this.content.linkmapPanorama('instance'));
 
       this.content.linkmapLookaround('update',
-                                     configuration.get('margin_scrolling_disabled'));
+                                     this.getMarginScrollingDisabled(configuration.attributes));
       this.setupHoverImages(pageElement, configuration.attributes);
       this.updateVideoPlayState(configuration);
 
@@ -379,6 +383,32 @@ pageflow.pageType.register('linkmap_page', _.extend({
   isHoverVideoEnabled: function(configuration) {
     return !pageflow.browser.has('mobile platform') &&
       configuration.background_type === 'hover_video';
+  },
+
+  updateNavigationMode: function(configuration) {
+    if (this.isPanZoomEnabled(configuration)) {
+      this.content.linkmapPanorama('disable');
+      this.content.linkmapPanZoom('enable');
+      this.mobileInfoBox.linkmapPaginator('enable');
+    }
+    else {
+      this.content.linkmapPanZoom('disable');
+      this.mobileInfoBox.linkmapPaginator('disable');
+      this.content.linkmapPanorama('enable');
+    }
+  },
+
+  isPanZoomEnabled: function(configuration) {
+    return (pageflow.browser.has('mobile platform') || this.phoneEmulation()) &&
+      configuration.mobile_panorama_navigation === 'pan_zoom';
+  },
+
+  getMarginScrollingDisabled: function(configuration) {
+    return configuration.margin_scrolling_disabled || this.phoneEmulation();
+  },
+
+  phoneEmulation: function() {
+    return !!$('#entry_preview > .emulation_mode_phone').length;
   },
 
   playVideo: function(configuration) {
