@@ -43,6 +43,14 @@ pageflow.linkmapPage.ConfigurationEditorView = pageflow.ConfigurationEditorView.
         }
       });
 
+      this.input('linkmap_masked_hover_image_id', pageflow.FileProcessingStateDisplayView, {
+        collection: 'pageflow_linkmap_page_masked_image_files',
+        visibleBinding: 'background_type',
+        visible: function(backgroundType) {
+          return _(['image', 'video']).contains(backgroundType);
+        }
+      });
+
       this.input('panorama_video_id', pageflow.FileInputView, {
         attributeTranslationKeyPrefixes: ['pageflow.linkmap_page.page_attributes.hover_video_type'],
         collection: pageflow.videoFiles,
@@ -68,9 +76,21 @@ pageflow.linkmapPage.ConfigurationEditorView = pageflow.ConfigurationEditorView.
         }
       });
 
+      this.input('linkmap_color_map_file_id', pageflow.FileProcessingStateDisplayView, {
+        collection: 'pageflow_linkmap_page_color_map_files',
+        visibleBinding: 'background_type',
+        visible: function(backgroundType) {
+          return _(['image', 'video']).contains(backgroundType);
+        }
+      });
+
       this.input('visited_image_id', pageflow.FileInputView, {
         collection: pageflow.imageFiles,
         positioning: false
+      });
+
+      this.input('linkmap_masked_visited_image_id', pageflow.FileProcessingStateDisplayView, {
+        collection: 'pageflow_linkmap_page_masked_image_files'
       });
 
       this.input('thumbnail_image_id', pageflow.FileInputView, {
