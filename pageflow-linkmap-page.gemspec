@@ -31,6 +31,12 @@ Gem::Specification.new do |spec|
   # Browser like integration testing
   spec.add_development_dependency 'capybara', '~> 2.13'
 
+  # PNG processing
+  spec.add_development_dependency 'chunky_png', '~> 1.3'
+
+  # Remove whitespace from strings
+  spec.add_development_dependency 'unindent', '~> 1.0'
+
   # Semantic versioning rake tasks
   spec.add_development_dependency 'semmy', '~> 1.0'
 end

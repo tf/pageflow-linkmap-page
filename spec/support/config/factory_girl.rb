@@ -1,3 +1,5 @@
+FactoryGirl.definition_file_paths << Pageflow::LinkmapPage::Engine.root.join('spec', 'factories')
+
 RSpec.configure do |config|
   # Allow to use build and create methods without FactoryGirl prefix.
   config.include FactoryGirl::Syntax::Methods
