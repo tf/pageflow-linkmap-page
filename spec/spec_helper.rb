@@ -1,6 +1,8 @@
 ENV['RAILS_ENV'] ||= 'test'
 ENV['PAGEFLOW_PLUGIN_ENGINE'] = 'pageflow_linkmap_page'
 
+require 'unindent'
+
 require 'pageflow/support'
 Pageflow::Dummy.setup
 
@@ -15,4 +17,8 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
   config.infer_base_class_for_anonymous_controllers = false
   config.order = "random"
+
+  config.expect_with :rspec do |expectations|
+    expectations.include_chain_clauses_in_custom_matcher_descriptions = true
+  end
 end
