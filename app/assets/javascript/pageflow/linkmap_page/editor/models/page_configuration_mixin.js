@@ -1,15 +1,37 @@
 (function() {
   pageflow.linkmapPage.pageConfigurationMixin = {
-    initialize: function() {
-      this.listenTo(this, 'change:linkmap_color_map_image_id', function(model, imageFileId) {
-        if (imageFileId) {
-          var imageFile = this.getImageFile('linkmap_color_map_image_id');
-          generateMaskSpriteWhenReady(this, imageFile);
-        }
-        else {
-          resetMaskSprite(this);
-        }
-      });
+    initialize: function(options) {
+      this.listenTo(this,
+                    'change:linkmap_color_map_image_id',
+                    function(model, imageFileId) {
+                      if (imageFileId) {
+                        this.setReference('linkmap_color_map_file_id',
+                                          colorMapFiles().findOrCreateBy({
+                                            source_image_file_id: imageFileId
+                                          }));
+                      }
+                      else {
+                        this.unsetReference('linkmap_color_map_file_id');
+                      }
+                    });
+
+      this.listenTo(this,
+                    'change:hover_image_id change:linkmap_color_map_file_id change:linkmap_color_map_file_id:ready',
+                    function() {
+                      var colorMapFile = colorMapFiles().get(this.get('linkmap_color_map_file_id'));
+                      var hoverImageFile = pageflow.imageFiles.get(this.get('hover_image_id'));
+
+                      if (hoverImageFile && colorMapFile && colorMapFile.isReady()) {
+                        this.setReference('linkmap_masked_hover_image_id',
+                                          maskedImageFiles().findOrCreateBy({
+                                            source_image_file_id: hoverImageFile.id,
+                                            color_map_file_id: colorMapFile.id
+                                          }));
+                      }
+                      else {
+                        this.unsetReference('linkmap_masked_hover_image_id');
+                      }
+                    });
     },
 
     linkmapPageLinks: function() {
@@ -42,52 +64,14 @@
 
         return collection;
       }
-    },
-
-    getLinkmapAreaMask: function(masks, permaId) {
-      if (this.get('background_type') !== 'hover_video') {
-        return masks.findByPermaId(permaId);
-      }
     }
   };
 
-  function generateMaskSpriteWhenReady(configuration, imageFile) {
-    if (imageFile.isReady()) {
-      generateMaskSprite(configuration, imageFile);
-    }
-    else {
-      imageFile.once('change:state', function() {
-        generateMaskSpriteWhenReady(configuration, imageFile);
-      });
-    }
+  function maskedImageFiles() {
+    return pageflow.entry.getFileCollection('pageflow_linkmap_page_masked_image_files');
   }
 
-  function generateMaskSprite(configuration, imageFile) {
-    // panorama_mask_url is available in Pageflow >= 12.1
-    pageflow.linkmapPage.StoredMaskSprite
-      .findOrCreateForImageFileId(imageFile.id,
-                                  imageFile.get('panorama_mask_url') ||
-                                  imageFile.get('panorama_url'))
-      .then(
-        function(masks) {
-          configuration.set('linkmap_masks', masks);
-        },
-        function(error) {
-          configuration.unset('linkmap_masks');
-          configuration.unset('linkmap_color_map_image_id');
-
-          if (error.i18nKey) {
-            alert(I18n.t(error.i18nKey));
-          }
-          else {
-            alert(I18n.t('pageflow.linkmap_page.errors.mask_image_failed'));
-            throw(error);
-          }
-        }
-      );
-  }
-
-  function resetMaskSprite(configuration) {
-    configuration.unset('linkmap_masks');
+  function colorMapFiles() {
+    return pageflow.entry.getFileCollection('pageflow_linkmap_page_color_map_files');
   }
 }());
