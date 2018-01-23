@@ -8,10 +8,7 @@ pageflow.linkmapPage.RemoteImage = (function() {
       return image.height;
     };
 
-    this.draw = function(canvas, options) {
-      options = options || {};
-      var context = canvas.getContext('2d');
-
+    this.draw = function(context, options) {
       if (options.disableImageSmoothing) {
         context.imageSmoothingEnabled = false;
       }
@@ -19,8 +16,8 @@ pageflow.linkmapPage.RemoteImage = (function() {
       context.drawImage(image,
                         0,
                         0,
-                        canvas.width,
-                        canvas.height);
+                        options.width,
+                        image.height * (options.width / image.width));
     };
   }
 

@@ -6,8 +6,7 @@
     _create: function() {
       var widget = this;
 
-      this.lastImageUrls = {};
-      this.imagePromises = {};
+      this.colorMapPromise = $.when(pageflow.linkmapPage.ColorMap.empty);
 
       this.refresh();
 
@@ -111,32 +110,14 @@
     },
 
     refresh: function() {
+      var areaBackgroundImages = this.element.find('.background_image');
       var hoverAreas = this.element.find('.hover_area');
-      var widget = this;
 
-      $.when(
-        this.loadImage('hover'),
-        this.loadImage('visited'),
-        this.loadMasks()
-      ).then(function(hoverImage, visitedImage, masks) {
-        var baseImage = widget.options.baseImage();
-        var width = baseImage.width();
-        var height = baseImage.height();
+      this.resizeToBaseImage(areaBackgroundImages);
 
-        hoverAreas.linkmapAreaRedraw({
-          target: '.hover_image',
-          image: hoverImage,
-          width: width,
-          height: height,
-          masks: masks
-        });
-
-        hoverAreas.linkmapAreaRedraw({
-          target: '.visited_image',
-          image: visitedImage,
-          width: width,
-          height: height,
-          masks: masks
+      this.loadColorMap().then(function(colorMap) {
+        hoverAreas.linkmapAreaSetMask({
+          colorMap: colorMap
         });
       });
 
@@ -145,35 +126,27 @@
       hoverAreas.linkmapAreaVisited();
     },
 
-    loadImage: function(name) {
-      var url = this.options[name + 'ImageUrl'];
-
-      if (this.lastImageUrls[name] !== url) {
-        this.lastImageUrls[name] = url;
-        this.imagePromises[name] = url && pageflow.linkmapPage.RemoteImage.load(url);
-      }
-
-      return this.imagePromises[name];
-    },
-
-    loadMasks: function() {
+    loadColorMap: function() {
       var widget = this;
-      var maskImageId = this.options.masksData && this.options.masksData.id;
 
-      if (this.lastMaskImageId !== maskImageId) {
-        this.lastMaskImageId = maskImageId;
+      if (this.lastColorMapFileId !== this.options.colorMapFileId) {
+        this.lastColorMapFileId = this.options.colorMapFileId;
+        this.colorMapPromise = pageflow.linkmapPage.ColorMap.load(this.options.colorMapFileId);
 
-        this.masksPromise = this.options.masksData ?
-          pageflow.linkmapPage.Masks.deserialize(this.options.masksData,
-                                                 this.options.maskSpriteUrlTemplate) :
-          $.when(pageflow.linkmapPage.Masks.empty);
-
-        this.masksPromise.then(function(masks) {
-          widget._trigger('updatemasks', null, {masks: masks});
+        this.colorMapPromise.then(function(colorMap) {
+          widget._trigger('updatecolormap', null, {colorMap: colorMap});
         });
       }
 
-      return this.masksPromise;
+      return this.colorMapPromise;
+    },
+
+    resizeToBaseImage: function(target) {
+      var baseImage = this.options.baseImage();
+
+      target
+        .width(baseImage.width())
+        .height(baseImage.height());
     }
   });
 

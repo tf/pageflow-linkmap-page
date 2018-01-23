@@ -51,7 +51,7 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
   handleMouseDown: function(event) {
     var view = this;
 
-    if (this.currentMask || this.selection.type === 'mask') {
+    if (this.currentColorMapComponent || this.selection.type === 'colorMapComponent') {
       return;
     }
 
@@ -91,10 +91,10 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
   },
 
   handleClick: function(event) {
-    var mask = this.maskFromPoint(event);
+    var colorMapComponent = this.colorMapComponentFromPoint(event);
 
-    if (mask) {
-      this.selection.deferred.resolve(mask.areaAttributes());
+    if (colorMapComponent) {
+      this.selection.deferred.resolve(colorMapComponent.areaAttributes());
     }
     else {
       this.selection.deferred.reject();
@@ -110,30 +110,30 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
       return;
     }
 
-    var mask = event && this.maskFromPoint(event);
+    var colorMapComponent = event && this.colorMapComponentFromPoint(event);
 
-    if (this.maskIsUsed(mask)) {
-      mask = null;
+    if (colorMapComponent && this.colorMapComponentIsUsed(colorMapComponent)) {
+      colorMapComponent = null;
     }
 
-    if (this.currentMask !== mask) {
-      this.currentMask = mask;
+    if (this.currentColorMapComponent !== colorMapComponent) {
+      this.currentColorMapComponent = colorMapComponent;
 
       this.updateCursor();
       this.redraw();
     }
   },
 
-  maskFromPoint: function(event) {
-    return this.options.masks.atPoint(event.offsetX / this.$el.width(),
-                                      event.offsetY / this.$el.height());
+  colorMapComponentFromPoint: function(event) {
+    return this.options.colorMap.componentFromPoint(event.offsetX / this.$el.width() * 100,
+                                                    event.offsetY / this.$el.height() * 100);
   },
 
   updateCursor: function() {
-    if (this.currentMask) {
+    if (this.currentColorMapComponent) {
       this.$el.css('cursor', 'pointer');
     }
-    else if (this.selection.type !== 'mask') {
+    else if (this.selection.type !== 'colorMapComponent') {
       this.$el.css('cursor', 'crosshair');
     }
     else {
@@ -153,16 +153,16 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
 
     context.globalAlpha = 0.5;
 
-    this.options.masks.each(function(mask) {
-      if (!this.maskIsUsed(mask)) {
-        mask.draw(context, canvas.width);
+    _(this.options.colorMap.components()).each(function(colorMapComponent) {
+      if (!this.colorMapComponentIsUsed(colorMapComponent)) {
+        colorMapComponent.draw(context, canvas.width);
       }
     }, this);
   },
 
-  maskIsUsed: function(mask) {
+  colorMapComponentIsUsed: function(colorMapComponent) {
     return this.options.areas.any(function(area) {
-      return mask === this.options.masks.findByPermaId(area.get('mask_perma_id'));
+      return colorMapComponent.permaId === area.get('mask_perma_id');
     }, this);
   },
 
@@ -176,8 +176,8 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
 
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (this.currentMask) {
-      this.currentMask.draw(context, canvas.width);
+    if (this.currentColorMapComponent) {
+      this.currentColorMapComponent.draw(context, canvas.width);
 
       context.globalCompositeOperation = 'source-in';
       this.usePattern(context);

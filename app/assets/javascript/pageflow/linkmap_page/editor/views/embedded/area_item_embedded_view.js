@@ -3,6 +3,11 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
 
   className: 'hover_area',
 
+  ui: {
+    hoverImage: '.hover_image',
+    visitedImage: '.visited_image'
+  },
+
   events: {
     'linkmapareaclick': function() {
       if (this.$el.is('.editable .hover_area')) {
@@ -58,13 +63,53 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
   },
 
   onRender: function() {
+    this.setupImageViews();
     this.setupDraggableAndResizable();
     this.setupAudioPlayer();
 
-    this.listenTo(this.options.masks, 'update', this.update);
+    this.listenTo(this.options.colorMap, 'update', this.update);
     this.listenTo(this.options.pageConfiguration, 'change:background_type', this.update);
 
     this.update();
+  },
+
+  setupImageViews: function() {
+    var view = this;
+
+    var backgroundImageClassNamePrefix = function() {
+      var colorMapComponent = view.getColorMapComponent();
+      return colorMapComponent &&
+        'pageflow_linkmap_page_masked_image_file_' + colorMapComponent.color;
+    };
+
+    var hoverImageView = new pageflow.BackgroundImageEmbeddedView({
+      el: this.ui.hoverImage,
+      model: this.options.pageConfiguration,
+      propertyName: function() {
+        return view.getColorMapComponent() ?
+          'linkmap_masked_hover_image_id' :
+          'hover_image_id';
+      },
+      useInlineStyles: false,
+      backgroundImageClassNamePrefix: backgroundImageClassNamePrefix
+    }).render();
+
+    var visitedImageView = new pageflow.BackgroundImageEmbeddedView({
+      el: this.ui.visitedImage,
+      model: this.options.pageConfiguration,
+      propertyName: function() {
+        return view.getColorMapComponent() ?
+          'linkmap_masked_visited_image_id' :
+          'visited_image_id';
+      },
+      useInlineStyles: false,
+      backgroundImageClassNamePrefix: backgroundImageClassNamePrefix
+    }).render();
+
+    this.listenTo(this.options.colorMap, 'update', function() {
+      hoverImageView.update();
+      visitedImageView.update();
+    });
   },
 
   setupDraggableAndResizable: function() {
@@ -125,12 +170,17 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
   },
 
   updateDraggableAndResizable: function() {
-    if (this.model.get('selected') && !this.getMask()) {
+    if (this.model.get('selected')) {
       this.$el.resizable('enable');
-      this.$el.draggable('enable');
     }
     else {
       this.$el.resizable('disable');
+    }
+
+    if (this.model.get('selected') && !this.getColorMapComponent()) {
+      this.$el.draggable('enable');
+    }
+    else {
       this.$el.draggable('disable');
     }
   },
@@ -141,9 +191,9 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
 
   update: function() {
     var audioFileId = this.model.get('target_id');
-    var mask = this.getMask();
+    var colorMapComponent = this.getColorMapComponent();
 
-    this.$el.attr('data-mask-id', mask ? this.model.get('mask_perma_id') : '');
+    this.$el.attr('data-mask-perma-id', colorMapComponent && colorMapComponent.permaId);
     this.$el.attr('data-audio-file', audioFileId ? audioFileId + '.' + this.cid : '');
     this.$el.attr('data-target-type', this.model.get('target_type'));
     this.$el.attr('data-target-id', this.model.get('target_id'));
@@ -152,8 +202,8 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
     this.$el.toggleClass('selected', !!this.model.get('selected'));
     this.$el.toggleClass('highlighted', !!this.model.get('highlighted'));
     this.$el.toggleClass('editing', !!this.model.get('editing'));
-    this.$el.toggleClass('without_mask', !mask);
-    this.$el.toggleClass('with_mask', !!mask);
+    this.$el.toggleClass('without_mask', !colorMapComponent);
+    this.$el.toggleClass('with_mask', !!colorMapComponent);
 
     this.$el.attr('data-width', this.model.get('width'));
     this.$el.attr('data-height', this.model.get('height'));
@@ -203,9 +253,8 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
     element.toggleClass('inverted', !!this.model.get('inverted'));
   },
 
-  getMask: function() {
-    return this.options.pageConfiguration.getLinkmapAreaMask(
-      this.options.masks,
+  getColorMapComponent: function() {
+    return this.options.colorMap.componentByPermaId(
       this.model.get('mask_perma_id')
     );
   }

@@ -85,7 +85,7 @@ pageflow.linkmapPage.EditAreaView = Backbone.Marionette.Layout.extend({
         visible: function(value) {
           return value !== 'dynamic_marker';
         },
-        disabled: !page.configuration.has('linkmap_masks') ||
+        disabled: !page.configuration.has('linkmap_color_map_file_id') ||
           page.configuration.get('background_type') === 'hover_video'
       });
       this.input('inverted', pageflow.CheckBoxInputView, {

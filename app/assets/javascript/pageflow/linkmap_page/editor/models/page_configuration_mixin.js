@@ -39,6 +39,11 @@
       }, this));
     },
 
+    linkmapReadyColorMapFileId: function() {
+      var colorMapFile = colorMapFiles().get(this.get('linkmap_color_map_file_id'));
+      return colorMapFile && colorMapFile.isReady() ? colorMapFile.id : null;
+    },
+
     linkmapPageLinks: function() {
       this._linkmapPageLinks = this._linkmapPageLinks || new pageflow.linkmapPage.PageLinksCollection({
         areas: this.linkmapAreas()
