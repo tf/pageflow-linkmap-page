@@ -19,11 +19,6 @@ Register the page type inside the configure block in `config/initializers/pagefl
       config.plugin(Pageflow::LinkmapPage.plugin)
     end
 
-Mount the engine:
-
-    # config/routes.rb
-    mount Pageflow::LinkmapPage::Engine, at: '/linkmap_page'
-
 Include javascripts and stylesheets:
 
     # app/assets/javascripts/pageflow/application.js
