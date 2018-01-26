@@ -4,8 +4,8 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
   className: 'linkmap_area_masks_preview',
 
   ui: {
-    allAreasCanvas: 'canvas.all',
-    currentAreaCanvas: 'canvas.current'
+    canvas: 'canvas',
+    backgroundImage: '.background_image'
   },
 
   modelEvents: {
@@ -44,7 +44,6 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
 
     this.update();
     this.updateCursor();
-    this.redrawAllAreas();
     this.redraw();
   },
 
@@ -102,6 +101,8 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
   },
 
   update: function(event) {
+    this.ui.backgroundImage.css('background-image', 'url("' + this.options.colorMap.previewUrl() +'"');
+
     if (this.dragStartOffset) {
       this.drawSelection(this.dragStartOffset.x,
                          this.dragStartOffset.y,
@@ -141,25 +142,6 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
     }
   },
 
-  redrawAllAreas: function() {
-    var canvas = this.ui.allAreasCanvas[0];
-
-    canvas.width = this.$el.width();
-    canvas.height = this.$el.height();
-
-    var context = canvas.getContext('2d');
-
-    context.clearRect(0, 0, canvas.width, canvas.height);
-
-    context.globalAlpha = 0.5;
-
-    _(this.options.colorMap.components()).each(function(colorMapComponent) {
-      if (!this.colorMapComponentIsUsed(colorMapComponent)) {
-        colorMapComponent.draw(context, canvas.width);
-      }
-    }, this);
-  },
-
   colorMapComponentIsUsed: function(colorMapComponent) {
     return this.options.areas.any(function(area) {
       return colorMapComponent.permaId === area.get('mask_perma_id');
@@ -167,16 +149,27 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
   },
 
   redraw: function() {
-    var canvas = this.ui.currentAreaCanvas[0];
-
-    canvas.width = this.$el.width();
-    canvas.height = this.$el.height();
-
-    var context = canvas.getContext('2d');
-
-    context.clearRect(0, 0, canvas.width, canvas.height);
-
     if (this.currentColorMapComponent) {
+      var attributes = this.currentColorMapComponent.areaAttributes();
+
+      this.ui.canvas.css({
+        top: attributes.top + '%',
+        left: attributes.left + '%',
+        width: attributes.width + '%',
+        height: attributes.height + '%',
+      });
+
+      this.ui.canvas.show();
+
+      var canvas = this.ui.canvas[0];
+
+      canvas.width = this.ui.canvas.width();
+      canvas.height = this.ui.canvas.height();
+
+      var context = canvas.getContext('2d');
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
       this.currentColorMapComponent.draw(context, canvas.width);
 
       context.globalCompositeOperation = 'source-in';
@@ -184,13 +177,23 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
       context.globalAlpha = 0.2;
       context.fillRect(0, 0, canvas.width, canvas.height);
     }
+    else {
+      this.ui.canvas.hide();
+    }
   },
 
   drawSelection: function(x, y, width, height) {
-    var canvas = this.ui.currentAreaCanvas[0];
+    var canvas = this.ui.canvas[0];
 
-    canvas.width = this.$el.width();
-    canvas.height = this.$el.height();
+    this.ui.canvas.css({
+      left: x + Math.min(0, width) + 'px',
+      top: y + Math.min(0, height) + 'px',
+      width: Math.abs(width) + 'px',
+      height: Math.abs(height) + 'px'
+    }).show();
+
+    canvas.width = this.ui.canvas.width();
+    canvas.height = this.ui.canvas.height();
 
     var context = canvas.getContext('2d');
 
@@ -198,7 +201,7 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
 
     this.usePattern(context);
     context.globalAlpha = 0.6;
-    context.fillRect(x, y, width, height);
+    context.fillRect(0, 0, width, height);
   },
 
   usePattern: function(context) {

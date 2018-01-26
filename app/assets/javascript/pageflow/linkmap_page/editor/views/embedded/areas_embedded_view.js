@@ -28,12 +28,6 @@ pageflow.linkmapPage.AreasEmbeddedView = Backbone.Marionette.View.extend({
       }
     }));
 
-    view.appendSubview(new pageflow.linkmapPage.AreaOutlinesEmbeddedView({
-      model: this.model,
-      areas: this.model.linkmapAreas(this.options.propertyName),
-      colorMap: colorMapDelegator
-    }));
-
     view.appendSubview(new pageflow.linkmapPage.AreaMasksPreviewEmbeddedView({
       model: this.model,
       areas: this.model.linkmapAreas(this.options.propertyName),

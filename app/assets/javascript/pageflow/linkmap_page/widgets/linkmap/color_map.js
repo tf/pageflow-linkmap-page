@@ -8,15 +8,15 @@ pageflow.linkmapPage.ColorMap = (function() {
     this.permaId = options.colorMapId + ':' + attributes.color;
 
     this.draw = function(context, width) {
-      var scale = width / colorMapWidth;
+      var scale = width / attributes.width;
 
       colorMapSprite.draw(context,
                           attributes.sprite_offset,
                           0,
                           attributes.width,
                           attributes.height,
-                          attributes.left * scale,
-                          attributes.top * scale,
+                          0,
+                          0,
                           attributes.width * scale,
                           attributes.height * scale);
     };
@@ -74,6 +74,10 @@ pageflow.linkmapPage.ColorMap = (function() {
       return _(components).find(function(component) {
         return component.permaId == permaId;
       });
+    };
+
+    this.previewUrl = function() {
+      return attributes.url;
     };
   }
 

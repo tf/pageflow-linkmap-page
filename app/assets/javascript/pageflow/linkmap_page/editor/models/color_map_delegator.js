@@ -9,7 +9,7 @@ pageflow.linkmapPage.ColorMapDelegator = pageflow.Object.extend({
   }
 });
 
-_(['components', 'componentFromPoint', 'componentByPermaId']).each(function(method) {
+_(['components', 'componentFromPoint', 'componentByPermaId', 'previewUrl']).each(function(method) {
   pageflow.linkmapPage.ColorMapDelegator.prototype[method] = function() {
     return this._colorMap[method].apply(this._colorMap, arguments);
   };
