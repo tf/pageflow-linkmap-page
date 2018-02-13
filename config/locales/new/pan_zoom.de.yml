@@ -16,3 +16,166 @@ de:
         hide_linkmap_overlay_boxes:
           label: "Infoboxes nur auf Phone anzeigen"
           inline_help: "Im Desktop und Tablet-Layout keine Infoboxes an den Hotspots einblenden."
+      help_entries:
+        page_type:
+          text: |-
+            # Hotspots
+
+            *Verweise mit konfigurierbaren Klickbereichen*
+
+            Hotspots können Audio-Dateien abspielen, interne Verweise auf andere
+            Seiten im Pageflow sein oder auf externe Seiten verlinken. Es können
+            so viele Hotspots angelegt werden wie gewünscht.
+
+            Der Panorama Typ entscheidet darüber, ob die Seite ein
+            Hintergrund-Bild oder Hintergrund-Video zeigt. (Beachte, dass
+            Hintergrund-Videos auf mobilen Geräten nicht abgespielt werden,
+            deshalb wähle ein zusätzliches Panorama-Bild für die mobile Version)
+
+            Die Hotspot-Seite ermöglicht auch die Nutzung von Panorama-Bildern,
+            die größer sind, als der sichtbare Bildschirmbereich. So können Nutzer
+            diese Seiten auch horizontal oder vertikal durch scrollen erkunden.
+
+            Um einen Hotspot zu erstellen, klicke auf „Bereiche“ und wähle
+            zwischen „Audio“, „Seitenverweis“ oder „Externer Verweis“.
+
+            Diese „Bereiche" können auf zwei unterschiedliche Arten dargestellt
+            werden:
+
+            ##  Hotspots als Kreise
+
+            Ein weißer Kreis, dessen Position und Größe frei gewählt werden kann,
+            markiert den Hotspot. Hierzu klicke beim entsprechenden Hotspot auf
+            den Button mit dem Auge-Symbol und ziehe den Kreis dann an die
+            gewünschte Position. Bei Auswahl einer Audio-Datei erscheint innerhalb
+            des Kreises ein Kopfhörer-Symbol mit einem Inline-Audio-Player. Dessen
+            Größe hängt von der Größe des Kreises ab. Je näher der Mauszeiger
+            Richtung Kreis bewegt wird, desto heller/sichtbarer wird dieser. Mit
+            Klick auf den Kopfhörer wird der Audio-Player gestartet und gestoppt.
+
+            ## Individuell gestaltete Hotspots
+
+            Alternativ kann ein zweites Panorama-Bild verwendet werden, um das
+            Aussehen der Hotspots zu bestimmen, über denen sich der Cursor
+            befindet. Es müssen zwei Panorama-Bilder vorbereitet werden:
+
+            1. Ein Bild mit allen Hotspots im inaktiven Modus (z.B. eine Karte, auf der Städte mit schwarzen Punkten markiert sind)
+            2. Ein Bild mit allen Hotspots im aktiven Zustand (z.B. die selbe Karte, aber mit roten Punkten als Markierung)
+
+            Die rechteckigen Bereiche der Hotspots werden nun so positioniert,
+            dass sie die graphischen Darstellungen der Hotspots im Bild
+            überdecken. Befindet sich der Cursor über einem der Bereiche, wird
+            genau in diesem Ausschnitt der entsprechende Teil des Hover-Bildes
+            gezeigt. Der Hotspot erscheint daher aktiv, während alle anderen
+            Hotspots weiterhin inaktiv dargestellt werden.
+
+            An Stelle von Bildern können auch Videos verwendet werden. Folgende
+            Kombinationen sind möglich:
+
+            1. Hintergrund-Bild mit Hover-Bild
+            2. Hintergrund-Video mit Hover-Bild
+            3. Hintergrund-Bild mit Hover-Video
+
+            Falls die vom User bereits besuchten Bereiche anschliessend anders
+            dargestellt werden sollen, kann ein „Visited-Bild“ festgelegt werden,
+            das dann zum Beispiel einen bestimmten Hotspot nach dem Klick in einer
+            abgeschwächten Farbe zeigt.
+
+            ## Frei geformte Hotspots
+
+            Es ist nicht immer möglich, die visuellen Elemente eines
+            Panorama-Bildes so mit rechteckigen Hotspots zu überdecken, dass sich
+            keine Überschneidungen ergeben. Möchte man zum Beispiel die Länder auf
+            einer Landkarte als Hotspots verwenden, so dass stets das unter dem
+            Cursor befindliche Land in einer anderern Farbe angezeigt wird, lässt
+            sich dies mit einem einzelnen Hover-Bild nicht umsetzen: Sobald der
+            Bereich eines Hotspots über die Landesgrenze hinausragt, erscheint
+            auch immer ein Teil des Nachbarlandes in der aktiven Farbe.
+
+            Für diese Fälle kann ein sogenanntes Masken-Bild eingesetzt werden, um
+            die Umrisse der Hotspots frei zu bestimmen. Es sollte sich dabei um
+            ein PNG-Bild mit transparentem Hintergrund handeln, auf dem die
+            gewünschten Hotspot-Bereiche durch einfarbige Flächen dargestellt
+            sind. Die Abmessungen des Bildes müssen denen des Panorama- und des
+            Hover-Bildes entsprechen.
+
+            Für das Landkarten-Beispiel könnte also eine identisch proportionierte
+            Karte verwendet werden, auf der die Länder jeweils mit einem einzelnen
+            Farbton gefüllt sind, Meere und Landesteile, die nicht mit einem
+            Hotspot versehen werden sollen, aber transparent bleiben.
+
+            Nachdem das Masken-Bild ausgewählt wurde, kann beim Erstellen eines
+            Hotspots nicht nur ein Bereich mit der Maus gezogen, sondern auch ein
+            vordefinierter farbiger Bereich aus dem Masken-Bild angeklickt werden.
+
+            Die Umrisse des Hotspots entsprechen dann genau dem ausgewählten
+            farbigen Bereich im Masken-Bild. Entsprechend wird das Hover-Bild nur
+            innerhalb dieses Bereiches dargestellt.
+
+            Bei der Zuordnung der Bereiche ist dabei nur die Farbe
+            ausschlaggebend: der Bereich eines Hotspots muss keine
+            zusammenhängende Fläche darstellen. So können, um das Karten-Beispiel
+            ein letztes Mal aufzugreifen, auch die zu einem Land gehörenden Inseln
+            zusammen mit dem Festland hervorgehoben werden, ohne dass das Meer,
+            welches die Inseln umgibt, Teil des anklickbaren Bereichs sein
+            müsste.
+
+            Wichtig: Bei der Erstellung des Masken-Bildes muss in der
+            Grafik-Anwendung Kantenglättung deaktiviert werden, da zur präzisen
+            Abgrenzung der Bereiche scharf getrennte Farbbereiche nötig
+            sind. Kantenglättung führt zur Entstehung kleiner Farbverläufe im
+            Bild, die dann als mehrere Bereiche erkannt werden. Die Farben des
+            Masken-Bildes werden bei der Verarbeitung auf eine feste Palette
+            eingeschränkt. Bereiche mit zu ähnlichen Farben können dadurch
+            möglicherweise als einzelner Bereich erkannt werden.
+
+            Im Moment ist es nicht möglich, die Masken-Bild-Funktion zusammen mit
+            einem Hover-Video zu verwenden.
+
+            ## Textoptionen
+
+            Die Hotspots können mit einem Titel benannt und mit weiteren Text
+            versehen werden. Der Text kann in fett, kursiv und unterstrichen
+            formatiert werden.
+
+            ## Panorama Navigation im Phone Layout
+
+            Um die Orientierung im Panorama auf kleinen Bildschirmen
+            zu erleichtern, kann für die Anzeige auf Telefonen eine
+            alternative Navigationsmethode gewählt werden. Auf dem Tab
+            “Bereiche” kann dazu unter “Phone-Panorama-Navigation” die
+            Variante “Geführt (Per rechts/links-Swipe-Geste)”
+            ausgewählt werden.  Der Benutzer kann dann die Hotspots
+            der Seite durch horizontale Swipe-Gesten nacheinander
+            ansteuern. Die Beschreibungstexte der Hotspots werden in
+            einer Box am unteren Bildschrimrand angezeigt.
+
+            Über das Vorschau-Menü links unten in der
+            Editor-Seitenleiste kann zur Phone-Layout-Vorschau
+            gewechselt werden, um das Verhalten zu testen.
+
+            ## Atmo Optionen
+
+            Wie bei den anderen Seitentypen auch, kann im Hintergrund ein
+            zusätzliches Audiofile abgespielt werden. Für die Kombination mit
+            Audio-Hotspots ist es neben “Ausblenden” und “Weiterspielen” zudem
+            möglich, die Option “Leiser weiterspielen” auszuwählen. Das kann
+            sinnvoll sein, wenn zum Beispiel ein im Hintergrund laufender Titel
+            von einem kurzen Interview überlagert wird.
+
+            ## Weitere Optionen
+
+            Unter „Optionen" können folgende Regeln definiert werden:
+
+            Scrollbereich auf aktive Bereiche beschränken: Hierbei wird
+            verhindert, dass die User sich in Bildbereiche ausserhalb der Hotspots
+            bewegen können.
+
+            Scrollumgebung erzwingen: Hierbei wird der sichtbare Bereich so
+            verkleinert, dass User sich durch die Seite scrollen müssen, um alle
+            Hotspots zu sehen.
+
+            Am Bildrand scrollen deaktivieren: Hierbei wird das sonst automatische
+            Scrollen unterdrückt, sobald User die Maus zum Bildrand bewegen.
+
+            Typische Anwendungsbeispiele: Menüseite, Multiple Choice, Entdeckungstour
