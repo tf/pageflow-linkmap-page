@@ -7,6 +7,7 @@
 //= require_tree ./editor/controllers
 //= require_tree ./editor/templates
 //= require_tree ./editor/views
+//= require_tree ./editor/patterns
 
 //= require ./editor/config
 

@@ -8,6 +8,7 @@
   pointer-events: all;
 
   .background_image,
+  .canvas_wrapper,
   canvas {
     position: absolute;
     top: 0;
@@ -16,5 +17,9 @@
 
   .background_image {
     opacity: 0.3;
+  }
+
+  .canvas_wrapper {
+    overflow: hidden;
   }
 }

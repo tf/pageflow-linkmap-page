@@ -30,7 +30,6 @@ pageflow.linkmapPage.AreaOutlineEmbeddedView = Backbone.Marionette.ItemView.exte
     canvas.height = this.$el.height();
 
     var context = canvas.getContext('2d');
-
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     var area = this.options.area;
@@ -39,7 +38,7 @@ pageflow.linkmapPage.AreaOutlineEmbeddedView = Backbone.Marionette.ItemView.exte
       this.drawArea(context, area);
 
       context.globalCompositeOperation = 'source-in';
-      this.usePattern(context);
+      pageflow.linkmapPage.areaPattern.use(context);
 
       if (area.get('highlighted')) {
         context.globalAlpha = 0.4;
@@ -65,29 +64,5 @@ pageflow.linkmapPage.AreaOutlineEmbeddedView = Backbone.Marionette.ItemView.exte
                        canvas.width,
                        canvas.height);
     }
-  },
-
-  usePattern: function(context) {
-    if (!this.patternSource) {
-      var rectSize = 7;
-
-      var canvas = document.createElement('canvas');
-      this.patternSource = canvas;
-
-      canvas.width = rectSize * 2;
-      canvas.height = rectSize * 2;
-
-      var c = canvas.getContext('2d');
-
-      c.fillStyle = '#000';
-      c.fillRect(0, 0, rectSize, rectSize);
-      c.fillRect(rectSize, rectSize, rectSize, rectSize);
-
-      c.fillStyle = '#fff';
-      c.fillRect(rectSize, 0, rectSize, rectSize);
-      c.fillRect(0, rectSize, rectSize, rectSize);
-    }
-
-    context.fillStyle = context.createPattern(this.patternSource, 'repeat');
   }
 });

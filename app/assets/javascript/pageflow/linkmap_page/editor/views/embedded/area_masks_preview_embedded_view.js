@@ -5,6 +5,7 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
 
   ui: {
     canvas: 'canvas',
+    canvasWrapper: '.canvas_wrapper',
     backgroundImage: '.background_image'
   },
 
@@ -152,12 +153,19 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
     if (this.currentColorMapComponent) {
       var attributes = this.currentColorMapComponent.areaAttributes();
 
-      this.ui.canvas.css({
+      this.ui.canvasWrapper.css({
         top: attributes.top + '%',
         left: attributes.left + '%',
         width: attributes.width + '%',
         height: attributes.height + '%',
       });
+
+      this.ui.canvas.css({
+        left: 0,
+        top: 0,
+        width: '100%',
+        height: '100%'
+      }).show();
 
       this.ui.canvas.show();
 
@@ -173,7 +181,7 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
       this.currentColorMapComponent.draw(context, canvas.width);
 
       context.globalCompositeOperation = 'source-in';
-      this.usePattern(context);
+      pageflow.linkmapPage.areaPattern.use(context)
       context.globalAlpha = 0.2;
       context.fillRect(0, 0, canvas.width, canvas.height);
     }
@@ -185,46 +193,27 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
   drawSelection: function(x, y, width, height) {
     var canvas = this.ui.canvas[0];
 
-    this.ui.canvas.css({
-      left: x + Math.min(0, width) + 'px',
-      top: y + Math.min(0, height) + 'px',
-      width: Math.abs(width) + 'px',
-      height: Math.abs(height) + 'px'
+    var wrapperLeft = x + Math.min(0, width);
+    var wrapperTop = y + Math.min(0, height);
+    var wrapperWidth = Math.abs(width);
+    var wrapperHeight = Math.abs(height);
+
+    this.ui.canvasWrapper.css({
+      left: wrapperLeft + 'px',
+      top: wrapperTop + 'px',
+      width: wrapperWidth + 'px',
+      height: wrapperHeight + 'px'
     }).show();
 
-    canvas.width = this.ui.canvas.width();
-    canvas.height = this.ui.canvas.height();
+    pageflow.linkmapPage.areaPattern.applyOffset(canvas,
+                                                 wrapperLeft, wrapperTop,
+                                                 wrapperWidth, wrapperHeight)
 
     var context = canvas.getContext('2d');
 
     context.clearRect(0, 0, canvas.width, canvas.height);
-
-    this.usePattern(context);
+    pageflow.linkmapPage.areaPattern.use(context)
     context.globalAlpha = 0.6;
-    context.fillRect(0, 0, width, height);
-  },
-
-  usePattern: function(context) {
-    if (!this.patternSource) {
-      var rectSize = 7;
-
-      var canvas = document.createElement('canvas');
-      this.patternSource = canvas;
-
-      canvas.width = rectSize * 2;
-      canvas.height = rectSize * 2;
-
-      var c = canvas.getContext('2d');
-
-      c.fillStyle = '#000';
-      c.fillRect(0, 0, rectSize, rectSize);
-      c.fillRect(rectSize, rectSize, rectSize, rectSize);
-
-      c.fillStyle = '#fff';
-      c.fillRect(rectSize, 0, rectSize, rectSize);
-      c.fillRect(0, rectSize, rectSize, rectSize);
-    }
-
-    context.fillStyle = context.createPattern(this.patternSource, 'repeat');
+    context.fillRect(0, 0, canvas.width, canvas.height);
   }
 });
