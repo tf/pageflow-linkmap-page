@@ -102,6 +102,8 @@ pageflow.pageType.register('linkmap_page', _.extend({
           that.scrollIndicator.enable();
           that.mobileInfoBox.linkmapPaginator('hideDots');
         }
+
+        that.multiPlayer.fadeOutAndPause();
       },
 
       changing: function(options) {
