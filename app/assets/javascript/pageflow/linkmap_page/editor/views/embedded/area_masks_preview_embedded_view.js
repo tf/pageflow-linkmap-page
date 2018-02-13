@@ -99,6 +99,8 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
     else {
       this.selection.deferred.reject();
     }
+
+    event.stopPropagation();
   },
 
   update: function(event) {

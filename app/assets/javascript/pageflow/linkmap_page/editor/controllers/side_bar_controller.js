@@ -13,8 +13,10 @@ pageflow.linkmapPage.SideBarController = Backbone.Marionette.Controller.extend({
     }));
   },
 
-  selectAreaPosition: function(pageId) {
-    var returnPath = 'pages/' + pageId + '/areas';
+  selectAreaPosition: function(pageId, areaIndex) {
+    var returnPath = areaIndex === undefined ?
+      'pages/' + pageId + '/areas' :
+      'linkmap_pages/' + pageId + '/areas/' + areaIndex;
 
     if (!pageflow.linkmapPage.currentAreaSelection) {
       pageflow.editor.navigate(returnPath, {trigger: true});
@@ -31,8 +33,25 @@ pageflow.linkmapPage.SideBarController = Backbone.Marionette.Controller.extend({
       selection: pageflow.linkmapPage.currentAreaSelection
     }));
 
-    pageflow.linkmapPage.currentAreaSelection.deferred.always(function() {
-      pageflow.editor.navigate(returnPath, {trigger: true});
-    });
+    var areas = page.configuration.linkmapAreas();
+
+    if (!areaIndex) {
+      areas.once('add', function(area) {
+        pageflow.editor.navigate(area.editPath(), {trigger: true});
+      }, this);
+    }
+
+    pageflow.linkmapPage.currentAreaSelection.deferred
+      .then(
+        function() {
+          if (areaIndex) {
+            pageflow.editor.navigate(returnPath, {trigger: true});
+          }
+        },
+        _.bind(function() {
+          areas.off('add', null, this);
+          pageflow.editor.navigate(returnPath, {trigger: true});
+        }, this)
+      );
   }
 });
