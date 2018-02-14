@@ -94,7 +94,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
         that.content.linkmapPanZoom('goToAreaByIndex', currentPageIndex - 1);
 
-        if (currentPageIndex > 0) {
+        if (currentPageIndex > 0 || that.phoneEmulation()) {
           that.scrollIndicator.disable();
           that.mobileInfoBox.linkmapPaginator('showDots');
         }
