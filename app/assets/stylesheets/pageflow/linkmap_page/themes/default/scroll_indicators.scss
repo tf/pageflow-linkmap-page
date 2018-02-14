@@ -1,6 +1,5 @@
 .linkmap_page {
   $arrow-margin: 30px;
-  $arrow-margin-with-default-navigation: 95px;
   $arrow-margin-mobile: 10px;
 
   .arrow_left,
@@ -72,6 +71,11 @@
     @extend %pageflow_widget_margin_right !optional;
 
     @include phone {
+      right: $arrow-margin-mobile;
+    }
+
+    .emulation_mode_phone & {
+      margin-right: 0;
       right: $arrow-margin-mobile;
     }
   }
