@@ -26,6 +26,8 @@ pageflow.linkmapPage.areaTypesFor = function(pageConfiguration) {
 };
 
 pageflow.linkmapPage.selectArea = function(page, options) {
+  pageflow.entry.unset('emulation_mode');
+
   return $.Deferred(function(deferred) {
     pageflow.linkmapPage.currentAreaSelection = _.extend(options || {}, {
       deferred: deferred
