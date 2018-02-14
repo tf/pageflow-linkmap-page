@@ -293,7 +293,10 @@ pageflow.pageType.register('linkmap_page', _.extend({
   },
 
   activated: function(pageElement, configuration) {
-    this.scrollIndicator.disable();
+    if (this.isPanZoomEnabled(configuration)) {
+      this.scrollIndicator.disable();
+    }
+
     this.content.linkmapPanorama('highlightAreas');
   },
 
