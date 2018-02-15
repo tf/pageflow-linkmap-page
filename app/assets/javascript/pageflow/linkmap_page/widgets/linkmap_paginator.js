@@ -6,6 +6,7 @@
   $.widget('pageflow.linkmapPaginator', {
     _create: function() {
       this.scrollerReady = $.Deferred();
+      this.pageHeights = {};
 
       this.scrollerElement = this.element.find('.linkmap-paginator-scroller');
       this.scrollerInner = this.scrollerElement.children().first();
@@ -162,7 +163,7 @@
 
     _getCurrentPageHeight: function() {
       var currentPageIndex = this.scroller.currentPage.pageX;
-      return this.pageHeights[currentPageIndex];
+      return this.pageHeights[currentPageIndex] || 0;
     },
 
     _heightFromPageHeight: function(pageHeight) {
