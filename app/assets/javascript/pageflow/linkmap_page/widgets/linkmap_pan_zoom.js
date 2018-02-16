@@ -74,6 +74,8 @@
       }
 
       this._highlightAreaAfterTransition(this.currentArea);
+      this._setTransitionDuration();
+
       this.refresh();
     },
 
@@ -85,6 +87,15 @@
           area.addClass('hover active');
         });
       }
+    },
+
+    _setTransitionDuration: function() {
+      var panoramaWrapper = this.panoramaWrapper;
+      panoramaWrapper.css('transition-duration', '0.3s');
+
+      this.panoramaWrapper.one('transitionend', function() {
+        panoramaWrapper.css('transition-duration', '0s');
+      });
     },
 
     transitionBottomMargin: function(options) {
@@ -139,8 +150,6 @@
         this._getInitialTransform();
 
       this.currentScale = options.scale;
-
-      this.panoramaWrapper.css('transition-duration', '0.3s');
 
       transform(this.panoramaWrapper, options);
       transformPercent(this.options.areas().find('.current_time, .play,.pause'), {translateY: -50, translateX: -50, scale: 1 / options.scale});
