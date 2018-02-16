@@ -90,7 +90,9 @@
             area.addClass('active');
           }
 
-          if (!area.hasClass('dynamic_marker') && area.hasClass('external_site_area')) {
+          if (!area.hasClass('dynamic_marker') &&
+              area.hasClass('external_site_area') &&
+              area.hasClass('target_self')) {
             displayExternalLinkLoadingIndicator(event.originalEvent);
           }
         });
