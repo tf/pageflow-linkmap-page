@@ -20,6 +20,7 @@
           transform(this.panoramaWrapper, {});
           transform(this.safeAreaWrapper, {});
           transformPercent(this.options.areas().find('.current_time, .play,.pause'), {translateY: -50, translateX: -50});
+          this.options.areas().removeClass('hover active');
         }
         else {
           this.refresh();

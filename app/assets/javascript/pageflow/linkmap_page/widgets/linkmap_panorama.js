@@ -53,7 +53,15 @@
 
       this._on(pageElement, {
         'linkmapareaenter .hover_area': function(event) {
-          positionOverlay($(event.currentTarget));
+          var area = $(event.currentTarget);
+          area.addClass('hover');
+
+          positionOverlay(area);
+        },
+
+        'linkmaparealeave .hover_area': function(event) {
+          var area = $(event.currentTarget);
+          area.removeClass('hover');
         },
 
         'click': resetIndicatorsAndOverlays,

@@ -62,7 +62,7 @@
         var area = $(this);
         var hovered = area.linkmapAreaContains(position);
 
-        if (area.hasClass('hover') && !hovered) {
+        if (area.hasClass('pointer_inside') && !hovered) {
           area.trigger('linkmaparealeave');
         }
       });
@@ -72,11 +72,11 @@
         var hovered = area.linkmapAreaContains(position);
 
         if (area.hasClass('enabled')) {
-          if (!area.hasClass('hover') && hovered) {
+          if (!area.hasClass('pointer_inside') && hovered) {
             area.trigger('linkmapareaenter');
           }
 
-          area.toggleClass('hover', hovered);
+          area.toggleClass('pointer_inside', hovered);
         }
 
         area.css('cursor',
