@@ -4,6 +4,7 @@ pageflow.linkmapPage.AreaOutlineEmbeddedView = Backbone.Marionette.ItemView.exte
   className: 'linkmap_area_outlines',
 
   ui: {
+    canvasWrapper: '.linkmap_area_outlines-canvas_wrapper',
     canvas: 'canvas',
   },
 
@@ -24,15 +25,34 @@ pageflow.linkmapPage.AreaOutlineEmbeddedView = Backbone.Marionette.ItemView.exte
   },
 
   redraw: function() {
+    var area = this.options.area;
     var canvas = this.ui.canvas[0];
 
-    canvas.width = this.$el.width();
-    canvas.height = this.$el.height();
+    var colorMapComponent = this.options.colorMap.componentByPermaId(area.get('mask_perma_id'));
+
+    if (colorMapComponent) {
+      var attributes = colorMapComponent.areaAttributes();
+
+      this.ui.canvas.css({
+        left: this.ui.canvasWrapper.width() * attributes.left / 100,
+        top: this.ui.canvasWrapper.height() * attributes.top / 100
+      });
+
+      canvas.width = this.ui.canvasWrapper.width() * attributes.width / 100;
+      canvas.height = this.ui.canvasWrapper.height() * attributes.height / 100;
+    }
+    else {
+      this.ui.canvas.css({
+        left: 0,
+        top: 0
+      });
+
+      canvas.width = this.$el.width();
+      canvas.height = this.$el.height();
+    }
 
     var context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
-
-    var area = this.options.area;
 
     if (!area.get('editing')) {
       this.drawArea(context, area);

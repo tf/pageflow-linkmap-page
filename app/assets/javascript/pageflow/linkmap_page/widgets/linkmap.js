@@ -116,7 +116,7 @@
     },
 
     refresh: function() {
-      var areaBackgroundImages = this.element.find('.background_image');
+      var areaBackgroundImages = this.element.find('.background_image, .linkmap_area_outlines-canvas_wrapper');
       var hoverAreas = this.element.find('.hover_area');
 
       this.resizeToBaseImage(areaBackgroundImages);
