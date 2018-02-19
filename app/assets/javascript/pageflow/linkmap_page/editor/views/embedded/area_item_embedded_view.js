@@ -182,14 +182,21 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
 
   updateDraggableAndResizable: function() {
     if (this.model.get('selected') &&
-        !pageflow.entry.has('emulation_mode') &&
-        !this.getColorMapComponent()) {
+        !pageflow.entry.has('emulation_mode')) {
 
       this.$el.resizable('enable');
-      this.$el.draggable('enable');
     }
     else {
       this.$el.resizable('disable');
+    }
+
+    if (this.model.get('selected') &&
+        !pageflow.entry.has('emulation_mode') &&
+        !this.getColorMapComponent()) {
+
+      this.$el.draggable('enable');
+    }
+    else {
       this.$el.draggable('disable');
     }
   },
