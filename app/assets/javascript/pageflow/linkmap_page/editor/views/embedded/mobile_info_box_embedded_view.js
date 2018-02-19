@@ -53,6 +53,9 @@ pageflow.linkmapPage.MobileInfoBoxEmbeddedView = Backbone.Marionette.View.extend
     this.ui.title.text(this.model.get('mobile_info_box_title'));
     this.ui.description.html(this.model.get('mobile_info_box_description'));
 
+    this.ui.title.toggle(!!this.model.get('mobile_info_box_title'));
+    this.ui.description.toggle(!!this.model.get('mobile_info_box_description'));
+
     this.paginator.linkmapPaginator('updateHeight');
   }
 });
