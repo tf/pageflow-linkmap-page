@@ -4,48 +4,52 @@
 
   $.widget('pageflow.linkmap', {
     _create: function() {
-      var widget = this;
-
       this.colorMapPromise = $.when(pageflow.linkmapPage.ColorMap.empty);
 
       this.refresh();
 
-      if (widget.options.hoverVideoEnabled) {
-        widget.options.hoverVideo.activate();
+      if (this.options.hoverVideoEnabled) {
+        this.options.hoverVideo.activate();
       }
 
-      this.element.on('mousemove', '.hover_area', function() {
-        var hoverArea = $(this);
+      this._on({
+        'mousemove .hover_area': function(event) {
+          var hoverArea = $(event.currentTarget);
 
-        if (widget.options.hoverVideoEnabled) {
-          widget.options.hoverVideo.schedulePlay({
-            area: hoverArea,
-            baseImage: widget.options.baseImage()
-          });
+          if (this.options.hoverVideoEnabled) {
+            this.options.hoverVideo.schedulePlay({
+              area: hoverArea,
+              baseImage: this.options.baseImage()
+            });
+          }
+        },
+
+        'mouseleave .hover_area': function() {
+          if (this.options.hoverVideoEnabled) {
+            this.options.hoverVideo.pause();
+          }
+        },
+
+        'click': function(event) {
+          var area = this.areaAt(this.positionFromEvent(event));
+
+          if (area.length && area.hasClass('enabled')) {
+            area.first().trigger($.Event('linkmapareaclick', {originalEvent: event}));
+          }
+          else {
+            this._trigger('backgroundclick');
+          }
+
+          return false;
+        },
+
+        'mousemove': function(event) {
+          this.updateHoverStates(event);
+        },
+
+        'mouseleave': function(event) {
+          this.updateHoverStates(event);
         }
-      });
-
-      this.element.on('mouseleave', '.hover_area', function() {
-        if (widget.options.hoverVideoEnabled) {
-          widget.options.hoverVideo.pause();
-        }
-      });
-
-      this.element.on('click', function(event) {
-        var area = widget.areaAt(widget.positionFromEvent(event));
-
-        if (area.length && area.hasClass('enabled')) {
-          area.first().trigger($.Event('linkmapareaclick', {originalEvent: event}));
-        }
-        else {
-          widget._trigger('backgroundclick');
-        }
-
-        return false;
-      });
-
-      this.element.on('mousemove mouseleave', function(event) {
-        widget.updateHoverStates(event);
       });
     },
 

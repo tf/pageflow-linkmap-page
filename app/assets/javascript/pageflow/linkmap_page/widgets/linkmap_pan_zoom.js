@@ -8,7 +8,30 @@
       this.safeAreaWrapper = this.options.safeAreaWrapper;
       this.innerScrollerElement = this.options.innerScrollerElement;
 
+      this.mouseDownClientX = null;
+      this.mouseDownClientY = null;
+
+      this._on({
+        'click': function(event) {
+          if (this.currentArea && this._mouseDidNotPerformSwipeGesture(event)) {
+            this.currentArea.trigger($.Event('linkmapareaclick', {originalEvent: event}));
+            this.options.areaIndicators.displayForClickedArea(this.currentArea);
+          }
+        },
+
+        'mousedown': function(event) {
+          this.mouseDownClientX = event.clientX;
+          this.mouseDownClientY = event.clientY;
+        }
+      });
+
       this.update(this.options);
+    },
+
+    _mouseDidNotPerformSwipeGesture: function(event) {
+      return (this.mouseDownClientX !== null &&
+              Math.abs(event.clientX - this.mouseDownClientX) < 5 &&
+              Math.abs(event.clientY - this.mouseDownClientY) < 5);
     },
 
     _setOptions: function(options) {

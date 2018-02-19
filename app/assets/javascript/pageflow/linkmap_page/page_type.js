@@ -66,6 +66,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
     this.linkmapAreas = pageElement.find('.linkmap_areas');
     this.linkmapAreas.linkmap({
+      disabled: this.isPanZoomEnabled(configuration),
       colorMapFileId: configuration.linkmap_color_map_file_id,
 
       baseImage: function() {
@@ -404,6 +405,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
   updateNavigationMode: function(configuration) {
     if (this.isPanZoomEnabled(configuration)) {
+      this.linkmapAreas.linkmap('disable');
       this.content.linkmapPanorama('disable');
       this.contentAndBackground.linkmapScrollIndicators('disable');
       this.content.linkmapPanZoom('enable');
@@ -414,6 +416,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
       this.mobileInfoBox.linkmapPaginator('disable');
       this.contentAndBackground.linkmapScrollIndicators('enable');
       this.content.linkmapPanorama('enable');
+      this.linkmapAreas.linkmap('enable');
     }
   },
 
