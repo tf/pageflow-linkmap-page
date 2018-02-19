@@ -101,7 +101,9 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
         that.content.linkmapPanZoom('goToAreaByIndex', currentPageIndex - 1);
 
-        if (currentPageIndex > 0 || that.phoneEmulation()) {
+        if (currentPageIndex > 0 ||
+            that.phoneEmulation() ||
+            !pageflow.slides.nextPageExists()) {
           that.scrollIndicator.disable();
           that.mobileInfoBox.linkmapPaginator('showDots');
         }
