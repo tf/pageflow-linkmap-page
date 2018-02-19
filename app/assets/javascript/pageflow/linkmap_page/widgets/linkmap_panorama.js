@@ -233,7 +233,10 @@
 
       if (changed) {
         if (this.options.disabled) {
-
+          this.panoramaWrapper.css({
+            left: 0,
+            top: 0
+          });
         }
         else {
           this.refresh();
