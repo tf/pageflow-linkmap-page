@@ -103,11 +103,14 @@
     },
 
     _highlightAreaAfterTransition: function(area) {
+      var areaIndicators = this.options.areaIndicators;
+
       this.options.areas().removeClass('hover active');
 
       if (area) {
         this.panoramaWrapper.one('transitionend', function() {
           area.addClass('hover active');
+          areaIndicators.displayForSelectedArea(area);
         });
       }
     },

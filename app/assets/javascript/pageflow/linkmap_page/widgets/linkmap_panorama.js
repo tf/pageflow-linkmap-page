@@ -22,10 +22,6 @@
       this.overlayTitle = pageElement.find('.description_overlay .link_title');
       this.overlayDescription = pageElement.find('.description_overlay .link_description');
 
-      this.touchIndicator = pageElement.find('.touch_indicator');
-      this.externalLinkLoadingIndicator = pageElement.find('.external_link_loading_indicator');
-      this.globalIndicators = this.touchIndicator.add(this.externalLinkLoadingIndicator);
-
       this.startScrollPosition = _.clone(this.options.startScrollPosition);
 
       this.currentScrollPosition = null;
@@ -80,7 +76,7 @@
       function resetIndicatorsAndOverlays() {
         resetOverlays();
         that.activeAreas.removeClass('hover hover_mobile');
-        that.globalIndicators.hide();
+        that.options.areaIndicators.reset();
       }
 
       function resetOverlays() {
@@ -103,10 +99,7 @@
               area.addClass('hover hover_mobile');
 
               positionOverlay($(event.currentTarget));
-
-              if (!area.hasClass('dynamic_marker')) {
-                displayTouchIndicator(event.originalEvent);
-              }
+              this.options.areaIndicators.displayForSelectedArea(area, event.originalEvent);
 
               return false;
             }
@@ -116,11 +109,7 @@
             area.addClass('active');
           }
 
-          if (!area.hasClass('dynamic_marker') &&
-              area.hasClass('external_site_area') &&
-              area.hasClass('target_self')) {
-            displayExternalLinkLoadingIndicator(event.originalEvent);
-          }
+          this.options.areaIndicators.displayForClickedArea(area, event.originalEvent);
         }
       });
 
@@ -194,34 +183,6 @@
             that.overlayInnerBox.css('top', '0px');
           }
         }
-      };
-
-      var displayExternalLinkLoadingIndicator = function(event) {
-        positionGlobalIndicator(that.externalLinkLoadingIndicator, event);
-        that.externalLinkLoadingIndicator.show();
-      };
-
-      var displayTouchIndicator = function(event) {
-        positionGlobalIndicator(that.touchIndicator, event);
-        animateTouchIndicator();
-      };
-
-      var animateTouchIndicator = function() {
-        that.touchIndicator.hide();
-
-        setTimeout(function() {
-          that.touchIndicator.show();
-        }, 500);
-      };
-
-      var positionGlobalIndicator = function(indicator, event) {
-        var parentClientRect = that.panoramaWrapper[0].getBoundingClientRect();
-        var touch = event.touches ? event.touches[0] : event;
-
-        indicator.css({
-          left: touch.clientX - parentClientRect.left,
-          top: touch.clientY - parentClientRect.top
-        });
       };
 
       this.refresh();

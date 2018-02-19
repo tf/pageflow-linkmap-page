@@ -18,6 +18,10 @@ pageflow.pageType.register('linkmap_page', _.extend({
     this.content = pageElement.find('.scroller');
     this.panorama = pageElement.find('.panorama');
 
+    this.contentAndBackground.linkmapAreaIndicators({
+      pageElement: pageElement
+    });
+
     this.content.linkmapPanorama({
       disabled: this.isPanZoomEnabled(configuration),
 
@@ -26,6 +30,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
         return pageElement.find('.panorama.active');
       },
       scroller: this.scroller,
+      areaIndicators: this.contentAndBackground.linkmapAreaIndicators('instance'),
       activeAreasSelector: '.linkmap_areas > .hover_area',
       limitScrolling: configuration.limit_scrolling,
       minScaling: pageflow.browser.has('mobile platform'),
@@ -47,6 +52,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
       },
       scroller: this.scroller,
       innerScrollerElement: pageElement.find('.linkmap'),
+      areaIndicators: this.contentAndBackground.linkmapAreaIndicators('instance'),
       initialPosition: this.getPanoramaStartScrollPosition(configuration)
     });
 
