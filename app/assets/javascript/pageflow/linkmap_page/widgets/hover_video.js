@@ -38,7 +38,10 @@
 
     play: function(options) {
       var video = this.options.video;
-      var position = options.area.position();
+      var position = {
+        left: options.area.prop('offsetLeft'),
+        top: options.area.prop('offsetTop')
+      };
 
       video
         .width(options.baseImage.width())

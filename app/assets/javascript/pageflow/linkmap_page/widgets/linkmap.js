@@ -159,8 +159,11 @@
   $.fn.linkmapAreaClip = function(optionalPosition) {
     this.each(function() {
       var hoverArea = $(this);
-      var clippedElement = hoverArea.find('.panorama_video, .hover_image, .visited_image');
-      var position = optionalPosition || hoverArea.position();
+      var clippedElement = hoverArea.find('.panorama_video, .background_image, .linkmap_area_outlines-canvas_wrapper');
+      var position = optionalPosition || {
+        left: hoverArea.prop('offsetLeft'),
+        top: hoverArea.prop('offsetTop')
+      };
 
       clippedElement.css({
         left: -position.left + 'px',
