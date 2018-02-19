@@ -33,10 +33,12 @@ module Pageflow
 
         it 'renders masked hover image inside masked linkmap areas' do
           entry = create(:entry)
+          color_map_file = create(:color_map_file)
           masked_image_file = create(:masked_image_file)
           configuration = {
-            'linkmap_areas' => [{'mask_perma_id' => "#{masked_image_file.id}:aaa"}],
+            'linkmap_areas' => [{'mask_perma_id' => "#{color_map_file.id}:aaa"}],
             'hover_image_id' => 5,
+            'linkmap_color_map_file_id' => color_map_file.id,
             'linkmap_masked_hover_image_id' => masked_image_file.id
           }
 
@@ -63,7 +65,8 @@ module Pageflow
         it 'does not use masked hover image if area mask perma id references other image' do
           entry = create(:entry)
           masked_image_file = create(:masked_image_file)
-          other_id = masked_image_file.id + 1
+          color_map_file = create(:color_map_file)
+          other_id = color_map_file.id + 1
           configuration = {
             'linkmap_areas' => [{'mask_perma_id' => "#{other_id}:aaa"}],
             'hover_image_id' => 5,
@@ -86,10 +89,12 @@ module Pageflow
 
         it 'renders masked visited image inside masked linkmap areas' do
           entry = create(:entry)
+          color_map_file = create(:color_map_file)
           masked_image_file = create(:masked_image_file)
           configuration = {
-            'linkmap_areas' => [{'mask_perma_id' => "#{masked_image_file.id}:aaa"}],
+            'linkmap_areas' => [{'mask_perma_id' => "#{color_map_file.id}:aaa"}],
             'hover_image_id' => 5,
+            'linkmap_color_map_file_id' => color_map_file.id,
             'linkmap_masked_visited_image_id' => masked_image_file.id
           }
 
