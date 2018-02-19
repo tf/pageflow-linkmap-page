@@ -429,7 +429,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
   },
 
   isPanZoomEnabled: function(configuration) {
-    return (pageflow.browser.has('mobile platform') || this.phoneEmulation()) &&
+    return (pageflow.browser.has('phone platform') || this.phoneEmulation()) &&
       configuration.mobile_panorama_navigation === 'pan_zoom';
   },
 
