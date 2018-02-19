@@ -33,6 +33,7 @@ $linkmap-paginator-active-dot-color: #fff;
     left: 50%;
     @include transform(translateX(-50%));
     @include transition(opacity 0.5s linear);
+    white-space: nowrap;
 
     &.faded {
       opacity: 0;
