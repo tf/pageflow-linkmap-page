@@ -34,6 +34,11 @@
   $linkmap-overlay-title-color: $linkmap-main-color !default;
   $linkmap-overlay-background-color: rgba(48,48,48,0.8) !default;
 
+  $linkmap-overlay-title-typography: () !default;
+  $linkmap-overlay-description-typography: () !default;
+  $linkmap-overlay-title-phone-typography: () !default;
+  $linkmap-overlay-description-phone-typography: () !default;
+
   $linkmap-icon-color: $main-color !default;
 
   $linkmap-audio-progress-color: $linkmap-main-color !default;
@@ -186,29 +191,49 @@
         padding: 5px 10px;
 
         .link_title {
-          line-height: 20px;
-          font-size: 16px;
+          @include typography(
+            $linkmap-overlay-title-phone-typography,
+            (
+              line-height: 20px,
+              font-size: 16px
+            )
+          );
         }
 
         .link_description {
-          font-size: 12px;
-          line-height: 14px;
+          @include typography(
+            $linkmap-overlay-description-phone-typography,
+            (
+              font-size: 12px,
+              line-height: 14px
+            )
+          );
         }
       }
     }
 
     .link_title {
-      font-size: 24px;
+      @include typography(
+        $linkmap-overlay-title-typography,
+        (
+          font-size: 24px,
+          letter-spacing: 0.31px,
+          line-height: 30px
+        )
+      );
       color: $linkmap-overlay-title-color;
-      letter-spacing: 0.31px;
-      line-height: 30px;
     }
 
     .link_description {
-      font-size: 16px;
-      color: white;
-      letter-spacing: 0.22px;
-      line-height: 26px;
+      @include typography(
+        $linkmap-overlay-description-typography,
+        (
+          font-size: 16px,
+          letter-spacing: 0.22px,
+          line-height: 26px
+        )
+      );
+      color: white,
     }
 
     &:before {
