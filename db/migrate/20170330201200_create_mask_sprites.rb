@@ -1,4 +1,4 @@
-class CreateMaskSprites < ActiveRecord::Migration
+class CreateMaskSprites < ActiveRecord::Migration[4.2]
   def change
     create_table   :pageflow_linkmap_page_mask_sprites do |t|
       t.belongs_to :image_file
