@@ -18,10 +18,12 @@ module Pageflow
           entry = create(:entry, with_editor: user)
           image_file = create(:image_file, used_in: entry.draft)
 
-          sign_in(user)
+          sign_in(user, scope: :user)
           post(:create,
-               image_file_id: image_file.id,
-               mask_sprite: {attachment: DATA_URL},
+               params: {
+                 image_file_id: image_file.id,
+                 mask_sprite: {attachment: DATA_URL}
+               },
                format: 'json')
 
           expect(response.status).to eq(201)
@@ -32,10 +34,12 @@ module Pageflow
           entry = create(:entry, with_editor: user)
           image_file = create(:image_file, used_in: entry.draft)
 
-          sign_in(user)
+          sign_in(user, scope: :user)
           post(:create,
-               image_file_id: image_file.id,
-               mask_sprite: {attachment: DATA_URL},
+               params: {
+                 image_file_id: image_file.id,
+                 mask_sprite: {attachment: DATA_URL}
+               },
                format: 'json')
 
           json = JSON.parse(response.body)
@@ -48,10 +52,12 @@ module Pageflow
           entry = create(:entry, with_editor: user)
           image_file = create(:image_file, used_in: entry.draft)
 
-          sign_in(user)
+          sign_in(user, scope: :user)
           post(:create,
-               image_file_id: image_file.id,
-               mask_sprite: {attachment: DATA_URL},
+               params: {
+                 image_file_id: image_file.id,
+                 mask_sprite: {attachment: DATA_URL}
+               },
                format: 'json')
           mask_sprite = MaskSprite.where(image_file: image_file).first
 
@@ -64,16 +70,20 @@ module Pageflow
           entry = create(:entry, with_editor: user)
           image_file = create(:image_file, used_in: entry.draft)
 
-          sign_in(user)
+          sign_in(user, scope: :user)
           post(:create,
-               image_file_id: image_file.id,
-               mask_sprite: {attachment: DATA_URL},
+               params: {
+                 image_file_id: image_file.id,
+                 mask_sprite: {attachment: DATA_URL}
+               },
                format: 'json')
 
           expect {
             post(:create,
-                 image_file_id: image_file.id,
-                 mask_sprite: {attachment: DATA_URL},
+                 params: {
+                   image_file_id: image_file.id,
+                   mask_sprite: {attachment: DATA_URL}
+                 },
                  format: 'json')
           }.not_to change { MaskSprite.count }
         end
@@ -83,10 +93,12 @@ module Pageflow
           entry = create(:entry)
           image_file = create(:image_file, used_in: entry.draft)
 
-          sign_in(user)
+          sign_in(user, scope: :user)
           post(:create,
-               image_file_id: image_file.id,
-               mask_sprite: {attachment: DATA_URL},
+               params: {
+                 image_file_id: image_file.id,
+                 mask_sprite: {attachment: DATA_URL}
+               },
                format: 'json')
 
           expect(response.status).to eq(403)
@@ -96,8 +108,10 @@ module Pageflow
           image_file = create(:image_file)
 
           post(:create,
-               image_file_id: image_file.id,
-               mask_sprite: {attachment: DATA_URL},
+               params: {
+                 image_file_id: image_file.id,
+                 mask_sprite: {attachment: DATA_URL}
+               },
                format: 'json')
 
           expect(response.status).to eq(401)

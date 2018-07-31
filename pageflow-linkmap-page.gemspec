@@ -18,14 +18,14 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '~> 2.1'
 
-  spec.add_runtime_dependency 'pageflow', ['>= 0.10', '< 13']
-  spec.add_runtime_dependency 'pageflow-external-links', ['>= 0.3', '< 2']
+  spec.add_runtime_dependency 'pageflow', '~> 13.x'
+  spec.add_runtime_dependency 'pageflow-external-links', '~> 2.x'
 
-  spec.add_development_dependency 'pageflow-support', '~> 12.0'
+  spec.add_development_dependency 'pageflow-support', '~> 13.x'
   spec.add_development_dependency 'bundler', '~> 1.0'
   spec.add_development_dependency 'rake', '~> 12.0'
-  spec.add_development_dependency 'rspec-rails', '~> 3.0'
-  spec.add_development_dependency 'factory_girl_rails', '~> 4.5'
+  spec.add_development_dependency 'rspec-rails', '~> 3.7'
+  spec.add_development_dependency 'factory_bot_rails', '~> 4.8'
   spec.add_development_dependency 'sqlite3', '~> 1.3'
 
   # Browser like integration testing

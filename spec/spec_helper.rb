@@ -1,7 +1,7 @@
 ENV['RAILS_ENV'] ||= 'test'
 ENV['PAGEFLOW_PLUGIN_ENGINE'] = 'pageflow_linkmap_page'
 
-require 'factory_girl_rails'
+require 'factory_bot_rails'
 
 require 'pageflow/support'
 Pageflow::Dummy.setup

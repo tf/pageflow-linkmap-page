@@ -3,7 +3,7 @@ module Pageflow
     class MaskSpritesController < Pageflow::ApplicationController
       respond_to :json
 
-      before_filter :authenticate_user!
+      before_action :authenticate_user!
 
       def create
         image_file = ImageFile.find(params[:image_file_id])
