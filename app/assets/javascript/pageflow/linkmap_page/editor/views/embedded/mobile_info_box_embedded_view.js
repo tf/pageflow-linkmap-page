@@ -41,7 +41,7 @@ pageflow.linkmapPage.MobileInfoBoxEmbeddedView = Backbone.Marionette.View.extend
   },
 
   setupOverviewPage: function() {
-    var overviewPage = this.$el.find('.linkmap-paginator-page').eq(1);
+    var overviewPage = this.$el.find('.linkmap-mobile_info_box-overview_page');
 
     this.ui = {
       title: $('<h3 />').appendTo(overviewPage),
