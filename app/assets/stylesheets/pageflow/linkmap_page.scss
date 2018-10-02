@@ -41,6 +41,10 @@
     > div {
       min-height: 0;
     }
+
+    .emulation_mode_phone & {
+      margin-right: 0 !important;
+    }
   }
 
   .linkmap {
