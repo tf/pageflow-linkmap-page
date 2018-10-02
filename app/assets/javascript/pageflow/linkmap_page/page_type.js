@@ -87,13 +87,16 @@ pageflow.pageType.register('linkmap_page', _.extend({
       hoverVideoEnabled: configuration.background_type === 'hover_video'
     });
 
+    var carousel = !pageflow.navigationDirection || !pageflow.navigationDirection.isHorizontal();
+
     this.mobileInfoBox = pageElement.find('.linkmap-paginator');
     this.mobileInfoBox.linkmapPaginator({
       disabled: !this.isPanZoomEnabled(configuration),
+      carousel: carousel,
 
       scrollerEventListenerTarget: this.content,
 
-      change: function(currentPageIndex) {
+      change: function(currentPageIndex, pageCount) {
         that.content.linkmapPanZoom('setBottomMarginFor', {
           areaIndex: currentPageIndex - 1,
           hiddenHeight: that.mobileInfoBox.linkmapPaginator('getCurrentHeight')
@@ -101,9 +104,10 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
         that.content.linkmapPanZoom('goToAreaByIndex', currentPageIndex - 1);
 
-        if (currentPageIndex > 0 ||
-            that.phoneEmulation() ||
-            !pageflow.slides.nextPageExists()) {
+        if (that.phoneEmulation() ||
+            !pageflow.slides.nextPageExists() ||
+            (carousel && currentPageIndex > 0) ||
+            (!carousel && currentPageIndex < pageCount - 1)) {
           that.scrollIndicator.disable();
           that.mobileInfoBox.linkmapPaginator('showDots');
         }
@@ -278,6 +282,18 @@ pageflow.pageType.register('linkmap_page', _.extend({
       .map(function(area) {
         return area.target_id;
       });
+  },
+
+  isPageChangeAllowed: function(pageElement, configuration, options) {
+    if (this.isPanZoomEnabled(configuration) &&
+        pageflow.navigationDirection && pageflow.navigationDirection.isHorizontal() &&
+        ((options.type == 'bumpnext' && !this.mobileInfoBox.linkmapPaginator('isOnLastPage')) ||
+         (options.type == 'bumpback' && !this.mobileInfoBox.linkmapPaginator('isOnFirstPage')))) {
+      return false;
+    }
+    else {
+      return true;
+    }
   },
 
   preload: function(pageElement, configuration) {

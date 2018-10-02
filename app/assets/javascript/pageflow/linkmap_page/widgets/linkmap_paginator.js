@@ -89,6 +89,14 @@
       return this._heightFromPageHeight(this._getCurrentPageHeight());
     },
 
+    isOnFirstPage: function() {
+      return this._currentPageIndex() == 0;
+    },
+
+    isOnLastPage: function() {
+      return this._currentPageIndex() == this._pageCount() - 1;
+    },
+
     goToPage: function(index) {
       if (this.options.disabled) {
         return;
