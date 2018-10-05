@@ -47,11 +47,8 @@ pageflow.linkmapPage.EditAreaView = Backbone.Marionette.Layout.extend({
         visibleBindingValue: 'page'
       });
 
-      this.input('page_transition', pageflow.SelectInputView, {
-        translationKeyPrefix: 'pageflow.page_transitions',
+      this.group('page_transitions', {
         includeBlank: true,
-        blankTranslationKey: 'pageflow.linkmap_page.default_page_transition',
-        values: pageflow.pageTransitions.names(),
         visibleBinding: 'target_type',
         visibleBindingValue: 'page'
       });
