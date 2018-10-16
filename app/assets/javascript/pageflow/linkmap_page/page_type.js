@@ -158,6 +158,12 @@ pageflow.pageType.register('linkmap_page', _.extend({
       hooks: pageflow.atmo.createMediaPlayerHooks(configuration)
     });
 
+    this.multiPlayer.on('play', function(options) {
+      if (pageflow.backgroundMedia) {
+        pageflow.backgroundMedia.unmute();
+      }
+    });
+
     pageElement.linkmapAudioPlayersController({
       player: this.multiPlayer
     });
