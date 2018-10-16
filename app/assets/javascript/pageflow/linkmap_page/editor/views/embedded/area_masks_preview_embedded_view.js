@@ -66,6 +66,14 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
       var width = Math.abs(mouseUpEvent.offsetX - dragStartOffset.x);
       var height = Math.abs(mouseUpEvent.offsetY - dragStartOffset.y);
 
+      if (width < 10) {
+        width = 50;
+      }
+
+      if (height < 10) {
+        height = 50;
+      }
+
       view.selection.deferred.resolve({
         left: left / view.$el.width() * 100,
         top: top / view.$el.height() * 100,
