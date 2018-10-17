@@ -121,9 +121,11 @@ pageflow.pageType.register('linkmap_page', _.extend({
       });
     });
 
-    pageflow.events.on('background_media:unmute', function() {
-      videoPlayer.muted(false);
-    });
+    if (pageflow.browser.has('autoplay support')) {
+      pageflow.events.on('background_media:unmute', function() {
+        videoPlayer.muted(false);
+      });
+    }
 
     wrapper.data('videoPlayer', this.videoPlayer);
   },
@@ -325,7 +327,8 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
     this.videoPlayer.ensureCreated();
 
-    if (pageflow.backgroundMedia && pageflow.backgroundMedia.muted) {
+    if ((pageflow.backgroundMedia && pageflow.backgroundMedia.muted) ||
+        !pageflow.browser.has('autoplay support')) {
       this.videoPlayer.muted(true);
     }
 
