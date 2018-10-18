@@ -55,6 +55,6 @@ pageflow.linkmapPage.getPanoramaSize = (function() {
       smallestSize = Math.min(smallestSize, Math.min(width, height));
     });
 
-    return MIN_SCALING_SIZE / smallestSize;
+    return Math.min(1.5, MIN_SCALING_SIZE / Math.max(1, smallestSize));
   }
 }());
