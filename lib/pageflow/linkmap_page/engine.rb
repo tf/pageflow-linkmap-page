@@ -14,6 +14,10 @@ module Pageflow
         g.assets false
         g.helper false
       end
+
+      initializer 'pageflow_linkmap_page.paperclip' do
+        Paperclip::DataUriAdapter.register
+      end
     end
   end
 end
