@@ -107,12 +107,25 @@ pageflow.pageType.register('linkmap_page', _.extend({
       .attr('data-width', template.data('videoWidth'))
       .attr('data-height', template.data('videoHeight'));
 
-    this.videoPlayer = new pageflow.VideoPlayer.Lazy(template, {
+    var videoPlayer = this.videoPlayer = new pageflow.VideoPlayer.Lazy(template, {
       volumeFading: true,
+      fallbackToMutedAutoplay: true,
 
       width: '100%',
       height: '100%'
     });
+
+    videoPlayer.ready(function() {
+      videoPlayer.on('playmuted', function() {
+        pageflow.backgroundMedia.mute();
+      });
+    });
+
+    if (pageflow.browser.has('autoplay support')) {
+      pageflow.events.on('background_media:unmute', function() {
+        videoPlayer.muted(false);
+      });
+    }
 
     wrapper.data('videoPlayer', this.videoPlayer);
   },
@@ -145,6 +158,12 @@ pageflow.pageType.register('linkmap_page', _.extend({
       playFromBeginning: true,
       fadeDuration: 1000,
       hooks: pageflow.atmo.createMediaPlayerHooks(configuration)
+    });
+
+    this.multiPlayer.on('play', function(options) {
+      if (pageflow.backgroundMedia) {
+        pageflow.backgroundMedia.unmute();
+      }
     });
 
     pageElement.linkmapAudioPlayersController({
@@ -307,6 +326,11 @@ pageflow.pageType.register('linkmap_page', _.extend({
     var that = this;
 
     this.videoPlayer.ensureCreated();
+
+    if ((pageflow.backgroundMedia && pageflow.backgroundMedia.muted) ||
+        !pageflow.browser.has('autoplay support')) {
+      this.videoPlayer.muted(true);
+    }
 
     this.prebufferingPromise = this.videoPlayer.prebuffer().then(function() {
       if (configuration.background_type === 'video') {
