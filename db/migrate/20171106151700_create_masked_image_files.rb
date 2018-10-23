@@ -1,4 +1,4 @@
-class CreateMaskedImageFiles < ActiveRecord::Migration
+class CreateMaskedImageFiles < ActiveRecord::Migration[4.2]
   def change
     create_table :pageflow_linkmap_page_masked_image_files do |t|
       t.belongs_to :entry, index: true

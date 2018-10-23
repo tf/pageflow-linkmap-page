@@ -1,4 +1,4 @@
-class CreateColorMapFiles < ActiveRecord::Migration
+class CreateColorMapFiles < ActiveRecord::Migration[4.2]
   def change
     create_table :pageflow_linkmap_page_color_map_files do |t|
       t.belongs_to :entry, index: true
