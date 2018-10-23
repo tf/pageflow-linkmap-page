@@ -1,5 +1,6 @@
 //= require_self
 
+//= require ./editor/models/processed_file
 //= require_tree ./editor/models
 //= require_tree ./editor/collections
 //= require_tree ./editor/routers

@@ -9,10 +9,10 @@ pageflow.linkmapPage.AreasEmbeddedView = Backbone.Marionette.View.extend({
   render: function() {
     var view = this;
 
-    var masksDelegator = this.masks = new pageflow.linkmapPage.MasksDelegator();
+    var colorMapDelegator = this.colorMap = new pageflow.linkmapPage.ColorMapDelegator();
 
-    this.$el.on('linkmapupdatemasks', function(event, options) {
-      masksDelegator.updateDelegate(options.masks);
+    this.$el.on('linkmapupdatecolormap', function(event, options) {
+      colorMapDelegator.updateDelegate(options.colorMap);
       view.updateClassNames();
     });
 
@@ -24,20 +24,20 @@ pageflow.linkmapPage.AreasEmbeddedView = Backbone.Marionette.View.extend({
         pageConfiguration: this.model,
         page: this.model.page,
         container: this.options.container,
-        masks: masksDelegator
+        colorMap: colorMapDelegator
       }
     }));
 
     view.appendSubview(new pageflow.linkmapPage.AreaOutlinesEmbeddedView({
       model: this.model,
       areas: this.model.linkmapAreas(this.options.propertyName),
-      masks: masksDelegator
+      colorMap: colorMapDelegator
     }));
 
     view.appendSubview(new pageflow.linkmapPage.AreaMasksPreviewEmbeddedView({
       model: this.model,
       areas: this.model.linkmapAreas(this.options.propertyName),
-      masks: masksDelegator
+      colorMap: colorMapDelegator
     }));
 
     this.listenTo(this.model.page, 'change:areas_editable', function() {
@@ -52,6 +52,7 @@ pageflow.linkmapPage.AreasEmbeddedView = Backbone.Marionette.View.extend({
 
     this.$el.toggleClass('editable', !!editable);
     this.$el.toggleClass('masks_available',
-                         !this.masks.isEmpty() && this.model.get('background_type') !== 'hover_video');
+                         this.colorMap.components().length > 0 &&
+                         this.model.get('background_type') !== 'hover_video');
   }
 });

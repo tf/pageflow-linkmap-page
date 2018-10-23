@@ -22,44 +22,102 @@ module Pageflow
           expect(html).to have_selector('div a[href]')
         end
 
-        it 'renders hover image canvas inside linkmap areas' do
+        it 'renders hover image inside linkmap areas' do
           entry = create(:entry)
           configuration = {'linkmap_areas' => [{}], 'hover_image_id' => 5}
 
           html = helper.linkmap_areas_div(entry, configuration)
 
-          expect(html).to have_selector('a canvas.hover_image')
+          expect(html).to have_selector('a div[class~="image_panorama_5"]')
         end
 
-        it 'sets data-mask-id attribute if area has mask_perma_id' do
+        it 'renders masked hover image inside masked linkmap areas' do
           entry = create(:entry)
-          configuration = {'linkmap_areas' => [{'mask_perma_id' => '1:2'}]}
+          masked_image_file = create(:masked_image_file)
+          configuration = {
+            'linkmap_areas' => [{'mask_perma_id' => "#{masked_image_file.id}:aaa"}],
+            'hover_image_id' => 5,
+            'linkmap_masked_hover_image_id' => masked_image_file.id
+          }
 
           html = helper.linkmap_areas_div(entry, configuration)
 
-          expect(html).to have_selector('a[data-mask-id="1:2"]')
+          image_class = "pageflow_linkmap_page_masked_image_file_aaa_#{masked_image_file.id}"
+          expect(html).to have_selector("a div[class~=#{image_class}]")
         end
 
-        it 'does not set data-mask-id attribute if background type is hover_video' do
+        it 'only uses masked hover image if area is masked' do
+          entry = create(:entry)
+          masked_image_file = create(:masked_image_file)
+          configuration = {
+            'linkmap_areas' => [{}],
+            'hover_image_id' => 5,
+            'linkmap_masked_hover_image_id' => masked_image_file.id
+          }
+
+          html = helper.linkmap_areas_div(entry, configuration)
+
+          expect(html).to have_selector('a div[class~="image_panorama_5"]')
+        end
+
+        it 'does not use masked hover image if area mask perma id references other image' do
+          entry = create(:entry)
+          masked_image_file = create(:masked_image_file)
+          other_id = masked_image_file.id + 1
+          configuration = {
+            'linkmap_areas' => [{'mask_perma_id' => "#{other_id}:aaa"}],
+            'hover_image_id' => 5,
+            'linkmap_masked_hover_image_id' => masked_image_file.id
+          }
+
+          html = helper.linkmap_areas_div(entry, configuration)
+
+          expect(html).to have_selector('a div[class~="image_panorama_5"]')
+        end
+
+        it 'renders visited image inside linkmap areas' do
+          entry = create(:entry)
+          configuration = {'linkmap_areas' => [{}], 'visited_image_id' => 5}
+
+          html = helper.linkmap_areas_div(entry, configuration)
+
+          expect(html).to have_selector('a div[class~="image_panorama_5"]')
+        end
+
+        it 'renders masked visited image inside masked linkmap areas' do
+          entry = create(:entry)
+          masked_image_file = create(:masked_image_file)
+          configuration = {
+            'linkmap_areas' => [{'mask_perma_id' => "#{masked_image_file.id}:aaa"}],
+            'hover_image_id' => 5,
+            'linkmap_masked_visited_image_id' => masked_image_file.id
+          }
+
+          html = helper.linkmap_areas_div(entry, configuration)
+
+          image_class = "pageflow_linkmap_page_masked_image_file_aaa_#{masked_image_file.id}"
+          expect(html).to have_selector("a div[class~='#{image_class}']")
+        end
+
+        it 'sets data-mask-perma-id attribute if area has mask_perma_id' do
+          entry = create(:entry)
+          configuration = {'linkmap_areas' => [{'mask_perma_id' => '1:aaa'}]}
+
+          html = helper.linkmap_areas_div(entry, configuration)
+
+          expect(html).to have_selector('a[data-mask-perma-id="1:aaa"]')
+        end
+
+        it 'does not set data-mask-perma-id attribute if background type is hover_video' do
           entry = create(:entry)
           configuration = {
-            'linkmap_areas' => [{'mask_perma_id' => '1:2'}],
+            'linkmap_areas' => [{'mask_perma_id' => '1:aaa'}],
             'background_type' => 'hover_video'
           }
 
           html = helper.linkmap_areas_div(entry, configuration)
 
-          expect(html).not_to have_selector('a[data-mask-id]')
-        end
-
-        it 'renders attribute with url template for mask sprite' do
-          entry = create(:entry)
-          configuration = {}
-
-          html = helper.linkmap_areas_div(entry, configuration)
-
-          url_matcher = 'attachments/:id_partition/original'
-          expect(html).to have_selector("div[data-mask-sprite-url-template*='#{url_matcher}']")
+          expect(html).not_to have_selector('a[data-mask-perma-id]')
         end
       end
 

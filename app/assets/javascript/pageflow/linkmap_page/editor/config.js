@@ -1,3 +1,19 @@
+pageflow.editor.fileTypes.register('pageflow_linkmap_page_color_map_files', {
+  model: pageflow.linkmapPage.ColorMapFile,
+
+  matchUpload: function(upload) {
+    return false;
+  }
+});
+
+pageflow.editor.fileTypes.register('pageflow_linkmap_page_masked_image_files', {
+  model: pageflow.linkmapPage.MaskedImageFile,
+
+  matchUpload: function(upload) {
+    return false;
+  }
+});
+
 pageflow.editor.pageTypes.register('linkmap_page', {
   configurationEditorView: pageflow.linkmapPage.ConfigurationEditorView,
 

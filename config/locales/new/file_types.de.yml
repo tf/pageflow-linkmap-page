@@ -1,0 +1,15 @@
+de:
+  pageflow:
+    editor:
+      files:
+        stages:
+          pageflow/linkmap_page/color_map_file:
+            processing:
+              active: Farbbereiche werden extrahiert.
+              failed: Fehler Extrahieren der Farbbereiche.
+              finished: Farbbereiche erfolgreich extrahiert.
+          pageflow/linkmap_page/masked_image_file:
+            processing:
+              active: Maske wird angewendet.
+              failed: Fehler beim Anwenden der Maske.
+              finished: Maske erfolgreich angewendet.

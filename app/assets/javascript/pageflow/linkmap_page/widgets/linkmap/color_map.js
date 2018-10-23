@@ -1,162 +1,99 @@
 pageflow.linkmapPage.ColorMap = (function() {
-  function ColorMap(width, height, components) {
-    this.width = width;
-    this.height = height;
-    this.components = components;
+  function ColorMapComponent(attributes, options) {
+    var colorMapWidth = options.colorMapWidth;
+    var colorMapHeight = options.colorMapHeight;
+    var colorMapSprite = options.colorMapSprite;
 
-    this.sumOfComponentWidths = function() {
-      return _(components).reduce(function(result, component) {
-        return result + component.boundingBox.width;
-      }, 0);
+    this.color = attributes.color;
+    this.permaId = options.colorMapId + ':' + attributes.color;
+
+    this.draw = function(context, width) {
+      var scale = width / colorMapWidth;
+
+      colorMapSprite.draw(context,
+                          attributes.sprite_offset,
+                          0,
+                          attributes.width,
+                          attributes.height,
+                          attributes.left * scale,
+                          attributes.top * scale,
+                          attributes.width * scale,
+                          attributes.height * scale);
     };
 
-    this.maxComponentHeight = function() {
-      return _(components).reduce(function(result, rect) {
-        return Math.max(result, rect.boundingBox.height);
-      }, 0);
-    };
-
-    this.serialize = function() {
+    this.areaAttributes = function() {
       return {
-        w: this.width,
-        h: this.height,
-        c: _(components).map(function(component) {
-          return {
-            c: component.color,
-            l: component.boundingBox.left,
-            t: component.boundingBox.top,
-            w: component.boundingBox.width,
-            h: component.boundingBox.height
-          };
-        })
+        mask_perma_id: this.permaId,
+        top: attributes.top / colorMapHeight * 100.0,
+        left: attributes.left / colorMapWidth * 100.0,
+        height: attributes.height / colorMapHeight * 100.0,
+        width: attributes.width / colorMapWidth * 100.0
       };
+    };
+
+    this.contains = function(xInPercent, yInPercent) {
+      var x = xInPercent * colorMapWidth / 100;
+      var y = yInPercent * colorMapHeight / 100;
+
+      return inBoundingBox(x, y) &&
+        colorMapSprite.nonTransparentAt(
+          x - attributes.left + attributes.sprite_offset,
+          y - attributes.top
+        );
+    };
+
+    function inBoundingBox(x, y) {
+      return x > attributes.left &&
+        x < attributes.left + attributes.width &&
+        y >= attributes.top &&
+        y < attributes.top + attributes.height;
+    }
+  }
+
+  function ColorMap(attributes, sprite) {
+    var components = _(attributes.components).map(function(componentAttributes) {
+      return new ColorMapComponent(componentAttributes, {
+        colorMapId: attributes.id,
+        colorMapWidth: attributes.width,
+        colorMapHeight: attributes.height,
+        colorMapSprite: sprite
+      });
+    }, this);
+
+    this.components = function() {
+      return components;
+    };
+
+    this.componentFromPoint = function(xInPercent, yInPercent) {
+      return _(components).find(function(component) {
+        return component.contains(xInPercent, yInPercent);
+      });
+    };
+
+    this.componentByPermaId = function(permaId) {
+      return _(components).find(function(component) {
+        return component.permaId == permaId;
+      });
     };
   }
 
-  ColorMap.deserialize = function(data) {
-    return new ColorMap(
-      data.w,
-      data.h,
-      _(data.c).map(function(item) {
-        return {
-          color: item.c,
-          boundingBox: {
-            left: item.l,
-            top: item.t,
-            width: item.w,
-            height: item.h,
-            right: item.l + item.w,
-            bottom: item.t + item.h
-          }
-        };
-      })
-    );
-  };
+  ColorMap.empty = new ColorMap({
+    components: [],
+    width: 0,
+    height: 0
+  });
 
-  ColorMap.fromImageData = function(imageData) {
-    var width = imageData.width;
-    var height = imageData.height;
+  ColorMap.load = function(id) {
+    var colorMapFile = pageflow.entryData.getFile('pageflow_linkmap_page_color_map_files', id);
 
-    var data = imageData.get(0, 0, width, height).data;
-    var i, key, component;
-
-    var componentsByKey = {};
-    var components = [];
-
-    var currentStreakKey, currentStreakLength;
-
-    for (var y = 0; y < height; y++) {
-      currentStreakKey = null;
-      currentStreakLength = 0;
-
-      for (var x = 0; x < width; x++) {
-        i = (y * width + x) * 4;
-
-        if (!blackOrTransparent(data, i)) {
-          key = [data[i], data[i + 1], data[i + 2]].join('-');
-          component = componentsByKey[key];
-
-          if (currentStreakKey === key && sameColorAboveAndBelow(data, i, width)) {
-            currentStreakLength += 1;
-          }
-          else {
-            currentStreakKey = key;
-            currentStreakLength = 1;
-          }
-
-          if (!component) {
-            component = componentsByKey[key] = {
-              color: [data[i], data[i + 1], data[i + 2]],
-              left: x,
-              top: y,
-              right: x + 1,
-              bottom: y + 1,
-              longestStreak: currentStreakLength
-            };
-
-            components.push(component);
-          }
-          else {
-            component.left = Math.min(component.left, x);
-            component.top = Math.min(component.top, y);
-            component.right = Math.max(component.right, x + 1);
-            component.bottom = Math.max(component.bottom, y + 1);
-            component.longestStreak = Math.max(component.longestStreak, currentStreakLength);
-          }
-        }
-      }
+    if (!colorMapFile) {
+      return $.when(ColorMap.empty);
     }
 
-    components = _(components).select(function(component) {
-      return component.longestStreak > 7;
+    return pageflow.linkmapPage.ImageData.load(colorMapFile.sprite_url).then(function(sprite) {
+      return new ColorMap(colorMapFile, sprite);
     });
-
-    if (components.length === 0) {
-      throw noComponentsError();
-    }
-
-    return new ColorMap(width, height, _(components).map(function(component) {
-      return {
-        color: component.color,
-        boundingBox: {
-          left: component.left,
-          top: component.top,
-          right: component.right,
-          bottom: component.bottom,
-          width: component.right - component.left,
-          height: component.bottom - component.top
-        }
-      };
-    }));
   };
-
-  function blackOrTransparent(data, i) {
-    return (data[i] === 0 && data[i + 1] === 0 && data[i + 2] === 0) ||
-      data[i + 3] === 0;
-  }
-  function sameColorAboveAndBelow(data, i, width) {
-    var above = i - width * 4;
-    var below = i + width * 4;
-
-    return above >= 0 &&
-      below < data.length &&
-      sameColor(data, i, above) &&
-      sameColor(data, i, below);
-  }
-
-  function sameColor(data, i, j) {
-    return data[i] === data[j] &&
-      data[i + 1] === data[j + 1] &&
-      data[i + 2] === data[j + 2] &&
-      data[i + 3] === data[j + 3];
-  }
-
-  function noComponentsError() {
-    var error = new Error('No big enough components detected.');
-    error.i18nKey = 'pageflow.linkmap_page.errors.no_big_enough_color_map_components';
-
-    return error;
-  }
 
   return ColorMap;
 }());
