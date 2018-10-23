@@ -1,10 +1,10 @@
-<%= content_tag(:div, class: 'linkmap_areas', data: data_attributes) do %>
+<%= content_tag(:div, class: css_classes, data: data_attributes) do %>
   <% (configuration['linkmap_areas'].presence || []).each_with_index do |attributes, index| %>
     <%= linkmap_area(entry, attributes, index, configuration['background_type']) do %>
       <%= linkmap_area_background_image_div('visited',
                                             attributes,
                                             configuration,
-                                            masked_visited_image_file) %>
+                                            color_map_file) %>
 
       <% if configuration['background_type'] == 'hover_video' &&
             !Pageflow::ImageFile.find_by_id(configuration['hover_image_id']) %>
@@ -17,7 +17,7 @@
         <%= linkmap_area_background_image_div('hover',
                                               attributes,
                                               configuration,
-                                              masked_hover_image_file) %>
+                                              color_map_file) %>
       <% end %>
 
       <div class="linkmap_marker <%= attributes['marker'] %>">

@@ -4,48 +4,52 @@
 
   $.widget('pageflow.linkmap', {
     _create: function() {
-      var widget = this;
-
       this.colorMapPromise = $.when(pageflow.linkmapPage.ColorMap.empty);
 
       this.refresh();
 
-      if (widget.options.hoverVideoEnabled) {
-        widget.options.hoverVideo.activate();
+      if (this.options.hoverVideoEnabled) {
+        this.options.hoverVideo.activate();
       }
 
-      this.element.on('mousemove', '.hover_area', function() {
-        var hoverArea = $(this);
+      this._on({
+        'mousemove .hover_area': function(event) {
+          var hoverArea = $(event.currentTarget);
 
-        if (widget.options.hoverVideoEnabled) {
-          widget.options.hoverVideo.schedulePlay({
-            area: hoverArea,
-            baseImage: widget.options.baseImage()
-          });
+          if (this.options.hoverVideoEnabled) {
+            this.options.hoverVideo.schedulePlay({
+              area: hoverArea,
+              baseImage: this.options.baseImage()
+            });
+          }
+        },
+
+        'mouseleave .hover_area': function() {
+          if (this.options.hoverVideoEnabled) {
+            this.options.hoverVideo.pause();
+          }
+        },
+
+        'click': function(event) {
+          var area = this.areaAt(this.positionFromEvent(event));
+
+          if (area.length && area.hasClass('enabled')) {
+            area.first().trigger($.Event('linkmapareaclick', {originalEvent: event}));
+          }
+          else {
+            this._trigger('backgroundclick');
+          }
+
+          return false;
+        },
+
+        'mousemove': function(event) {
+          this.updateHoverStates(event);
+        },
+
+        'mouseleave': function(event) {
+          this.updateHoverStates(event);
         }
-      });
-
-      this.element.on('mouseleave', '.hover_area', function() {
-        if (widget.options.hoverVideoEnabled) {
-          widget.options.hoverVideo.pause();
-        }
-      });
-
-      this.element.on('click', function(event) {
-        var area = widget.areaAt(widget.positionFromEvent(event));
-
-        if (area.length) {
-          area.first().trigger($.Event('linkmapareaclick', {originalEvent: event}));
-        }
-        else {
-          widget._trigger('backgroundclick');
-        }
-
-        return false;
-      });
-
-      this.element.on('mousemove mouseleave', function(event) {
-        widget.updateHoverStates(event);
       });
     },
 
@@ -62,7 +66,7 @@
         var area = $(this);
         var hovered = area.linkmapAreaContains(position);
 
-        if (area.hasClass('hover') && !hovered) {
+        if (area.hasClass('pointer_inside') && !hovered) {
           area.trigger('linkmaparealeave');
         }
       });
@@ -71,24 +75,30 @@
         var area = $(this);
         var hovered = area.linkmapAreaContains(position);
 
-        if (!area.hasClass('hover') && hovered) {
-          area.trigger('linkmapareaenter');
+        if (area.hasClass('enabled')) {
+          if (!area.hasClass('pointer_inside') && hovered) {
+            area.trigger('linkmapareaenter');
+          }
+
+          area.toggleClass('pointer_inside', hovered);
         }
 
         area.css('cursor',
                  hovered &&
                  area.attr('data-target-type') !== 'text_only' ?
                  'pointer' : 'default');
-
-        area.toggleClass('hover', hovered);
       });
     },
 
     positionFromEvent: function(event) {
-      var clientRect = this.element[0].getBoundingClientRect();
+      // Older versions of Firefox do not support event.offsetX, which
+      // would be exactly what we need here.
 
-      var left = event.clientX - clientRect.left;
-      var top = event.clientY - clientRect.top;
+      var clientRect = this.element[0].getBoundingClientRect();
+      var scale = this.options.parentScale();
+
+      var left = (event.clientX - clientRect.left) / scale;
+      var top = (event.clientY - clientRect.top) / scale;
 
       return {
         leftInPixel: left,
@@ -110,7 +120,7 @@
     },
 
     refresh: function() {
-      var areaBackgroundImages = this.element.find('.background_image');
+      var areaBackgroundImages = this.element.find('.background_image, .linkmap_area_outlines-canvas_wrapper');
       var hoverAreas = this.element.find('.hover_area');
 
       this.resizeToBaseImage(areaBackgroundImages);
@@ -153,8 +163,11 @@
   $.fn.linkmapAreaClip = function(optionalPosition) {
     this.each(function() {
       var hoverArea = $(this);
-      var clippedElement = hoverArea.find('.panorama_video, .hover_image, .visited_image');
-      var position = optionalPosition || hoverArea.position();
+      var clippedElement = hoverArea.find('.panorama_video, .background_image, .linkmap_area_outlines-canvas_wrapper');
+      var position = optionalPosition || {
+        left: hoverArea.prop('offsetLeft'),
+        top: hoverArea.prop('offsetTop')
+      };
 
       clippedElement.css({
         left: -position.left + 'px',

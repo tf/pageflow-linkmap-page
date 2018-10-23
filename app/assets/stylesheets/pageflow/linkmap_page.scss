@@ -27,6 +27,14 @@
 
   @include user-select(none);
 
+  .backgroundArea {
+    background: #000;
+  }
+
+  .content {
+    pointer-events: none;
+  }
+
   .scroller {
     overflow: hidden;
 
@@ -52,6 +60,8 @@
 
   .panorama_wrapper {
     position: absolute;
+    @include transition(transform 0.3s ease);
+    @include transform-origin(0 0);
   }
 
   .linkmap_areas {
@@ -60,6 +70,10 @@
     left: 0;
     right: 0;
     bottom: 0;
+  }
+
+  .controls:before {
+    display: none;
   }
 
   .panorama {
@@ -109,7 +123,11 @@
     width: 20%;
     overflow: hidden;
     display: block;
-    pointer-events: all;
+    pointer-events: none;
+
+    &.enabled {
+      pointer-events: all;
+    }
 
     .hover_image,
     .visited_image {
@@ -187,7 +205,6 @@
     left: 0;
     top: 0;
     z-index: 1;
-    display: block;
     pointer-events: none;
     opacity: 0;
     max-width: 510px;
@@ -201,7 +218,6 @@
     @include transition(opacity 0.15s);
 
     &.active {
-      display: block;
       opacity: 1;
     }
 
@@ -217,6 +233,12 @@
       color: #999999;
       letter-spacing: 0.22px;
       line-height: 30px;
+    }
+  }
+
+  &.hide_overlay_boxes {
+    .description_overlay {
+      display: none;
     }
   }
 

@@ -4,8 +4,9 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
   className: 'linkmap_area_masks_preview',
 
   ui: {
-    allAreasCanvas: 'canvas.all',
-    currentAreaCanvas: 'canvas.current'
+    canvas: 'canvas',
+    canvasWrapper: '.canvas_wrapper',
+    backgroundImage: '.background_image'
   },
 
   modelEvents: {
@@ -44,7 +45,6 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
 
     this.update();
     this.updateCursor();
-    this.redrawAllAreas();
     this.redraw();
   },
 
@@ -99,9 +99,13 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
     else {
       this.selection.deferred.reject();
     }
+
+    event.stopPropagation();
   },
 
   update: function(event) {
+    this.ui.backgroundImage.css('background-image', 'url("' + this.options.colorMap.previewUrl() +'"');
+
     if (this.dragStartOffset) {
       this.drawSelection(this.dragStartOffset.x,
                          this.dragStartOffset.y,
@@ -141,25 +145,6 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
     }
   },
 
-  redrawAllAreas: function() {
-    var canvas = this.ui.allAreasCanvas[0];
-
-    canvas.width = this.$el.width();
-    canvas.height = this.$el.height();
-
-    var context = canvas.getContext('2d');
-
-    context.clearRect(0, 0, canvas.width, canvas.height);
-
-    context.globalAlpha = 0.5;
-
-    _(this.options.colorMap.components()).each(function(colorMapComponent) {
-      if (!this.colorMapComponentIsUsed(colorMapComponent)) {
-        colorMapComponent.draw(context, canvas.width);
-      }
-    }, this);
-  },
-
   colorMapComponentIsUsed: function(colorMapComponent) {
     return this.options.areas.any(function(area) {
       return colorMapComponent.permaId === area.get('mask_perma_id');
@@ -167,61 +152,70 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
   },
 
   redraw: function() {
-    var canvas = this.ui.currentAreaCanvas[0];
-
-    canvas.width = this.$el.width();
-    canvas.height = this.$el.height();
-
-    var context = canvas.getContext('2d');
-
-    context.clearRect(0, 0, canvas.width, canvas.height);
-
     if (this.currentColorMapComponent) {
+      var attributes = this.currentColorMapComponent.areaAttributes();
+
+      this.ui.canvasWrapper.css({
+        top: attributes.top + '%',
+        left: attributes.left + '%',
+        width: attributes.width + '%',
+        height: attributes.height + '%',
+      });
+
+      this.ui.canvas.css({
+        left: 0,
+        top: 0,
+        width: '100%',
+        height: '100%'
+      }).show();
+
+      this.ui.canvas.show();
+
+      var canvas = this.ui.canvas[0];
+
+      canvas.width = this.ui.canvas.width();
+      canvas.height = this.ui.canvas.height();
+
+      var context = canvas.getContext('2d');
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
       this.currentColorMapComponent.draw(context, canvas.width);
 
       context.globalCompositeOperation = 'source-in';
-      this.usePattern(context);
+      pageflow.linkmapPage.areaPattern.use(context)
       context.globalAlpha = 0.2;
       context.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    else {
+      this.ui.canvas.hide();
     }
   },
 
   drawSelection: function(x, y, width, height) {
-    var canvas = this.ui.currentAreaCanvas[0];
+    var canvas = this.ui.canvas[0];
 
-    canvas.width = this.$el.width();
-    canvas.height = this.$el.height();
+    var wrapperLeft = x + Math.min(0, width);
+    var wrapperTop = y + Math.min(0, height);
+    var wrapperWidth = Math.abs(width);
+    var wrapperHeight = Math.abs(height);
+
+    this.ui.canvasWrapper.css({
+      left: wrapperLeft + 'px',
+      top: wrapperTop + 'px',
+      width: wrapperWidth + 'px',
+      height: wrapperHeight + 'px'
+    }).show();
+
+    pageflow.linkmapPage.areaPattern.applyOffset(canvas,
+                                                 wrapperLeft, wrapperTop,
+                                                 wrapperWidth, wrapperHeight)
 
     var context = canvas.getContext('2d');
 
     context.clearRect(0, 0, canvas.width, canvas.height);
-
-    this.usePattern(context);
+    pageflow.linkmapPage.areaPattern.use(context)
     context.globalAlpha = 0.6;
-    context.fillRect(x, y, width, height);
-  },
-
-  usePattern: function(context) {
-    if (!this.patternSource) {
-      var rectSize = 7;
-
-      var canvas = document.createElement('canvas');
-      this.patternSource = canvas;
-
-      canvas.width = rectSize * 2;
-      canvas.height = rectSize * 2;
-
-      var c = canvas.getContext('2d');
-
-      c.fillStyle = '#000';
-      c.fillRect(0, 0, rectSize, rectSize);
-      c.fillRect(rectSize, rectSize, rectSize, rectSize);
-
-      c.fillStyle = '#fff';
-      c.fillRect(rectSize, 0, rectSize, rectSize);
-      c.fillRect(0, rectSize, rectSize, rectSize);
-    }
-
-    context.fillStyle = context.createPattern(this.patternSource, 'repeat');
+    context.fillRect(0, 0, canvas.width, canvas.height);
   }
 });

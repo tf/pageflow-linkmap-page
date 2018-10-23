@@ -12,6 +12,10 @@ pageflow.linkmapPage.AreasCollection = Backbone.Collection.extend({
     this.listenTo(this, 'add', this.updateSelectedAttributes);
   },
 
+  comparator: function(area) {
+    return area.get('position');
+  },
+
   canAddLink: function() {
     return true;
   },
@@ -55,6 +59,7 @@ pageflow.linkmapPage.AreasCollection = Backbone.Collection.extend({
   },
 
   resetSelection: function() {
+    this.trigger('resetSelection');
     this.updateSelectedAttributes(null);
   },
 
@@ -62,5 +67,7 @@ pageflow.linkmapPage.AreasCollection = Backbone.Collection.extend({
     this.each(function(area) {
       area.set('selected', area === selectedArea);
     });
-  }
+  },
+
+  saveOrder: function() {}
 });

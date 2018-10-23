@@ -64,11 +64,13 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
 
   onRender: function() {
     this.setupImageViews();
+    this.setupOutlineView();
     this.setupDraggableAndResizable();
     this.setupAudioPlayer();
 
     this.listenTo(this.options.colorMap, 'update', this.update);
     this.listenTo(this.options.pageConfiguration, 'change:background_type', this.update);
+    this.listenTo(pageflow.entry, 'change:emulation_mode', this.updateDraggableAndResizable);
 
     this.update();
   },
@@ -78,8 +80,9 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
 
     var backgroundImageClassNamePrefix = function() {
       var colorMapComponent = view.getColorMapComponent();
-      return colorMapComponent &&
-        'pageflow_linkmap_page_masked_image_file_' + colorMapComponent.color;
+      return colorMapComponent ?
+        'pageflow_linkmap_page_masked_image_file_' + colorMapComponent.color:
+        'image_panorama';
     };
 
     var hoverImageView = new pageflow.BackgroundImageEmbeddedView({
@@ -110,6 +113,14 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
       hoverImageView.update();
       visitedImageView.update();
     });
+  },
+
+  setupOutlineView: function() {
+    this.appendSubview(new pageflow.linkmapPage.AreaOutlineEmbeddedView({
+      model: this.options.pageConfiguration,
+      area: this.model,
+      colorMap: this.options.colorMap
+    }));
   },
 
   setupDraggableAndResizable: function() {
@@ -170,14 +181,19 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
   },
 
   updateDraggableAndResizable: function() {
-    if (this.model.get('selected')) {
+    if (this.model.get('selected') &&
+        !pageflow.entry.has('emulation_mode')) {
+
       this.$el.resizable('enable');
     }
     else {
       this.$el.resizable('disable');
     }
 
-    if (this.model.get('selected') && !this.getColorMapComponent()) {
+    if (this.model.get('selected') &&
+        !pageflow.entry.has('emulation_mode') &&
+        !this.getColorMapComponent()) {
+
       this.$el.draggable('enable');
     }
     else {
@@ -193,7 +209,7 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
     var audioFileId = this.model.get('target_id');
     var colorMapComponent = this.getColorMapComponent();
 
-    this.$el.attr('data-mask-perma-id', colorMapComponent && colorMapComponent.permaId);
+    this.$el.attr('data-mask-perma-id', colorMapComponent ? colorMapComponent.permaId : null);
     this.$el.attr('data-audio-file', audioFileId ? audioFileId + '.' + this.cid : '');
     this.$el.attr('data-target-type', this.model.get('target_type'));
     this.$el.attr('data-target-id', this.model.get('target_id'));

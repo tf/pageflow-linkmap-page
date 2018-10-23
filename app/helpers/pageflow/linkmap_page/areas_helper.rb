@@ -4,25 +4,37 @@ module Pageflow
       include BackgroundImageHelper
 
       def linkmap_areas_div(entry, configuration)
+        color_map_file =
+          ColorMapFile.find_by_id(configuration['linkmap_color_map_file_id'])
         masked_hover_image_file =
           MaskedImageFile.find_by_id(configuration['linkmap_masked_hover_image_id'])
         masked_visited_image_file =
           MaskedImageFile.find_by_id(configuration['linkmap_masked_visited_image_id'])
 
+
+        hide_overlay_boxes =
+          configuration['mobile_panorama_navigation'] == 'pan_zoom' &&
+          configuration['hide_linkmap_overlay_boxes']
+
         render('pageflow/linkmap_page/areas/div',
                entry: entry,
                configuration: configuration,
+               color_map_file: color_map_file,
                masked_hover_image_file: masked_hover_image_file,
                masked_visited_image_file: masked_visited_image_file,
+               css_classes: [
+                 'linkmap_areas',
+                 hide_overlay_boxes ? 'hide_overlay_boxes' : nil
+               ].compact.join(' '),
                data_attributes: {
                  color_map_file_id: configuration['color_map_file_id']
                })
       end
 
-      def linkmap_area_background_image_div(prefix, attributes, configuration, masked_image_file)
-        if masked_image_file &&
+      def linkmap_area_background_image_div(prefix, attributes, configuration, color_map_file)
+        if color_map_file &&
            attributes['mask_perma_id'].present? &&
-           attributes['mask_perma_id'].split(':').first.to_i == masked_image_file.id
+           attributes['mask_perma_id'].split(':').first.to_i == color_map_file.id
           background_image_div(configuration,
                                "linkmap_masked_#{prefix}_image",
                                class: "#{prefix}_image",

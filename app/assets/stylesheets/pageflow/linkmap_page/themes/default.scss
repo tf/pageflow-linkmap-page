@@ -21,6 +21,9 @@
 }
 
 .linkmap_page {
+  @import "./default/paginator";
+  @import "./default/mobile_info_box";
+
   $linkmap-icon-font: "FontAwesome" !default;
   $linkmap-icon-line-height: 1.1em !default;
 

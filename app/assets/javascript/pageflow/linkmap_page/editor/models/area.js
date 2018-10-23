@@ -70,7 +70,10 @@ pageflow.linkmapPage.Area = Backbone.Model.extend({
 
     return pageflow.linkmapPage.selectArea(
       this.collection.page,
-      {type: 'colorMapComponent'}
+      {
+        type: 'colorMapComponent',
+        areaIndex: this.collection.indexOf(this)
+      }
     ).then(function(attributes) {
       model.set(_.extend(attributes, {
         marker: 'no_marker'

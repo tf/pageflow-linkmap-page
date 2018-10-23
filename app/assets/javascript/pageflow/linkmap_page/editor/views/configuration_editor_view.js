@@ -107,6 +107,32 @@ pageflow.linkmapPage.ConfigurationEditorView = pageflow.ConfigurationEditorView.
       this.view(pageflow.linkmapPage.AreasListView, {
         model: this.model
       });
+
+      this.input('mobile_panorama_navigation', pageflow.SelectInputView, {
+        values: ['free', 'pan_zoom']
+      });
+
+      this.input('mobile_info_box_title', pageflow.TextInputView, {
+        visibleBinding: 'mobile_panorama_navigation',
+        visible: function(navigation) {
+          return navigation === 'pan_zoom';
+        }
+      });
+      this.input('mobile_info_box_description', pageflow.TextAreaInputView, {
+        size: 'short',
+        disableLinks: true,
+        visibleBinding: 'mobile_panorama_navigation',
+        visible: function(navigation) {
+          return navigation === 'pan_zoom';
+        }
+      });
+
+      this.input('hide_linkmap_overlay_boxes', pageflow.CheckBoxInputView, {
+        visibleBinding: 'mobile_panorama_navigation',
+        visible: function(navigation) {
+          return navigation === 'pan_zoom';
+        }
+      });
     });
 
     this.tab('options', function() {

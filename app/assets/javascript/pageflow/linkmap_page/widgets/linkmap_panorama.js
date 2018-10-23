@@ -22,10 +22,6 @@
       this.overlayTitle = pageElement.find('.description_overlay .link_title');
       this.overlayDescription = pageElement.find('.description_overlay .link_description');
 
-      this.touchIndicator = pageElement.find('.touch_indicator');
-      this.externalLinkLoadingIndicator = pageElement.find('.external_link_loading_indicator');
-      this.globalIndicators = this.touchIndicator.add(this.externalLinkLoadingIndicator);
-
       this.startScrollPosition = _.clone(this.options.startScrollPosition);
 
       this.currentScrollPosition = null;
@@ -33,40 +29,66 @@
       this.refresh();
 
       this.scroller.onScrollEnd(function() {
-        that.updateScrollPosition();
+        if (!that.options.disabled) {
+          that.updateScrollPosition();
+        }
       });
 
-      $(window).on('resize', function () {
-        that.centerToPoint(null, 0);
+      this._on(window, {
+        resize: function () {
+          that.centerToPoint(null, 0);
+        }
       });
 
-      this.element.on('mousemove', function(e) {
-        that.lastMouseMoveEvent = e;
-        that.calcAreaOpacity(that.activeAreas, e.pageX, e.pageY);
+      this._on({
+        mousemove: function(e) {
+          that.lastMouseMoveEvent = e;
+          that.calcAreaOpacity(that.activeAreas, e.pageX, e.pageY);
+        }
       });
 
-      pageElement.on('linkmapareaenter', '.hover_area', function() {
-        positionOverlay($(this));
+      this._on(pageElement, {
+        'linkmapareaenter .hover_area': function(event) {
+          var area = $(event.currentTarget);
+          area.addClass('hover');
+
+          positionOverlay(area);
+        },
+
+        'linkmaparealeave .hover_area': function(event) {
+          var area = $(event.currentTarget);
+          area.removeClass('hover');
+        },
+
+        'click': resetIndicatorsAndOverlays,
+        'linkmapbackgroundclick': resetIndicatorsAndOverlays
       });
 
-      pageElement.on('click linkmapbackgroundclick', function() {
-        that.overlayBox.removeClass('active');
+      this._on($('body'), {
+        'linkmaparealeave .hover_area': resetOverlays
+      });
+
+      this._on(pageElement, {
+        'dragstart .hover_area': resetOverlays,
+        'resizestart .hover_area': resetOverlays
+      });
+
+      function resetIndicatorsAndOverlays() {
+        resetOverlays();
         that.activeAreas.removeClass('hover hover_mobile');
-        that.globalIndicators.hide();
-      });
+        that.options.areaIndicators.reset();
+      }
 
-      $('body').on('linkmaparealeave', '.hover_area', function() {
+      function resetOverlays() {
         that.overlayBox.removeClass('active');
-      });
-
-      pageElement.on('dragstart resizestart', '.hover_area', function() {
-        that.overlayBox.removeClass('active');
-      });
+      }
 
       that.activeAreas.each(function() {
         var area = $(this);
 
-        area.on('linkmapareaclick', function(event) {
+        that._on(area, {linkmapareaclick: onAreaClick});
+
+        function onAreaClick(event) {
           if (pageflow.browser.has('mobile platform')) {
             if (area.hasClass('hover_mobile')) {
               that.activeAreas.removeClass('active');
@@ -76,11 +98,8 @@
               that.activeAreas.removeClass('hover hover_mobile');
               area.addClass('hover hover_mobile');
 
-              positionOverlay($(this));
-
-              if (!area.hasClass('dynamic_marker')) {
-                displayTouchIndicator(event.originalEvent);
-              }
+              positionOverlay($(event.currentTarget));
+              this.options.areaIndicators.displayForSelectedArea(area, event.originalEvent);
 
               return false;
             }
@@ -90,12 +109,8 @@
             area.addClass('active');
           }
 
-          if (!area.hasClass('dynamic_marker') &&
-              area.hasClass('external_site_area') &&
-              area.hasClass('target_self')) {
-            displayExternalLinkLoadingIndicator(event.originalEvent);
-          }
-        });
+          this.options.areaIndicators.displayForClickedArea(area, event.originalEvent);
+        }
       });
 
       var positionOverlay = function(area) {
@@ -170,35 +185,24 @@
         }
       };
 
-      var displayExternalLinkLoadingIndicator = function(event) {
-        positionGlobalIndicator(that.externalLinkLoadingIndicator, event);
-        that.externalLinkLoadingIndicator.show();
-      };
-
-      var displayTouchIndicator = function(event) {
-        positionGlobalIndicator(that.touchIndicator, event);
-        animateTouchIndicator();
-      };
-
-      var animateTouchIndicator = function() {
-        that.touchIndicator.hide();
-
-        setTimeout(function() {
-          that.touchIndicator.show();
-        }, 500);
-      };
-
-      var positionGlobalIndicator = function(indicator, event) {
-        var parentClientRect = that.panoramaWrapper[0].getBoundingClientRect();
-        var touch = event.touches ? event.touches[0] : event;
-
-        indicator.css({
-          left: touch.clientX - parentClientRect.left,
-          top: touch.clientY - parentClientRect.top
-        });
-      };
-
       this.refresh();
+    },
+
+    _setOptions: function(options) {
+      var changed = (this.options.disabled !== options.disabled);
+      this._super(options);
+
+      if (changed) {
+        if (this.options.disabled) {
+          this.panoramaWrapper.css({
+            left: 0,
+            top: 0
+          });
+        }
+        else {
+          this.refresh();
+        }
+      }
     },
 
     calcAreaOpacity: function(activeAreas, mX, mY) {
@@ -229,6 +233,10 @@
     },
 
     highlightAreas: function() {
+      if (this.options.disabled) {
+        return;
+      }
+
       var element = this.element;
       element.find('.linkmap_marker').addClass('teasing');
 
@@ -242,6 +250,10 @@
     },
 
     resetAreaHighlighting: function() {
+      if (this.options.disabled) {
+        return;
+      }
+
       var element = this.element;
 
       element.find('.linkmap_marker').removeClass('no_transition teasing');
@@ -298,6 +310,10 @@
     },
 
     refresh: function() {
+      if (this.options.disabled) {
+        return;
+      }
+
       this.keepingScrollPosition(function() {
         var pageElement = this.options.page;
 
@@ -340,6 +356,8 @@
 
         this.innerScrollerElement.removeClass('measuring');
         this.scroller.refresh();
+
+        this.activeAreas.addClass('enabled');
       });
     },
 
@@ -365,6 +383,10 @@
     },
 
     resetScrollPosition: function() {
+      if (this.options.disabled) {
+        return;
+      }
+
       this.centerToPoint(this.panoramaToScroller(this.startScrollPosition), 0);
     },
 
