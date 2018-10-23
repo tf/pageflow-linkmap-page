@@ -43,7 +43,7 @@
         this.update();
 
         if (!this.options.disabled) {
-          this.scroller.goToPage(1, 0, 100);
+          this.goToPage(0);
           this.scroller._execEvent('initPosition');
         }
       }
@@ -89,12 +89,20 @@
       return this._heightFromPageHeight(this._getCurrentPageHeight());
     },
 
+    isOnFirstPage: function() {
+      return this._currentPageIndex() == 0;
+    },
+
+    isOnLastPage: function() {
+      return this._currentPageIndex() == this._pageCount() - 1;
+    },
+
     goToPage: function(index) {
       if (this.options.disabled) {
         return;
       }
 
-      this.scroller.goToPage(index + 1, 0, 100);
+      this.scroller.goToPage(this.options.carousel ? index + 1 : index, 0, 100);
     },
 
     _findPages: function() {
@@ -121,7 +129,7 @@
         var direction = this.scroller.x > this.scroller.currentPage.x ? -1 : 1;
 
         var currentPageIndex = this.scroller.currentPage.pageX;
-        var destinationPageIndex = currentPageIndex + direction;
+        var destinationPageIndex = Math.max(0, Math.min(currentPageIndex + direction, this.pages.length - 1));
 
         var currentPageHeight = this.pageHeights[currentPageIndex];
         var destinationPageHeight = this.pageHeights[destinationPageIndex];
@@ -171,6 +179,10 @@
     },
 
     _cloneFirstAndLastPageForCarousel: function() {
+      if (!this.options.carousel) {
+        return;
+      }
+
       var pages = this.element.find('.linkmap-paginator-page');
       var container = this.element.find('.linkmap-paginator-pages');
 
@@ -179,12 +191,24 @@
     },
 
     _updateClonedPages: function() {
+      if (!this.options.carousel) {
+        return;
+      }
+
       this.pages.first().html(this.pages.eq(-2).html());
       this.pages.last().html(this.pages.eq(1).html());
     },
 
     _setupCarousel: function() {
       var scroller = this.scroller;
+
+      if (!this.options.carousel) {
+        this.scrollerReady.then(function() {
+          scroller._execEvent('initPosition');
+        });
+
+        return;
+      }
 
       scroller.on('scrollEnd', _.bind(function() {
         var currentPageIndex = scroller.currentPage.pageX;
@@ -208,8 +232,7 @@
 
       if (changeCallback) {
         this.scroller.on('scrollEnd', _.bind(function() {
-          var currentPageIndex = this.scroller.currentPage.pageX;
-          changeCallback(this._pageIndexIgnoringClonedPages(currentPageIndex));
+          changeCallback(this._currentPageIndex(), this._pageCount());
         }, this));
       }
     },
@@ -223,13 +246,14 @@
     },
 
     _setupIndicatorDots: function() {
+      var widget = this;
       var scroller = this.scroller;
       var container = this.dotsContainer = this.dotsContainer ||
         $('<div class="linkmap-paginator-dots" />').appendTo(this.element);
 
       container.children().remove();
 
-      _.times(this.pages.length - 2, function() {
+      _.times(this._pageCount(), function() {
         container.append('<div class="linkmap-paginator-dot" />');
       });
 
@@ -240,13 +264,26 @@
 
       function update() {
         dots.removeClass('active');
-        dots.eq(scroller.currentPage.pageX - 1).addClass('active');
+        dots.eq(widget._currentPageIndex()).addClass('active');
       }
     },
 
     _pageIndexIgnoringClonedPages: function(index) {
-      return (index - 1) % (this.pages.length - 2);
+      if (this.options.carousel) {
+        return (index - 1) % (this.pages.length - 2);
+      }
+      else {
+        return index;
+      }
     },
+
+    _currentPageIndex: function() {
+      return this._pageIndexIgnoringClonedPages(this.scroller.currentPage.pageX);
+    },
+
+    _pageCount: function() {
+      return this.options.carousel ? this.pages.length - 2 : this.pages.length;
+    }
   });
 
   function translateY(element, y) {
