@@ -2,6 +2,8 @@
 
 ### Unreleased Changes
 
+[Compare changes](https://github.com/codevise/pageflow-linkmap-page/compare/1-x-stable...master)
+
 ##### Breaking Changes
 
 - Requires Pageflow 13.
@@ -24,8 +26,6 @@
   processing before deploying the update.
 
 ##### Features
-
-[Compare changes](https://github.com/codevise/pageflow-linkmap-page/compare/1-x-stable...master)
 
 - Paginated mobile navigation
   ([#43](https://github.com/codevise/pageflow-linkmap-page/pull/43))
