@@ -33,9 +33,14 @@
 
   $linkmap-main-color: $main-color !default;
 
+  $linkmap-circle-color: #fff !default;
+  $linkmap-circle-shadow-color: #000 !default;
+
   $linkmap-overlay-text-color: #fff !default;
   $linkmap-overlay-title-color: $linkmap-main-color !default;
   $linkmap-overlay-background-color: rgba(48,48,48,0.8) !default;
+  $linkmap-overlay-connector-color: rgba(255, 255, 255, 0.8) !default;
+  $linkmap-overlay-connector-shadow-color: #000 !default;
 
   $linkmap-overlay-title-typography: () !default;
   $linkmap-overlay-description-typography: () !default;
@@ -123,19 +128,19 @@
         width: 95%;
         height: auto;
         padding: 0;
-        border: 4px solid #fff;
+        border: 4px solid $linkmap-circle-color;
         box-sizing: content-box;
         border-radius: 50%;
 
         opacity: 0.1;
-        box-shadow: 0 0 3px #000;
+        box-shadow: 0 0 3px $linkmap-circle-shadow-color;
         margin: 0;
 
         @include transition(0.5s);
 
         &.teasing {
           opacity: 1 !important;
-          border: 7px solid #fff;
+          border-width: 7px;
           @include transition(1s ease);
         }
 
@@ -153,9 +158,8 @@
       &:focus,
       &:active {
         .linkmap_marker {
-          border: 6px solid #fff;
+          border-width: 6px;
           opacity: 1 !important;
-          box-shadow: 0 0 3px #000;
         }
       }
     }
@@ -243,11 +247,11 @@
       content: "";
       position: absolute;
       width: 30px;
-      background-color: rgba(255,255,255, 0.8);
+      background-color: $linkmap-overlay-connector-color;
       height: 4px;
       left: 5px;
       top: 0;
-      box-shadow: 0 0 3px #000;
+      box-shadow: 0 0 3px $linkmap-overlay-connector-shadow-color;
 
       @include transition(0.15s ease);
       @include transform(scale(0));
