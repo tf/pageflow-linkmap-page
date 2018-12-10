@@ -1,8 +1,10 @@
 # CHANGELOG
 
-### Unreleased Changes
+### Version 2.0.0
 
-[Compare changes](https://github.com/codevise/pageflow-linkmap-page/compare/1-x-stable...master)
+2018-12-10
+
+[Compare changes](https://github.com/codevise/pageflow-linkmap-page/compare/1-x-stable...v2.0.0)
 
 ##### Breaking Changes
 
