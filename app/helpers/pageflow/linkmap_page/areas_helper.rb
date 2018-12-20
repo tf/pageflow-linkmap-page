@@ -32,14 +32,15 @@ module Pageflow
       end
 
       def linkmap_area_background_image_div(prefix, attributes, configuration, color_map_file)
+        mask_perma_id = attributes['color_map_component_id'] || attributes['mask_perma_id']
         if color_map_file &&
-           attributes['mask_perma_id'].present? &&
-           attributes['mask_perma_id'].split(':').first.to_i == color_map_file.id
+          mask_perma_id.present? &&
+          mask_perma_id.split(':').first.to_i == color_map_file.id
           background_image_div(configuration,
                                "linkmap_masked_#{prefix}_image",
                                class: "#{prefix}_image",
                                file_type: 'pageflow_linkmap_page_masked_image_files',
-                               style_group: attributes['mask_perma_id'].split(':').last)
+                               style_group: mask_perma_id.split(':').last)
         else
           background_image_div(configuration,
                                "#{prefix}_image",
@@ -90,7 +91,8 @@ module Pageflow
         end
 
         def data_attributes
-          mask_perma_id = background_type != 'hover_video' && attributes[:mask_perma_id]
+          mask_perma_id = background_type != 'hover_video' &&
+                          (attributes[:color_map_component_id] || attributes[:mask_perma_id])
           audio_file_id = attributes[:target_id]
 
           {

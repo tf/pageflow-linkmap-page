@@ -41,7 +41,7 @@ module Pageflow
         end
 
         def with_color_map(&block)
-          PaperclipTempfile.for(color_map_attachment, &block)
+          Pageflow::LinkmapPage::PaperclipTempfile.for(color_map_attachment, &block)
         end
 
         def color_map_attachment

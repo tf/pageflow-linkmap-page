@@ -41,7 +41,7 @@ module Pageflow
           color_map_file = color_map_file_for(color_map_image_file, revision)
           page.configuration['linkmap_color_map_file_id'] = color_map_file.id
 
-          hover_image_file = Pageflow::ImageFile.find_by_id(page.configuration['hover_image_id'])
+          hover_image_file = ImageFile.find_by_id(page.configuration['hover_image_id'])
 
           if hover_image_file
             puts "-- Masked image file for hover image file #{hover_image_file.id}"
@@ -100,9 +100,9 @@ module Pageflow
         areas = page.configuration['linkmap_areas'] || []
 
         page.configuration['linkmap_areas'] = areas.map do |area_attributes|
-          old_mask_perma_id = area_attributes['mask_perma_id']
+          mask_perma_id = area_attributes['mask_perma_id']
 
-          if old_mask_perma_id && !area_attributes['old_mask_perma_id']
+          if mask_perma_id && !area_attributes['color_map_component_id']
             sprite_id = page.configuration.fetch('linkmap_masks').fetch('id')
             colors =
               page
@@ -112,11 +112,10 @@ module Pageflow
               .fetch('c')
               .map { |component| component['c'] }
 
-            area_attributes.merge(old_mask_perma_id: old_mask_perma_id,
-                                  mask_perma_id: convert_mask_perma_id(old_mask_perma_id,
-                                                                       colors,
-                                                                       color_map_file,
-                                                                       sprite_id))
+            area_attributes.merge(color_map_component_id: convert_mask_perma_id(mask_perma_id,
+                                                                                colors,
+                                                                                color_map_file,
+                                                                                sprite_id))
           else
             area_attributes
           end

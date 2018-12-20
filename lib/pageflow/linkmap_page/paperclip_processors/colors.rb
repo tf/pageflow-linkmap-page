@@ -163,7 +163,7 @@ module Pageflow
         end
 
         def with_progress(steps:)
-          progress = Progress.new(steps: steps) do |percent|
+          progress = Pageflow::LinkmapPage::Progress.new(steps: steps) do |percent|
             if options[:progress_callback]
               attachment.instance.send(options[:progress_callback], percent)
             end

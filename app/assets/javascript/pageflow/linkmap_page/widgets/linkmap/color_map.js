@@ -23,7 +23,7 @@ pageflow.linkmapPage.ColorMap = (function() {
 
     this.areaAttributes = function() {
       return {
-        mask_perma_id: this.permaId,
+        color_map_component_id: this.permaId,
         top: attributes.top / colorMapHeight * 100.0,
         left: attributes.left / colorMapWidth * 100.0,
         height: attributes.height / colorMapHeight * 100.0,

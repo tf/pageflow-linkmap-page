@@ -113,6 +113,20 @@ module Pageflow
           expect(html).to have_selector('a[data-mask-perma-id="1:aaa"]')
         end
 
+        it 'uses v2 mask perma id if present, preceding mask perma id' do
+          entry = create(:entry)
+          color_map_file_1 = create(:color_map_file)
+          color_map_file_2 = create(:color_map_file)
+          configuration = {
+            'linkmap_areas' => [{'color_map_component_id' => "#{color_map_file_2.id}:aaa",
+                                 'mask_perma_id' => "#{color_map_file_1}:aaa"}]
+          }
+
+          html = helper.linkmap_areas_div(entry, configuration)
+
+          expect(html).to have_selector("a[data-mask-perma-id='#{color_map_file_2.id}:aaa']")
+        end
+
         it 'does not set data-mask-perma-id attribute if background type is hover_video' do
           entry = create(:entry)
           configuration = {
