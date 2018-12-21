@@ -147,7 +147,7 @@ pageflow.linkmapPage.AreaMasksPreviewEmbeddedView = Backbone.Marionette.ItemView
 
   colorMapComponentIsUsed: function(colorMapComponent) {
     return this.options.areas.any(function(area) {
-      return colorMapComponent.permaId === area.get('mask_perma_id');
+      return colorMapComponent.permaId === area.get('color_map_component_id');
     }, this);
   },
 

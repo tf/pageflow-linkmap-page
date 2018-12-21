@@ -77,7 +77,7 @@ pageflow.linkmapPage.EditAreaView = Backbone.Marionette.Layout.extend({
 
     configurationEditor.tab('appearance', function() {
       this.input('marker', pageflow.SelectInputView, {values: pageflow.linkmapPage.markerOptions});
-      this.input('mask_perma_id', pageflow.linkmapPage.AreaMaskInputView, {
+      this.input('color_map_component_id', pageflow.linkmapPage.AreaMaskInputView, {
         visibleBinding: 'marker',
         visible: function(value) {
           return value !== 'dynamic_marker';

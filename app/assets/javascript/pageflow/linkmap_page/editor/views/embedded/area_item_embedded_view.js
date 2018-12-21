@@ -209,7 +209,7 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
     var audioFileId = this.model.get('target_id');
     var colorMapComponent = this.getColorMapComponent();
 
-    this.$el.attr('data-mask-perma-id', colorMapComponent ? colorMapComponent.permaId : null);
+    this.$el.attr('data-color-map-component-id', colorMapComponent ? colorMapComponent.permaId : null);
     this.$el.attr('data-audio-file', audioFileId ? audioFileId + '.' + this.cid : '');
     this.$el.attr('data-target-type', this.model.get('target_type'));
     this.$el.attr('data-target-id', this.model.get('target_id'));
@@ -271,7 +271,7 @@ pageflow.linkmapPage.AreaItemEmbeddedView = Backbone.Marionette.ItemView.extend(
 
   getColorMapComponent: function() {
     return this.options.colorMap.componentByPermaId(
-      this.model.get('mask_perma_id')
+      this.model.get('color_map_component_id')
     );
   }
 });

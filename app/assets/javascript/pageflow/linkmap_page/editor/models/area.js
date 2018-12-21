@@ -85,7 +85,8 @@ pageflow.linkmapPage.Area = Backbone.Model.extend({
   unsetMask: function() {
     this.set({
       marker: 'no_marker',
-      mask_perma_id: undefined
+      mask_perma_id: undefined,
+      color_map_component_id: undefined
     });
     this.trigger('change:dimensions');
   },
@@ -119,5 +120,18 @@ pageflow.linkmapPage.Area = Backbone.Model.extend({
 
   remove: function() {
     this.collection.remove(this);
+  },
+
+  get: function(attr) {
+    if (attr === 'color_map_component_id') {
+      var colorMapComponentId = this.attributes['color_map_component_id'];
+      if(colorMapComponentId === undefined) {
+        // also try legacy mask_perma_id as fallback
+        colorMapComponentId = this.attributes['mask_perma_id'];
+      }
+      return colorMapComponentId;
+    } else {
+      return this.attributes[attr];
+    }
   }
 });

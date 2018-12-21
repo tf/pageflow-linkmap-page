@@ -1,0 +1,14 @@
+de:
+  activerecord:
+    attributes:
+      pageflow/linkmap_page/area:
+        mask_perma_id: DELETED
+        color_map_component_id: Maske
+  pageflow:
+    ui:
+      inline_help:
+        pageflow/linkmap_page/area:
+          mask_perma_id: DELETED
+          mask_perma_id_disabled: DELETED
+          color_map_component_id: Farbiger Bereich im Maskenbild, der die Form des Hotspots bestimmt.
+          color_map_component_id_disabled: Farbiger Bereich im Maskenbild, der die Form des Hotspots bestimmt. Nur verfügbar, wenn ein Masken-Bild im 'Dateien'-Tab der Hotspot-Seite festgelegt wurde und als Panorama-Typ nicht 'Hover Video' ausgewählt wurde.
