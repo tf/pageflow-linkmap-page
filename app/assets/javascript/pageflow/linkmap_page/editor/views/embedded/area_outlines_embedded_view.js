@@ -28,7 +28,7 @@ pageflow.linkmapPage.AreaOutlineEmbeddedView = Backbone.Marionette.ItemView.exte
     var area = this.options.area;
     var canvas = this.ui.canvas[0];
 
-    var colorMapComponent = this.options.colorMap.componentByPermaId(area.get('mask_perma_id'));
+    var colorMapComponent = this.options.colorMap.componentByPermaId(area.get('color_map_component_id'));
 
     if (colorMapComponent) {
       var attributes = colorMapComponent.areaAttributes();
@@ -73,7 +73,7 @@ pageflow.linkmapPage.AreaOutlineEmbeddedView = Backbone.Marionette.ItemView.exte
 
   drawArea: function(context, area) {
     var canvas = context.canvas;
-    var colorMapComponent = this.options.colorMap.componentByPermaId(area.get('mask_perma_id'));
+    var colorMapComponent = this.options.colorMap.componentByPermaId(area.get('color_map_component_id'));
 
     if (colorMapComponent) {
       colorMapComponent.draw(context, canvas.width);

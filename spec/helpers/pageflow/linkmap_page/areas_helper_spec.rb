@@ -36,7 +36,7 @@ module Pageflow
           color_map_file = create(:color_map_file)
           masked_image_file = create(:masked_image_file)
           configuration = {
-            'linkmap_areas' => [{'mask_perma_id' => "#{color_map_file.id}:aaa"}],
+            'linkmap_areas' => [{'color_map_component_id' => "#{color_map_file.id}:aaa"}],
             'hover_image_id' => 5,
             'linkmap_color_map_file_id' => color_map_file.id,
             'linkmap_masked_hover_image_id' => masked_image_file.id
@@ -62,13 +62,13 @@ module Pageflow
           expect(html).to have_selector('a div[class~="image_panorama_5"]')
         end
 
-        it 'does not use masked hover image if area mask perma id references other image' do
+        it 'does not use masked hover image if area color map component id references other image' do
           entry = create(:entry)
           masked_image_file = create(:masked_image_file)
           color_map_file = create(:color_map_file)
           other_id = color_map_file.id + 1
           configuration = {
-            'linkmap_areas' => [{'mask_perma_id' => "#{other_id}:aaa"}],
+            'linkmap_areas' => [{'color_map_component_id' => "#{other_id}:aaa"}],
             'hover_image_id' => 5,
             'linkmap_masked_hover_image_id' => masked_image_file.id
           }
@@ -92,7 +92,7 @@ module Pageflow
           color_map_file = create(:color_map_file)
           masked_image_file = create(:masked_image_file)
           configuration = {
-            'linkmap_areas' => [{'mask_perma_id' => "#{color_map_file.id}:aaa"}],
+            'linkmap_areas' => [{'color_map_component_id' => "#{color_map_file.id}:aaa"}],
             'hover_image_id' => 5,
             'linkmap_color_map_file_id' => color_map_file.id,
             'linkmap_masked_visited_image_id' => masked_image_file.id
@@ -104,39 +104,51 @@ module Pageflow
           expect(html).to have_selector("a div[class~='#{image_class}']")
         end
 
-        it 'sets data-mask-perma-id attribute if area has mask_perma_id' do
+        it 'sets data-color-map-component-id attribute if area has color_map_component_id' do
           entry = create(:entry)
-          configuration = {'linkmap_areas' => [{'mask_perma_id' => '1:aaa'}]}
+          configuration = {'linkmap_areas' => [{'color_map_component_id' => '1:aaa'}]}
 
           html = helper.linkmap_areas_div(entry, configuration)
 
-          expect(html).to have_selector('a[data-mask-perma-id="1:aaa"]')
+          expect(html).to have_selector('a[data-color-map-component-id="1:aaa"]')
         end
 
-        it 'uses v2 mask perma id if present, preceding mask perma id' do
+        it 'uses color map component id if present, preceding mask perma id' do
           entry = create(:entry)
           color_map_file_1 = create(:color_map_file)
           color_map_file_2 = create(:color_map_file)
           configuration = {
             'linkmap_areas' => [{'color_map_component_id' => "#{color_map_file_2.id}:aaa",
-                                 'mask_perma_id' => "#{color_map_file_1}:aaa"}]
+                                 'mask_perma_id' => "#{color_map_file_1.id}:aaa"}]
           }
 
           html = helper.linkmap_areas_div(entry, configuration)
 
-          expect(html).to have_selector("a[data-mask-perma-id='#{color_map_file_2.id}:aaa']")
+          expect(html).to have_selector("a[data-color-map-component-id='#{color_map_file_2.id}:aaa']")
         end
 
-        it 'does not set data-mask-perma-id attribute if background type is hover_video' do
+        it 'uses mask perma id as fallback if present and color map component id is blank' do
+          entry = create(:entry)
+          color_map_file = create(:color_map_file)
+          configuration = {
+            'linkmap_areas' => [{'mask_perma_id' => "#{color_map_file.id}:aaa"}]
+          }
+
+          html = helper.linkmap_areas_div(entry, configuration)
+
+          expect(html).to have_selector("a[data-color-map-component-id='#{color_map_file.id}:aaa']")
+        end
+
+        it 'does not set data-color-map-component-id attribute if background type is hover_video' do
           entry = create(:entry)
           configuration = {
-            'linkmap_areas' => [{'mask_perma_id' => '1:aaa'}],
+            'linkmap_areas' => [{'color_map_component_id' => '1:aaa'}],
             'background_type' => 'hover_video'
           }
 
           html = helper.linkmap_areas_div(entry, configuration)
 
-          expect(html).not_to have_selector('a[data-mask-perma-id]')
+          expect(html).not_to have_selector('a[data-color-map-component-id]')
         end
       end
 

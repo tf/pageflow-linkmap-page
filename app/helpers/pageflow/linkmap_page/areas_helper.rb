@@ -32,15 +32,15 @@ module Pageflow
       end
 
       def linkmap_area_background_image_div(prefix, attributes, configuration, color_map_file)
-        mask_perma_id = attributes['color_map_component_id'] || attributes['mask_perma_id']
+        color_map_component_id = attributes['color_map_component_id'] || attributes['mask_perma_id']
         if color_map_file &&
-          mask_perma_id.present? &&
-          mask_perma_id.split(':').first.to_i == color_map_file.id
+          color_map_component_id.present? &&
+          color_map_component_id.split(':').first.to_i == color_map_file.id
           background_image_div(configuration,
                                "linkmap_masked_#{prefix}_image",
                                class: "#{prefix}_image",
                                file_type: 'pageflow_linkmap_page_masked_image_files',
-                               style_group: mask_perma_id.split(':').last)
+                               style_group: color_map_component_id.split(':').last)
         else
           background_image_div(configuration,
                                "#{prefix}_image",
@@ -91,8 +91,8 @@ module Pageflow
         end
 
         def data_attributes
-          mask_perma_id = background_type != 'hover_video' &&
-                          (attributes[:color_map_component_id] || attributes[:mask_perma_id])
+          color_map_component_id = background_type != 'hover_video' &&
+                                   (attributes[:color_map_component_id] || attributes[:mask_perma_id])
           audio_file_id = attributes[:target_id]
 
           {
@@ -100,7 +100,7 @@ module Pageflow
             target_id: attributes[:target_id],
             audio_file: audio_file_id.present? ? "#{audio_file_id}.area_#{index}" : nil,
             page_transition: attributes[:page_transition],
-            mask_perma_id: mask_perma_id,
+            color_map_component_id: color_map_component_id,
             width: attributes[:width],
             height: attributes[:height]
           }.delete_if { |key, value| value.blank? }

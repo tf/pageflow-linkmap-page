@@ -123,12 +123,13 @@ pageflow.linkmapPage.Area = Backbone.Model.extend({
   },
 
   get: function(attr) {
-    if (attr === 'mask_perma_id') {
-      var maskId = this.attributes['color_map_component_id'];
-      if(maskId === undefined) {
-        maskId = this.attributes['mask_perma_id'];
+    if (attr === 'color_map_component_id') {
+      var colorMapComponentId = this.attributes['color_map_component_id'];
+      if(colorMapComponentId === undefined) {
+        // also try legacy mask_perma_id as fallback
+        colorMapComponentId = this.attributes['mask_perma_id'];
       }
-      return maskId;
+      return colorMapComponentId;
     } else {
       return this.attributes[attr];
     }
