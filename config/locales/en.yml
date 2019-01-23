@@ -2,11 +2,11 @@ en:
   activerecord:
     attributes:
       pageflow/linkmap_page/area:
+        color_map_component_id: Mask
         inverted: Invert
         link_description: Link decription text
         link_title: Link description title
         marker: Link display
-        mask_perma_id: Mask
         name: Label
         page_transition: Page transition
         target_id: Target
@@ -291,11 +291,11 @@ en:
           areas: Areas
       inline_help:
         pageflow/linkmap_page/area:
+          color_map_component_id: Colored area inside mask image which determines the shape of the hotspot.
+          color_map_component_id_disabled: Colored area inside mask image which determines the shape of the hotspot. Only available if a mask image has been selected on the hotspot page's 'Files' tab and the panorama type is not 'Hover video'.
           inverted: Display dark pictograms to improve visibility on light backgrounds.
           link_title: The description is displayed inside an overlay when the cursor hovers the hotspot.
           marker: 'Choose the hotspot''s visual appearance. '
-          mask_perma_id: Colored area inside mask image which determines the shape of the hotspot.
-          mask_perma_id_disabled: Colored area inside mask image which determines the shape of the hotspot. Only available if a mask image has been selected on the hotspot page's 'Files' tab and the panorama type is not 'Hover video'.
           name: Choose a label to recognize the link within the overview. This label is for your orientation only and will not be displayed to the reader.
           page_transition: Choose the animation, that will be used to transition to the link's target page.
           target_id: Object the hotspot links to.

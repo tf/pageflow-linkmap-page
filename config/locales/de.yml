@@ -2,11 +2,11 @@ de:
   activerecord:
     attributes:
       pageflow/linkmap_page/area:
+        color_map_component_id: Maske
         inverted: Invertieren
         link_description: 'Linkbeschreibung: Text'
         link_title: 'Linkbeschreibung: Titel'
         marker: Linkmarkierung
-        mask_perma_id: Maske
         name: Bezeichnung
         page_transition: Seitenwechsel-Animation
         target_id: Ziel
@@ -331,11 +331,11 @@ de:
           areas: Bereiche
       inline_help:
         pageflow/linkmap_page/area:
+          color_map_component_id: Farbiger Bereich im Maskenbild, der die Form des Hotspots bestimmt.
+          color_map_component_id_disabled: Farbiger Bereich im Maskenbild, der die Form des Hotspots bestimmt. Nur verfügbar, wenn ein Masken-Bild im 'Dateien'-Tab der Hotspot-Seite festgelegt wurde und als Panorama-Typ nicht 'Hover Video' ausgewählt wurde.
           inverted: Dunkle Piktogramme für die Verwendung auf hellen Hintergründen anzeigen.
           link_title: Die Beschreibung wird in einem Overlay angezeigt, wenn sich der Cursor über dem Hotspot befindet.
           marker: Wähle die visuelle Darstellung des Hotspots.
-          mask_perma_id: Farbiger Bereich im Maskenbild, der die Form des Hotspots bestimmt.
-          mask_perma_id_disabled: Farbiger Bereich im Maskenbild, der die Form des Hotspots bestimmt. Nur verfügbar, wenn ein Masken-Bild im 'Dateien'-Tab der Hotspot-Seite festgelegt wurde und als Panorama-Typ nicht 'Hover Video' ausgewählt wurde.
           name: Gib hier eine Bezeichnung ein, um später bei in der Verweis-Übersicht direkt zu erkennen, um welchen Verweis es sich handelt. Die Bezeichnung ist für die Leser nicht sichtbar.
           page_transition: Wähle hier den Effekt, der beim Übergang zur Zielseite des Verweises benutzt werden soll.
           target_id: Objekt auf das der Hotspot verlinkt.
