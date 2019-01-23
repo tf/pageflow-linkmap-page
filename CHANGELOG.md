@@ -1,10 +1,13 @@
 # CHANGELOG
 
-### Unreleased Changes
+### Version 2.1.0
 
-[Compare changes](https://github.com/codevise/pageflow-linkmap-page/compare/2-0-stable...master)
+2019-01-23
 
-None so far.
+[Compare changes](https://github.com/codevise/pageflow-linkmap-page/compare/2-0-stable...v2.1.0)
+
+- Add compatibility to pageflow_linkmap_page 1.5
+  ([#48](https://github.com/codevise/pageflow-linkmap-page/pull/48))
 
 See
 [2-0-stable branch](https://github.com/codevise/pageflow-linkmap-page/blob/2-0-stable/CHANGELOG.md)
