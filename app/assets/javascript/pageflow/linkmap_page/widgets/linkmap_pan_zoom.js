@@ -201,9 +201,9 @@
       var areaHeight = area.height();
       var areaPosition = area.position();
 
-      var scale = Math.min(2,
+      var scale = Math.max(1, Math.min(2,
                            this.pageWidth / areaWidth,
-                           this.pageHeight / areaHeight);
+                           this.pageHeight / areaHeight));
 
       var result = {
         scale: scale,
