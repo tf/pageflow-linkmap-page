@@ -3,6 +3,48 @@ require 'spec_helper'
 module Pageflow
   module LinkmapPage
     describe AreasHelper do
+      describe '#linkmap_content_and_background_css_classes' do
+        it 'contains default css classes' do
+          classes = helper.linkmap_content_and_background_css_classes({}).split(' ')
+
+          expect(classes).to include('content_and_background')
+          expect(classes).to include('linkmap_page')
+          expect(classes).to include('unplayed')
+        end
+
+        it 'contains hide_overlay_boxes if option is set and pan zoom is active' do
+          configuration = {
+            'mobile_panorama_navigation' => 'pan_zoom',
+            'hide_linkmap_overlay_boxes'=> true
+          }
+
+          classes = helper.linkmap_content_and_background_css_classes(configuration).split(' ')
+
+          expect(classes).to include('hide_overlay_boxes')
+        end
+
+        it 'does not contain hide_overlay_boxes if option is not set even if pan zoom is active' do
+          configuration = {
+            'mobile_panorama_navigation' => 'pan_zoom',
+            'hide_linkmap_overlay_boxes'=> false
+          }
+
+          classes = helper.linkmap_content_and_background_css_classes(configuration).split(' ')
+
+          expect(classes).not_to include('hide_overlay_boxes')
+        end
+
+        it 'does not contain hide_overlay_boxes if option is set even but pan zoom is not active' do
+          configuration = {
+            'hide_linkmap_overlay_boxes'=> true
+          }
+
+          classes = helper.linkmap_content_and_background_css_classes(configuration).split(' ')
+
+          expect(classes).not_to include('hide_overlay_boxes')
+        end
+      end
+
       describe '#linkmap_area_divs' do
         it 'renders div with attribute name as class' do
           entry = create(:entry)

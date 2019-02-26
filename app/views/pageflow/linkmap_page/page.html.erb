@@ -1,5 +1,5 @@
 <div class="blackLayer"></div>
-<div class="content_and_background linkmap_page unplayed">
+<%= content_tag(:div, class: linkmap_content_and_background_css_classes(configuration)) do %>
   <div class="backgroundArea">
     <%= background_image_div(configuration, 'fixed_background_image', class: 'fixed_background') %>
     <div class="scroller">
@@ -97,4 +97,4 @@
       </div>
     </div>
   </div>
-</div>
+<% end %>
