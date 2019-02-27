@@ -262,6 +262,12 @@ pageflow.pageType.register('linkmap_page', _.extend({
     this.content.linkmapLookaround('update', this.getMarginScrollingDisabled(configuration));
 
     this.phoneEmulationChanged(function() {
+      this.content.linkmapPanorama('update',
+                                   configuration.add_environment,
+                                   configuration.limit_scrolling,
+                                   this.getPanoramaStartScrollPosition(configuration),
+                                   this.phoneEmulation());
+
       this.content.linkmapPanorama('resetScrollPosition');
     });
   },
@@ -354,7 +360,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
     this.linkmapAreas.linkmap('updateHoverVideoEnabled', configuration.get('background_type') === 'hover_video');
 
     this.afterEmbeddedViewsUpdate(function() {
-      var minScaling = false;
+      var minScaling = this.phoneEmulation();
 
       this.linkmapAreas.linkmap('option',
                                 'colorMapFileId',
