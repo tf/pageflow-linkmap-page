@@ -263,6 +263,16 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
     this.updateNavigationMode(configuration);
     this.content.linkmapLookaround('update', this.getMarginScrollingDisabled(configuration));
+
+    this.phoneEmulationChanged(function() {
+      this.content.linkmapPanorama('update',
+                                   configuration.add_environment,
+                                   configuration.limit_scrolling,
+                                   this.getPanoramaStartScrollPosition(configuration),
+                                   this.phoneEmulation());
+
+      this.content.linkmapPanorama('resetScrollPosition');
+    });
   },
 
   prepare: function(pageElement, configuration) {
@@ -353,7 +363,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
     this.linkmapAreas.linkmap('updateHoverVideoEnabled', configuration.get('background_type') === 'hover_video');
 
     this.afterEmbeddedViewsUpdate(function() {
-      var minScaling = false;
+      var minScaling = this.phoneEmulation();
 
       this.linkmapAreas.linkmap('option',
                                 'colorMapFileId',
@@ -371,7 +381,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
         initialPosition: this.getPanoramaStartScrollPosition(configuration.attributes)
       });
 
-      this.updateScaledOnPhoneFlags(configuration.page,
+      this.updateScaledOnPhoneFlags(configuration,
                                     this.content.linkmapPanorama('instance'));
 
       this.content.linkmapLookaround('update',
@@ -384,8 +394,12 @@ pageflow.pageType.register('linkmap_page', _.extend({
     });
   },
 
-  updateScaledOnPhoneFlags: function(page, panorama) {
+  updateScaledOnPhoneFlags: function(configuration, panorama) {
+    var panZoomOnPhone = configuration.get('mobile_panorama_navigation') === 'pan_zoom';
+    var page = configuration.page;
+
     page.set('scaled_on_portrait_phone',
+             !panZoomOnPhone &&
              panorama.getPanoramaSize({
                pageWidth: 360,
                pageHeight: 640,
@@ -393,6 +407,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
              }).scaled);
 
     page.set('scaled_on_landscape_phone',
+             !panZoomOnPhone &&
              panorama.getPanoramaSize({
                pageWidth: 640,
                pageHeight: 360,
@@ -458,6 +473,16 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
   phoneEmulation: function() {
     return !!$('#entry_preview > .emulation_mode_phone').length;
+  },
+
+  phoneEmulationChanged: function(callback) {
+    var phoneEmulation = this.phoneEmulation();
+
+    if (this.lastPhoneEmulation != phoneEmulation) {
+      callback.call(this);
+    }
+
+    this.lastPhoneEmulation = phoneEmulation;
   },
 
   playVideo: function(configuration) {
