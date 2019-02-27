@@ -63,7 +63,9 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
     this.contentAndBackground.linkmapScrollIndicators({
       disabled: this.isPanZoomEnabled(configuration),
-      scroller: this.scroller
+      scroller: this.scroller,
+      viewport: this.content,
+      innerScrollerElement: pageElement.find('.linkmap')
     });
 
     pageElement.find('.hover_video').linkmapHoverVideo({
@@ -254,6 +256,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
   resize: function(pageElement, configuration) {
     this.content.linkmapPanorama('refresh');
+    this.contentAndBackground.linkmapScrollIndicators('refresh');
     this.content.linkmapPanZoom('refresh');
     this.linkmapAreas.linkmap('refresh');
     this.mobileInfoBox.linkmapPaginator('refresh');
