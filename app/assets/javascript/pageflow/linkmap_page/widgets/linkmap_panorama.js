@@ -114,6 +114,8 @@
       });
 
       var positionOverlay = function(area) {
+        var viewport = that.element;
+
         if (area.is('.editing')) {
           return;
         }
@@ -133,7 +135,7 @@
           }
           else {
             var spaceLeftOfArea = area.offset().left;
-            var spaceRightOfArea = $(pageElement).width() - area.offset().left - area.outerWidth();
+            var spaceRightOfArea = viewport.width() - area.offset().left - area.outerWidth();
 
             if(spaceLeftOfArea < spaceRightOfArea || spaceLeftOfArea < that.overlayBox.outerWidth()) {
               var overlayAlignmentDirection = "right";
@@ -163,8 +165,8 @@
           }
 
           var spaceToBottom = that.panorama.height() - area.position().top;
-          var spaceToViewportBottom = $(pageElement).height() - area.offset().top - area.height() / 2;
-          var spaceToViewportTop = $(pageElement).height() - 50;
+          var spaceToViewportBottom = viewport.height() - area.offset().top - area.height() / 2;
+          var spaceToViewportTop = viewport.height() - 50;
           var minMargin = 40;
 
           if(that.overlayBox.outerHeight() > spaceToBottom) {
@@ -210,8 +212,8 @@
         return;
       }
 
-      var pageElement = this.options.page;
-      var distanceLimit = pageElement.width() > pageElement.height() ? pageElement.height() : pageElement.width();
+      var viewport = this.element;
+      var distanceLimit = viewport.width() > viewport.height() ? viewport.height() : viewport.width();
       var minOpacity = 0.4;
       activeAreas.each(function() {
         var distance = calculateDistance($(this), mX, mY);
@@ -262,7 +264,7 @@
 
     getScrollArea: function(activeAreas) {
       var panorama = this.panorama;
-      var pageElement = this.options.page;
+      var viewport = this.element;
       var startScrollPosition = this.startScrollPosition;
       var scrollArea;
 
@@ -283,10 +285,10 @@
           scrollArea.right = scrollArea.right < el.position().left + el.width() ? el.position().left + el.width() : scrollArea.right;
         });
 
-        scrollArea.top = Math.max(0, scrollArea.top - pageElement.height() * this.scrollHoverMargin);
-        scrollArea.left = Math.max(0, scrollArea.left - pageElement.width() * this.scrollHoverMargin);
-        scrollArea.bottom = Math.min(panorama.height(), scrollArea.bottom + pageElement.height() * this.scrollHoverMargin);
-        scrollArea.right = Math.min(panorama.width(), scrollArea.right + pageElement.width() * this.scrollHoverMargin);
+        scrollArea.top = Math.max(0, scrollArea.top - viewport.height() * this.scrollHoverMargin);
+        scrollArea.left = Math.max(0, scrollArea.left - viewport.width() * this.scrollHoverMargin);
+        scrollArea.bottom = Math.min(panorama.height(), scrollArea.bottom + viewport.height() * this.scrollHoverMargin);
+        scrollArea.right = Math.min(panorama.width(), scrollArea.right + viewport.width() * this.scrollHoverMargin);
       }
       else {
         scrollArea = {
@@ -316,12 +318,13 @@
 
       this.keepingScrollPosition(function() {
         var pageElement = this.options.page;
+        var viewport = this.element;
 
         this.panorama = this.options.panorama();
 
         this.panoramaSize = this.getPanoramaSize({
-          pageWidth: pageElement.width(),
-          pageHeight: pageElement.height(),
+          pageWidth: viewport.width(),
+          pageHeight: viewport.height(),
 
           minScaling: this.minScaling
         });
@@ -340,14 +343,14 @@
         this.innerScrollerElement.width(this.scrollArea.right - this.scrollArea.left);
         this.innerScrollerElement.height(this.scrollArea.bottom - this.scrollArea.top);
 
-        var centerX = Math.max(0, (pageElement.width() - (this.scrollArea.right - this.scrollArea.left)) / 2);
-        var centerY = Math.max(0, (pageElement.height() - (this.scrollArea.bottom - this.scrollArea.top)) / 2);
+        var centerX = Math.max(0, (viewport.width() - (this.scrollArea.right - this.scrollArea.left)) / 2);
+        var centerY = Math.max(0, (viewport.height() - (this.scrollArea.bottom - this.scrollArea.top)) / 2);
 
         var translateX = this.scrollArea.left - centerX;
         var translateY = this.scrollArea.top - centerY;
 
-        var maxTranslateX = this.panoramaSize.width - pageElement.width();
-        var maxTranslateY = this.panoramaSize.height - pageElement.height();
+        var maxTranslateX = this.panoramaSize.width - viewport.width();
+        var maxTranslateY = this.panoramaSize.height - viewport.height();
 
         this.panoramaWrapper.css({
           left: -Math.min(maxTranslateX, Math.max(0, translateX)) +'px',
