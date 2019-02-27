@@ -378,7 +378,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
         initialPosition: this.getPanoramaStartScrollPosition(configuration.attributes)
       });
 
-      this.updateScaledOnPhoneFlags(configuration.page,
+      this.updateScaledOnPhoneFlags(configuration,
                                     this.content.linkmapPanorama('instance'));
 
       this.content.linkmapLookaround('update',
@@ -391,8 +391,12 @@ pageflow.pageType.register('linkmap_page', _.extend({
     });
   },
 
-  updateScaledOnPhoneFlags: function(page, panorama) {
+  updateScaledOnPhoneFlags: function(configuration, panorama) {
+    var panZoomOnPhone = configuration.get('mobile_panorama_navigation') === 'pan_zoom';
+    var page = configuration.page;
+
     page.set('scaled_on_portrait_phone',
+             !panZoomOnPhone &&
              panorama.getPanoramaSize({
                pageWidth: 360,
                pageHeight: 640,
@@ -400,6 +404,7 @@ pageflow.pageType.register('linkmap_page', _.extend({
              }).scaled);
 
     page.set('scaled_on_landscape_phone',
+             !panZoomOnPhone &&
              panorama.getPanoramaSize({
                pageWidth: 640,
                pageHeight: 360,
