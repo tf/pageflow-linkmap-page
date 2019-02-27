@@ -260,6 +260,10 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
     this.updateNavigationMode(configuration);
     this.content.linkmapLookaround('update', this.getMarginScrollingDisabled(configuration));
+
+    this.phoneEmulationChanged(function() {
+      this.content.linkmapPanorama('resetScrollPosition');
+    });
   },
 
   prepare: function(pageElement, configuration) {
@@ -455,6 +459,16 @@ pageflow.pageType.register('linkmap_page', _.extend({
 
   phoneEmulation: function() {
     return !!$('#entry_preview > .emulation_mode_phone').length;
+  },
+
+  phoneEmulationChanged: function(callback) {
+    var phoneEmulation = this.phoneEmulation();
+
+    if (this.lastPhoneEmulation != phoneEmulation) {
+      callback.call(this);
+    }
+
+    this.lastPhoneEmulation = phoneEmulation;
   },
 
   playVideo: function(configuration) {
