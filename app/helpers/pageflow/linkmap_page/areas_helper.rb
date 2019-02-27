@@ -3,6 +3,17 @@ module Pageflow
     module AreasHelper
       include BackgroundImageHelper
 
+      def linkmap_content_and_background_css_classes(configuration)
+        hide_overlay_boxes =
+          configuration['mobile_panorama_navigation'] == 'pan_zoom' &&
+          configuration['hide_linkmap_overlay_boxes']
+
+        [
+          'content_and_background linkmap_page unplayed',
+          hide_overlay_boxes ? 'hide_overlay_boxes' : nil
+        ].compact.join(' ')
+      end
+
       def linkmap_areas_div(entry, configuration)
         color_map_file =
           ColorMapFile.find_by_id(configuration['linkmap_color_map_file_id'])
@@ -11,21 +22,12 @@ module Pageflow
         masked_visited_image_file =
           MaskedImageFile.find_by_id(configuration['linkmap_masked_visited_image_id'])
 
-
-        hide_overlay_boxes =
-          configuration['mobile_panorama_navigation'] == 'pan_zoom' &&
-          configuration['hide_linkmap_overlay_boxes']
-
         render('pageflow/linkmap_page/areas/div',
                entry: entry,
                configuration: configuration,
                color_map_file: color_map_file,
                masked_hover_image_file: masked_hover_image_file,
                masked_visited_image_file: masked_visited_image_file,
-               css_classes: [
-                 'linkmap_areas',
-                 hide_overlay_boxes ? 'hide_overlay_boxes' : nil
-               ].compact.join(' '),
                data_attributes: {
                  color_map_file_id: configuration['color_map_file_id']
                })
