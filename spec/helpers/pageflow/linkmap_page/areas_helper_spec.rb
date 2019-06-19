@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'shared_contexts/usage_agnostic_file_association'
 
 module Pageflow
   module LinkmapPage
@@ -46,29 +47,31 @@ module Pageflow
       end
 
       describe '#linkmap_area_divs' do
+        include_context 'usage agnostic file association'
+
         it 'renders div with attribute name as class' do
-          @entry = PublishedEntry.new(create(:entry, :published))
+          entry = create(:entry)
           configuration = {}
 
-          html = helper.linkmap_areas_div(@entry, configuration)
+          html = helper.linkmap_areas_div(entry, configuration)
 
           expect(html).to have_selector('div.linkmap_areas')
         end
 
         it 'renders linkmap areas' do
-          @entry = PublishedEntry.new(create(:entry, :published))
+          entry = create(:entry)
           configuration = {'linkmap_areas' => [{}]}
 
-          html = helper.linkmap_areas_div(@entry, configuration)
+          html = helper.linkmap_areas_div(entry, configuration)
 
           expect(html).to have_selector('div a[href]')
         end
 
         it 'renders hover image inside linkmap areas' do
-          @entry = PublishedEntry.new(create(:entry, :published))
+          entry = create(:entry)
           configuration = {'linkmap_areas' => [{}], 'hover_image_id' => 5}
 
-          html = helper.linkmap_areas_div(@entry, configuration)
+          html = helper.linkmap_areas_div(entry, configuration)
 
           expect(html).to have_selector("a div[class~='image_panorama_5']")
         end
@@ -76,7 +79,9 @@ module Pageflow
         it 'renders masked hover image inside masked linkmap areas' do
           @entry = PublishedEntry.new(create(:entry, :published))
           color_map_file = create(:used_file, model: :color_map_file, revision: @entry.revision)
+          entry_has_file(color_map_file)
           masked_image_file = create(:used_file, model: :masked_image_file, revision: @entry.revision)
+          entry_has_file(masked_image_file)
           configuration = {
             'linkmap_areas' => [{'color_map_component_id' => "#{color_map_file.perma_id}:aaa"}],
             'hover_image_id' => 5,
@@ -91,40 +96,40 @@ module Pageflow
         end
 
         it 'only uses masked hover image if area is masked' do
-          @entry = PublishedEntry.new(create(:entry, :published))
-          masked_image_file = create(:used_file, model: :masked_image_file, revision: @entry.revision)
+          entry = create(:entry)
+          masked_image_file = create(:masked_image_file)
           configuration = {
             'linkmap_areas' => [{}],
             'hover_image_id' => 5,
-            'linkmap_masked_hover_image_id' => masked_image_file.perma_id
+            'linkmap_masked_hover_image_id' => masked_image_file.id
           }
 
-          html = helper.linkmap_areas_div(@entry, configuration)
+          html = helper.linkmap_areas_div(entry, configuration)
 
           expect(html).to have_selector('a div[class~="image_panorama_5"]')
         end
 
         it 'does not use masked hover image if area color map component id references other image' do
-          @entry = PublishedEntry.new(create(:entry, :published))
-          masked_image_file = create(:used_file, model: :masked_image_file, revision: @entry.revision)
-          color_map_file = create(:used_file, model: :color_map_file, revision: @entry.revision)
-          other_id = color_map_file.perma_id + 1
+          entry = create(:entry)
+          masked_image_file = create(:masked_image_file)
+          color_map_file = create(:color_map_file)
+          other_id = color_map_file.id + 1
           configuration = {
             'linkmap_areas' => [{'color_map_component_id' => "#{other_id}:aaa"}],
             'hover_image_id' => 5,
-            'linkmap_masked_hover_image_id' => masked_image_file.perma_id
+            'linkmap_masked_hover_image_id' => masked_image_file.id
           }
 
-          html = helper.linkmap_areas_div(@entry, configuration)
+          html = helper.linkmap_areas_div(entry, configuration)
 
           expect(html).to have_selector('a div[class~="image_panorama_5"]')
         end
 
         it 'renders visited image inside linkmap areas' do
-          @entry = PublishedEntry.new(create(:entry, :published))
+          entry = create(:entry)
           configuration = {'linkmap_areas' => [{}], 'visited_image_id' => 5}
 
-          html = helper.linkmap_areas_div(@entry, configuration)
+          html = helper.linkmap_areas_div(entry, configuration)
 
           expect(html).to have_selector('a div[class~="image_panorama_5"]')
         end
@@ -132,7 +137,9 @@ module Pageflow
         it 'renders masked visited image inside masked linkmap areas' do
           @entry = PublishedEntry.new(create(:entry, :published))
           color_map_file = create(:used_file, model: :color_map_file, revision: @entry.revision)
+          entry_has_file(color_map_file)
           masked_image_file = create(:used_file, model: :masked_image_file, revision: @entry.revision)
+          entry_has_file(masked_image_file)
           configuration = {
             'linkmap_areas' => [{'color_map_component_id' => "#{color_map_file.perma_id}:aaa"}],
             'hover_image_id' => 5,
@@ -147,48 +154,48 @@ module Pageflow
         end
 
         it 'sets data-color-map-component-id attribute if area has color_map_component_id' do
-          @entry = PublishedEntry.new(create(:entry, :published))
+          entry = create(:entry)
           configuration = {'linkmap_areas' => [{'color_map_component_id' => '1:aaa'}]}
 
-          html = helper.linkmap_areas_div(@entry, configuration)
+          html = helper.linkmap_areas_div(entry, configuration)
 
           expect(html).to have_selector('a[data-color-map-component-id="1:aaa"]')
         end
 
         it 'uses color map component id if present, preceding mask perma id' do
-          @entry = PublishedEntry.new(create(:entry, :published))
-          color_map_file_1 = create(:used_file, model: :color_map_file, revision: @entry.revision)
-          color_map_file_2 = create(:used_file, model: :color_map_file, revision: @entry.revision)
+          entry = create(:entry)
+          color_map_file_1 = create(:color_map_file)
+          color_map_file_2 = create(:color_map_file)
           configuration = {
-            'linkmap_areas' => [{'color_map_component_id' => "#{color_map_file_2.perma_id}:aaa",
-                                 'mask_perma_id' => "#{color_map_file_1.perma_id}:aaa"}]
+            'linkmap_areas' => [{'color_map_component_id' => "#{color_map_file_2.id}:aaa",
+                                 'mask_perma_id' => "#{color_map_file_1.id}:aaa"}]
           }
 
-          html = helper.linkmap_areas_div(@entry, configuration)
+          html = helper.linkmap_areas_div(entry, configuration)
 
-          expect(html).to have_selector("a[data-color-map-component-id='#{color_map_file_2.perma_id}:aaa']")
+          expect(html).to have_selector("a[data-color-map-component-id='#{color_map_file_2.id}:aaa']")
         end
 
         it 'uses mask perma id as fallback if present and color map component id is blank' do
-          @entry = PublishedEntry.new(create(:entry, :published))
-          color_map_file = create(:used_file, model: :color_map_file, revision: @entry.revision)
+          entry = create(:entry)
+          color_map_file = create(:color_map_file)
           configuration = {
-            'linkmap_areas' => [{'mask_perma_id' => "#{color_map_file.perma_id}:aaa"}]
+            'linkmap_areas' => [{'mask_perma_id' => "#{color_map_file.id}:aaa"}]
           }
 
-          html = helper.linkmap_areas_div(@entry, configuration)
+          html = helper.linkmap_areas_div(entry, configuration)
 
-          expect(html).to have_selector("a[data-color-map-component-id='#{color_map_file.perma_id}:aaa']")
+          expect(html).to have_selector("a[data-color-map-component-id='#{color_map_file.id}:aaa']")
         end
 
         it 'does not set data-color-map-component-id attribute if background type is hover_video' do
-          @entry = PublishedEntry.new(create(:entry, :published))
+          entry = create(:entry)
           configuration = {
             'linkmap_areas' => [{'color_map_component_id' => '1:aaa'}],
             'background_type' => 'hover_video'
           }
 
-          html = helper.linkmap_areas_div(@entry, configuration)
+          html = helper.linkmap_areas_div(entry, configuration)
 
           expect(html).not_to have_selector('a[data-color-map-component-id]')
         end
