@@ -7,8 +7,7 @@
                                             color_map_file) %>
 
       <% if configuration['background_type'] == 'hover_video' &&
-            !Pageflow::ImageFile.find_by_id(configuration['hover_image_id']) %>
-
+            !find_file_in_entry(Pageflow::ImageFile, configuration['hover_image_id']) %>
         <%= background_image_div(configuration,
                                  'panorama_video',
                                  file_type: 'video_file',

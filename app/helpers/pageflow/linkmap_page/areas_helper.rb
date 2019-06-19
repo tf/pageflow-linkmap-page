@@ -2,6 +2,7 @@ module Pageflow
   module LinkmapPage
     module AreasHelper
       include BackgroundImageHelper
+      include RevisionFileHelper
 
       def linkmap_content_and_background_css_classes(configuration)
         hide_overlay_boxes =
@@ -16,11 +17,11 @@ module Pageflow
 
       def linkmap_areas_div(entry, configuration)
         color_map_file =
-          ColorMapFile.find_by_id(configuration['linkmap_color_map_file_id'])
+          find_file_in_entry(ColorMapFile, configuration['linkmap_color_map_file_id'])
         masked_hover_image_file =
-          MaskedImageFile.find_by_id(configuration['linkmap_masked_hover_image_id'])
+          find_file_in_entry(MaskedImageFile, configuration['linkmap_masked_hover_image_id'])
         masked_visited_image_file =
-          MaskedImageFile.find_by_id(configuration['linkmap_masked_visited_image_id'])
+          find_file_in_entry(MaskedImageFile, configuration['linkmap_masked_visited_image_id'])
 
         render('pageflow/linkmap_page/areas/div',
                entry: entry,
@@ -37,7 +38,7 @@ module Pageflow
         color_map_component_id = attributes['color_map_component_id'] || attributes['mask_perma_id']
         if color_map_file &&
           color_map_component_id.present? &&
-          color_map_component_id.split(':').first.to_i == color_map_file.id
+          color_map_component_id.split(':').first.to_i == color_map_file.perma_id
           background_image_div(configuration,
                                "linkmap_masked_#{prefix}_image",
                                class: "#{prefix}_image",
