@@ -1,6 +1,6 @@
 //= require_self
 
-//= require ./editor/models/processed_file
+//= require ./editor/models/generated_image_file
 //= require_tree ./editor/models
 //= require_tree ./editor/collections
 //= require_tree ./editor/routers

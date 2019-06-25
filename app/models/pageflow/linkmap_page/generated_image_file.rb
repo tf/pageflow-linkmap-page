@@ -1,9 +1,9 @@
 module Pageflow
   module LinkmapPage
-    class ProcessedImageFile < ActiveRecord::Base
+    class GeneratedImageFile < ActiveRecord::Base
       self.abstract_class = true
 
-      include Pageflow::UploadedFile
+      include Pageflow::ReusableFile
 
       belongs_to :source_image_file, class_name: 'Pageflow::ImageFile'
 
@@ -29,22 +29,7 @@ module Pageflow
         end
       end
 
-      def url
-        ''
-      end
-
-      def original_url
-        ''
-      end
-
-      def retry!
-        process!
-      end
-
-      def publish!
-        process!
-      end
-
+      # ReusableFile-overrides:
       def retryable?
         processing_failed?
       end
@@ -57,8 +42,12 @@ module Pageflow
         processing_failed?
       end
 
-      def basename
-        'unused'
+      def retry!
+        process!
+      end
+
+      def publish!
+        process!
       end
 
       def prerequisite_files
