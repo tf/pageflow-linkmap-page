@@ -186,6 +186,7 @@ module Pageflow
               .reject { |color| color == TRANSPARENT }
               .map { |color| color.tr('#', '') }
               .map(&:downcase)
+              .map { |color| color.gsub(/(.{6})ff/, '\1') }
               .sort
           end
 
