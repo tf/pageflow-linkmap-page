@@ -19,13 +19,12 @@
         this.listenTo(
           this,
           'change:' + attribute +
-            ' change:linkmap_color_map_file_id' +
-            ' change:linkmap_color_map_file_id:ready',
+            ' change:linkmap_color_map_file_id',
           function() {
             var colorMapFile = colorMapFiles().get(this.get('linkmap_color_map_file_id'));
             var imageFile = pageflow.imageFiles.get(this.get(attribute));
 
-            if (imageFile && colorMapFile && colorMapFile.isReady()) {
+            if (imageFile && colorMapFile) {
               this.setReference('linkmap_masked_' + attribute,
                                 maskedImageFiles().findOrCreateBy({
                                   source_image_file_id: imageFile.id,

@@ -39,6 +39,10 @@ module Pageflow
         color_map_file.present_colors
       end
 
+      def prerequisite_files
+        [color_map_file, source_image_file]
+      end
+
       private
 
       def update_processing_progress(style)

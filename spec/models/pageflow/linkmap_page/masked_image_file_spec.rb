@@ -29,6 +29,54 @@ module Pageflow
       let(:color_of_source_image) { '#ff0000' }
 
       describe 'process' do
+        it 're-schedules job if source image file is not uploaded yet' do
+          image_file = create(:image_file, :not_yet_uploaded)
+          masked_image_file = create(:masked_image_file,
+                                     color_map_file: color_map_file,
+                                     source_image_file: image_file)
+
+          masked_image_file.process
+
+          expect(ProcessSourceImageFileJob)
+            .to have_been_enqueued.at(3.seconds.from_now)
+        end
+
+        it 're-schedules job if color map file is not ready yet' do
+          color_map_file = create(:color_map_file, state: 'processing')
+          masked_image_file = create(:masked_image_file,
+                                     color_map_file: color_map_file,
+                                     source_image_file: single_color_source_image_file)
+
+          masked_image_file.process
+
+          expect(ProcessSourceImageFileJob)
+            .to have_been_enqueued.at(3.seconds.from_now)
+        end
+
+        it 'fails if source image file failed' do
+          image_file = create(:image_file, :uploading_failed)
+          masked_image_file = create(:masked_image_file,
+                                     color_map_file: color_map_file,
+                                     source_image_file: image_file)
+
+          masked_image_file.process
+          masked_image_file.reload
+
+          expect(masked_image_file).to be_failed
+        end
+
+        it 'fails if color map file failed' do
+          color_map_file = create(:color_map_file, state: 'processing_failed')
+          masked_image_file = create(:masked_image_file,
+                                     color_map_file: color_map_file,
+                                     source_image_file: single_color_source_image_file)
+
+          masked_image_file.process
+          masked_image_file.reload
+
+          expect(masked_image_file).to be_failed
+        end
+
         it 'creates images for each color in color map masked to the area of that color' do
           masked_image_file = create(:masked_image_file,
                                      color_map_file: color_map_file,

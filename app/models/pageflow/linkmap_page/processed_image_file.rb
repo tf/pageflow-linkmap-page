@@ -23,6 +23,7 @@ module Pageflow
 
         job ProcessSourceImageFileJob do
           on_enter 'processing'
+          result :pending, retry_after: 3.seconds
           result ok: 'processed'
           result error: 'processing_failed'
         end
@@ -52,8 +53,16 @@ module Pageflow
         processed?
       end
 
+      def failed?
+        processing_failed?
+      end
+
       def basename
         'unused'
+      end
+
+      def prerequisite_files
+        [source_image_file]
       end
     end
   end

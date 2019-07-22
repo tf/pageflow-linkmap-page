@@ -7,6 +7,26 @@ module Pageflow
       let(:green_from_palette) { '69a77b' }
 
       describe 'process' do
+        it 're-schedules job if source image file is not uploaded yet' do
+          image_file = create(:image_file, :not_yet_uploaded)
+          color_map_file = create(:color_map_file, source_image_file: image_file)
+
+          color_map_file.process
+
+          expect(ProcessSourceImageFileJob)
+            .to have_been_enqueued.at(3.seconds.from_now)
+        end
+
+        it 'fails if source image file failed' do
+          image_file = create(:image_file, :uploading_failed)
+          color_map_file = create(:color_map_file, source_image_file: image_file)
+
+          color_map_file.process
+          color_map_file.reload
+
+          expect(color_map_file).to be_failed
+        end
+
         it 'remaps colors to fixed palette' do
           image_file = create(:image_file, :red_fixture)
           color_map_file = create(:color_map_file, source_image_file: image_file)
