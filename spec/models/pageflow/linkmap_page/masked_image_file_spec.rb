@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module Pageflow
   module LinkmapPage
-    describe MaskedImageFile, inline_resque: true do
+    describe MaskedImageFile, perform_jobs: :except_enqued_at do
       let :color_map_file do
         color_map_image_file = create(:image_file, :color_map_fixture)
 

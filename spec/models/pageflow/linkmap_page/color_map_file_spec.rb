@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module Pageflow
   module LinkmapPage
-    describe ColorMapFile, inline_resque: true do
+    describe ColorMapFile, perform_jobs: :except_enqued_at do
       let(:red_from_palette) { 'f65b57' }
       let(:green_from_palette) { '69a77b' }
 
