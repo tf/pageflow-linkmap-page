@@ -9,13 +9,47 @@ module Pageflow
             output = <<-OUTPUT.unindent
               # ImageMagick pixel enumeration: 3,1,255,srgba
               0,0: (246,91,87,1)  #F65B57  srgba(246,91,87,1)
-              1,0: (105,167,123,1)  #69A77B  srgba(105,167,123,1)
+              1,0: (105,167,123,1)  #69A77B66  srgba(105,167,123,0.4)
+            OUTPUT
+
+            result = Colors::ConvertOutput.parse_unique_colors(output)
+
+            expect(result).to eq(%w(69a77b66 f65b57))
+          end
+
+          it 'filters out transparent color' do
+            output = <<-OUTPUT.unindent
+              # ImageMagick pixel enumeration: 3,1,255,srgba
+              0,0: (246,91,87,1)  #F65B57  srgba(246,91,87,1)
               2,0: (0,0,0,0)  #00000000  none
             OUTPUT
 
             result = Colors::ConvertOutput.parse_unique_colors(output)
 
-            expect(result).to eq(%w(69a77b f65b57))
+            expect(result).to eq(%w(f65b57))
+          end
+
+          it 'removes trailing FF of rgba string added between ImageMagick 6.7 and 6.9' do
+            output = <<-OUTPUT.unindent
+              # ImageMagick pixel enumeration: 589,1,65535,srgba
+              0,0: (0,30069,48573,65535)  #0075BDFF  srgba(0,117,189,1)
+              1,0: (257,30069,48573,65535)  #0175BDFF  srgba(1,117,189,1)
+            OUTPUT
+
+            result = Colors::ConvertOutput.parse_unique_colors(output)
+
+            expect(result).to eq(%w(0075bd 0175bd))
+          end
+
+          it 'does not remove trailing FF of rgb string  ' do
+            output = <<-OUTPUT.unindent
+              # ImageMagick pixel enumeration: 589,1,65535,srgba
+              0,0: (0,30069,48573,65535)  #0075FF  srgba(0,117,255,1)
+            OUTPUT
+
+            result = Colors::ConvertOutput.parse_unique_colors(output)
+
+            expect(result).to eq(%w(0075ff))
           end
         end
 
