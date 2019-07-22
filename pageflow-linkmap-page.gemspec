@@ -39,4 +39,7 @@ Gem::Specification.new do |spec|
 
   # Semantic versioning rake tasks
   spec.add_development_dependency 'semmy', '~> 1.0'
+
+  # Freeze time in tests
+  spec.add_development_dependency 'timecop', '~> 0.7.1'
 end
