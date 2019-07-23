@@ -5,7 +5,7 @@ module Pageflow
 
       include Pageflow::ReusableFile
 
-      belongs_to :source_image_file, class_name: 'Pageflow::ImageFile'
+      belongs_to :source_image_file, class_name: 'Pageflow::ImageFile', optional: true
 
       GEOMETRY = '1920x1080^'.freeze
 
@@ -30,6 +30,10 @@ module Pageflow
       end
 
       # ReusableFile-overrides:
+      def attachments_for_export
+        []
+      end
+
       def retryable?
         processing_failed?
       end
