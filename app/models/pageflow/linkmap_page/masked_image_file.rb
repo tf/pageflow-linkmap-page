@@ -1,7 +1,7 @@
 module Pageflow
   module LinkmapPage
     class MaskedImageFile < GeneratedImageFile
-      belongs_to :color_map_file, class_name: 'Pageflow::LinkmapPage::ColorMapFile', optional: true
+      belongs_to :color_map_file, class_name: 'Pageflow::LinkmapPage::ColorMapFile'
 
       STYLES = lambda do |attachment|
         masked_image_file = attachment.instance

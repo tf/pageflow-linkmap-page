@@ -1,6 +1,10 @@
 module Pageflow
   module LinkmapPage
     class ColorMapFile < GeneratedImageFile
+      has_one :masked_image_file,
+              class_name: 'Pageflow::LinkmapPage::MaskedImageFile',
+              dependent: :destroy
+
       # Prevent anti aliasing. Otherwise, when processing color map
       # images, borders between areas are blurred.
       SOURCE_FILE_OPTIONS = '-filter point'.freeze

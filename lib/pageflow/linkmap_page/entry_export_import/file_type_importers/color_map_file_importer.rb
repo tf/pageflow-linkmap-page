@@ -24,9 +24,7 @@ module Pageflow
               file_data['source_image_file_id']
             )
 
-            if source_image_file
-              color_map_file.update!(source_image_file_id: source_image_file.id)
-            end
+            color_map_file.update!(source_image_file_id: source_image_file.id)
           end
         end
       end

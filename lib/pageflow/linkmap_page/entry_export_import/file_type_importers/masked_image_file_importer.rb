@@ -31,7 +31,6 @@ module Pageflow
               file_data['color_map_file_id']
             )
 
-
             masked_image_file.update!(
               source_image_file_id: source_image_file.id,
               color_map_file_id: color_map_file.id
