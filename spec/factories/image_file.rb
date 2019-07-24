@@ -2,6 +2,12 @@ FactoryBot.modify do
   fixtures = Pageflow::LinkmapPage::Engine.root.join('spec', 'support', 'fixtures')
 
   factory :image_file do
+    trait :not_yet_uploaded do
+      attachment { nil }
+      file_name { 'image.jpg' }
+      state { 'uploading' }
+    end
+
     trait :red_fixture do
       attachment { File.open(fixtures.join('red.png')) }
     end
