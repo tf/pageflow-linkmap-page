@@ -5,7 +5,7 @@ module Pageflow
 
       include Pageflow::ReusableFile
 
-      belongs_to :source_image_file, class_name: 'Pageflow::ImageFile'
+      belongs_to :source_image_file, class_name: 'Pageflow::ImageFile', optional: true
 
       GEOMETRY = '1920x1080^'.freeze
 
