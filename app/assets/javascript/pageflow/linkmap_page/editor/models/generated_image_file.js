@@ -1,4 +1,4 @@
-pageflow.linkmapPage.ProcessedFile = pageflow.UploadedFile.extend({
+pageflow.linkmapPage.GeneratedImageFile = pageflow.ReusableFile.extend({
   stages: [
     {
       name: 'processing',

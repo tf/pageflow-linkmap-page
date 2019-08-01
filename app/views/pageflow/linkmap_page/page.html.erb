@@ -7,7 +7,7 @@
         <div class="pan_zoom_safe_area_wrapper">
           <div class="panorama_wrapper">
             <% if configuration['background_type'] == 'video' &&
-                  !Pageflow::ImageFile.find_by_id(configuration['panorama_image_id']) %>
+                  !find_file_in_entry(Pageflow::ImageFile, configuration['panorama_image_id']) %>
 
               <%= background_image_div_with_size(configuration,
                                                  'panorama_video',

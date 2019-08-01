@@ -87,8 +87,8 @@ pageflow.linkmapPage.ColorMap = (function() {
     height: 0
   });
 
-  ColorMap.load = function(id) {
-    var colorMapFile = pageflow.entryData.getFile('pageflow_linkmap_page_color_map_files', id);
+  ColorMap.load = function(permaId) {
+    var colorMapFile = pageflow.entryData.getFile('pageflow_linkmap_page_color_map_files', permaId);
 
     if (!colorMapFile) {
       return $.when(ColorMap.empty);

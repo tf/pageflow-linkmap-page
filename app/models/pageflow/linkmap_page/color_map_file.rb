@@ -1,6 +1,6 @@
 module Pageflow
   module LinkmapPage
-    class ColorMapFile < ProcessedImageFile
+    class ColorMapFile < GeneratedImageFile
       belongs_to :source_image_file, class_name: 'Pageflow::ImageFile'
 
       # Prevent anti aliasing. Otherwise, when processing color map
