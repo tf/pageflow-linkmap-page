@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '~> 2.1'
 
-  spec.add_runtime_dependency 'pageflow', '~> 14.x'
+  spec.add_runtime_dependency 'pageflow', '~> 15.x'
   spec.add_runtime_dependency 'pageflow-external-links', '~> 2.x'
 
   spec.add_development_dependency 'bundler', ['>= 1.0', '< 3']
