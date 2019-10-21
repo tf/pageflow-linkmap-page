@@ -30,10 +30,6 @@ module Pageflow
       end
 
       # ReusableFile-overrides:
-      def attachments_for_export
-        []
-      end
-
       def retryable?
         processing_failed?
       end

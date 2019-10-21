@@ -28,7 +28,11 @@ module Pageflow
                    custom_attributes: [:source_image_file_id],
                    partial: 'pageflow/linkmap_page/color_map_files/color_map_file',
                    editor_partial: 'pageflow/linkmap_page/editor/color_map_files/color_map_file',
-                   importer: LinkmapPage::EntryExportImport::FileTypeImporters::ColorMapFileImporter)
+                   custom_attributes: {
+                     source_image_file_id: {
+                       model: 'Pageflow::ImageFile'
+                     }
+                   })
     end
 
     def self.masked_image_file_type
@@ -41,7 +45,14 @@ module Pageflow
                        result[color] = masked_image_file.url_for_color(color)
                      end
                    end,
-                   importer: LinkmapPage::EntryExportImport::FileTypeImporters::MaskedImageFileImporter)
+                   custom_attributes: {
+                     source_image_file_id: {
+                       model: 'Pageflow::ImageFile'
+                     },
+                     color_map_file_id: {
+                       model: 'Pageflow::LinkmapPage::ColorMapFile'
+                     }
+                   })
     end
   end
 end
