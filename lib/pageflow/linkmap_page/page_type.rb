@@ -29,7 +29,8 @@ module Pageflow
                    editor_partial: 'pageflow/linkmap_page/editor/color_map_files/color_map_file',
                    custom_attributes: {
                      source_image_file_id: {
-                       model: 'Pageflow::ImageFile'
+                       model: 'Pageflow::ImageFile',
+                       permitted_create_param: true
                      }
                    })
     end
@@ -45,10 +46,12 @@ module Pageflow
                    end,
                    custom_attributes: {
                      source_image_file_id: {
-                       model: 'Pageflow::ImageFile'
+                       model: 'Pageflow::ImageFile',
+                       permitted_create_param: true
                      },
                      color_map_file_id: {
-                       model: 'Pageflow::LinkmapPage::ColorMapFile'
+                       model: 'Pageflow::LinkmapPage::ColorMapFile',
+                       permitted_create_param: true
                      }
                    })
     end
