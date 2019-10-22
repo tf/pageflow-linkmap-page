@@ -26,7 +26,7 @@
             var colorMapFile = this.getReference('linkmap_color_map_file_id', colorMapFiles());
             var imageFile = this.getReference(attribute, pageflow.imageFiles);
 
-            if (imageFile && colorMapFile) {
+            if (imageFile && colorMapFile && !colorMapFile.isNew()) {
               this.setReference('linkmap_masked_' + attribute,
                                 maskedImageFiles().findOrCreateBy({
                                   source_image_file_id: imageFile.id,
