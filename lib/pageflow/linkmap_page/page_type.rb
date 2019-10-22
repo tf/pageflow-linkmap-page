@@ -25,7 +25,6 @@ module Pageflow
 
     def self.color_map_file_type
       FileType.new(model: ColorMapFile,
-                   custom_attributes: [:source_image_file_id],
                    partial: 'pageflow/linkmap_page/color_map_files/color_map_file',
                    editor_partial: 'pageflow/linkmap_page/editor/color_map_files/color_map_file',
                    custom_attributes: {
@@ -37,7 +36,6 @@ module Pageflow
 
     def self.masked_image_file_type
       FileType.new(model: MaskedImageFile,
-                   custom_attributes: [:source_image_file_id, :color_map_file_id],
                    editor_partial: 'pageflow/linkmap_page/editor/' \
                      'masked_image_files/masked_image_file',
                    css_background_image_urls: lambda do |masked_image_file|
