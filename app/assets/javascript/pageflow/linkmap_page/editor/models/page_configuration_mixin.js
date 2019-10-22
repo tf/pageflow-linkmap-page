@@ -42,7 +42,7 @@
 
     linkmapReadyColorMapFileId: function() {
       var colorMapFile = this.getReference('linkmap_color_map_file_id', colorMapFiles());
-      return colorMapFile && colorMapFile.isReady() ? colorMapFile.id : null;
+      return colorMapFile && colorMapFile.isReady() ? colorMapFile.get('perma_id') : null;
     },
 
     linkmapPageLinks: function() {
