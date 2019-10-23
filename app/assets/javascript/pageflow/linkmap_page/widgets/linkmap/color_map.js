@@ -5,7 +5,7 @@ pageflow.linkmapPage.ColorMap = (function() {
     var colorMapSprite = options.colorMapSprite;
 
     this.color = attributes.color;
-    this.permaId = options.colorMapId + ':' + attributes.color;
+    this.permaId = options.colorMapPermaId + ':' + attributes.color;
 
     this.draw = function(context, width) {
       var scale = width / attributes.width;
@@ -53,7 +53,7 @@ pageflow.linkmapPage.ColorMap = (function() {
   function ColorMap(attributes, sprite) {
     var components = _(attributes.components).map(function(componentAttributes) {
       return new ColorMapComponent(componentAttributes, {
-        colorMapId: attributes.id,
+        colorMapPermaId: attributes.perma_id,
         colorMapWidth: attributes.width,
         colorMapHeight: attributes.height,
         colorMapSprite: sprite
