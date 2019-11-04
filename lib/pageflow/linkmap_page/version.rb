@@ -1,5 +1,5 @@
 module Pageflow
   module LinkmapPage
-    VERSION = '2.6.0.dev'.freeze
+    VERSION = '2.6.0'.freeze
   end
 end
