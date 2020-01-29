@@ -75,6 +75,11 @@
       }, 300);
 
       this.element.removeClass('playing');
+    },
+
+    unmute: function () {
+      var videoPlayer = this.options.video.data('videoPlayer');
+      videoPlayer.muted(false);
     }
   });
 }(jQuery));

@@ -33,6 +33,10 @@
         'click': function(event) {
           var area = this.areaAt(this.positionFromEvent(event));
 
+          if (area.length && area.hasClass('hover_area')){
+            this.options.hoverVideo.unmute();
+          }
+
           if (area.length && area.hasClass('enabled')) {
             area.first().trigger($.Event('linkmapareaclick', {originalEvent: event}));
           }

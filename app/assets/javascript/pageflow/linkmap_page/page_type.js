@@ -187,14 +187,20 @@ pageflow.pageType.register('linkmap_page', _.extend({
     wrapper
       .attr('data-width', template.data('videoWidth'))
       .attr('data-height', template.data('videoHeight'));
-
-    var videoPlayer = this.videoPlayer = new pageflow.VideoPlayer.Lazy(template, {
+    
+    var options = {
       volumeFading: true,
       fallbackToMutedAutoplay: true,
-
       width: '100%',
       height: '100%'
-    });
+    }
+    if (pageflow.browser.has('mobile platform')) {
+      // to enable autoplay videos on mobile, 'muted' and 'playsinline' needs to be set
+      // video can be unmuted on user interaction
+      options.muted = true;
+      options.playsinline = true;
+    }
+    var videoPlayer = this.videoPlayer = new pageflow.VideoPlayer.Lazy(template, options);
 
     videoPlayer.ready(function() {
       videoPlayer.on('playmuted', function() {
@@ -431,18 +437,25 @@ pageflow.pageType.register('linkmap_page', _.extend({
   },
 
   isVideoEnabled: function(configuration) {
-    return !pageflow.browser.has('mobile platform') &&
-      (configuration.background_type === 'video' || configuration.background_type === 'hover_video');
+    return this.isBackgroundVideoEnabled(configuration) || this.isHoverVideoEnabled(configuration)
   },
 
   isBackgroundVideoEnabled: function(configuration) {
-    return !pageflow.browser.has('mobile platform') &&
-      configuration.background_type === 'video';
+    if (pageflow.browser.has('mobile platform')) {
+      return configuration.background_type === 'video' && configuration.panorama_image_id == undefined
+    }
+    else{
+      return configuration.background_type === 'video'
+    }
   },
 
   isHoverVideoEnabled: function(configuration) {
-    return !pageflow.browser.has('mobile platform') &&
-      configuration.background_type === 'hover_video';
+    if (pageflow.browser.has('mobile platform')) {
+      return configuration.background_type === 'hover_video' && configuration.hover_image_id == undefined
+    }
+    else{
+      return configuration.background_type === 'hover_video'
+    }
   },
 
   updateNavigationMode: function(configuration) {
