@@ -101,9 +101,7 @@ de:
             so viele Hotspots angelegt werden wie gewünscht.
 
             Der Panorama Typ entscheidet darüber, ob die Seite ein
-            Hintergrund-Bild oder Hintergrund-Video zeigt. (Beachte, dass
-            Hintergrund-Videos auf mobilen Geräten nicht abgespielt werden,
-            deshalb wähle ein zusätzliches Panorama-Bild für die mobile Version)
+            Hintergrund-Bild oder Hintergrund-Video zeigt. (Ein zusätzliches Fallback-Image für die mobile Version kann bereitgestellt werden, wenn das Video nicht passt)
 
             Die Hotspot-Seite ermöglicht auch die Nutzung von Panorama-Bildern,
             die größer sind, als der sichtbare Bildschirmbereich. So können Nutzer

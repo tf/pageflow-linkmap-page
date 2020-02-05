@@ -98,7 +98,7 @@ en:
 
             Hotspots can play audio files, link to other pages in a Pageflow or to external websites. You can define as many hotspots as you want.
 
-            Decide if you want to show a background image or a background video. (Keep in mind, that background videos will not be played on mobile devices, therefore use an additional fallback image for the mobile version)
+            Decide if you want to show a background image or a background video. (An additional fallback image for the mobile version can be provided if video does not fit)
 
             The hotspot page type allows to use panoramic images that are wider and taller than the screen-size. It enables users to explore these images by horizontal or vertical scrolling.
 
